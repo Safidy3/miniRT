@@ -1,6 +1,7 @@
-SRC = main.c shape_renderer.c
+SRC = main.c
 
-FLAGS = -Wall -Werror -Wextra -I/usr/include -Imlx_linux -O3
+# FLAGS = -Wall -Werror -Wextra -I/usr/include
+FLAGS = -I/usr/include
 FLAGS_MINI = -Lmlx_linux -Imlx_linux -lXext -lX11 -lm -lz
 
 LIB_MLX_PATH = ./minilibx-linux
