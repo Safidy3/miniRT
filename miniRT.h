@@ -6,11 +6,72 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/01/28 15:56:17 by safandri         ###   ########.fr       */
+/*   Updated: 2025/02/10 09:18:30 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef MINIRT_H
+#define MINIRT_H
 
 #include "minilibx-linux/mlx.h"
 #include "stdio.h"
 #include "unistd.h"
+#include <stdlib.h>
 #include <math.h>
+
+#define WIDTH 960
+#define HEIGHT 720
+#define FOV 60
+#define NEAR 0.1
+#define FAR 100.0
+#define M_PI 3.14159265358979323846
+
+typedef struct s_vec3
+{
+	float	x;
+	float	y;
+	float	z;
+}			t_vec3;
+
+typedef struct s_mat4
+{
+	float	m[4][4];
+}			t_mat4;
+
+typedef struct s_camera
+{
+	t_vec3	pos;
+	t_vec3	target;
+	t_vec3	up;
+}			t_camera;
+
+typedef struct s_data
+{
+	void    *mlx;               // Pointer to the MLX instance
+	void    *win;               // Pointer to the window instance
+	void    *img;               // Pointer to the image
+	char    *addr;              // Address of the image data
+	int     bits_per_pixel;     // Bits per pixel (color depth)
+	int     line_length;        // Length of a line in bytes
+	int     endian;             // Endianess of the pixel data
+}			t_data;
+
+
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
+void	draw_line(t_data *img, t_vec3 p0, t_vec3 p1, int color);
+
+t_vec3	vec3_sub(t_vec3 a, t_vec3 b);
+float	vec3_dot(t_vec3 a, t_vec3 b);
+t_vec3	vec3_cross(t_vec3 a, t_vec3 b);
+t_vec3	vec3_normalize(t_vec3 v);
+
+
+t_mat4	mat4_look_at(t_vec3 pos, t_vec3 target, t_vec3 up);
+t_vec3	mat4_mult_vec3(t_mat4 mat, t_vec3 v);
+t_mat4	mat4_perspective(float fov, float aspect, float near, float far);
+
+
+void	render_triangle(t_data *img, t_mat4 view, t_mat4 projection);
+void	render_cube(t_data *img, t_mat4 view, t_mat4 projection);
+
+#endif

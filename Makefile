@@ -1,4 +1,4 @@
-SRC = main.c
+SRC = main.c shape_renderer.c vect_utils.c mlx_drawer_utils.c
 
 # FLAGS = -Wall -Werror -Wextra -I/usr/include
 FLAGS = -I/usr/include
