@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 09:15:23 by safandri          #+#    #+#             */
-/*   Updated: 2025/02/10 09:15:23 by safandri         ###   ########.fr       */
+/*   Updated: 2025/02/13 10:49:19 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
-	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT) {
+	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT)
+	{
 		char *dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 		*(unsigned int*)dst = color;
 	}
