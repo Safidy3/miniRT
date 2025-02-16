@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/02/13 15:15:26 by safandri         ###   ########.fr       */
+/*   Updated: 2025/02/16 14:25:46 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@
 #include "unistd.h"
 #include <stdlib.h>
 #include <math.h>
+#include <limits.h>
 
-#define WIDTH 960
+#define WIDTH 1280
 #define HEIGHT 720
 #define FOV 60
 #define NEAR 0.1
@@ -55,6 +56,35 @@ typedef struct s_cam
 	t_vec3	origin;
 }			t_cam;
 
+typedef struct s_hit_record
+{
+	float	t;
+	t_vec3	p;
+	t_vec3	normal;
+}			t_hit_record;
+
+typedef struct s_hitable
+{
+	int		(*hit_function)(void *obj, const t_ray r, float tmin, float tmax, t_hit_record *rec);
+	void	*obj;
+}			t_hitable;
+
+typedef struct s_hitable_list
+{
+	t_hitable	*hit_list;
+	int			(*loop_hit_function)(void *obj, const t_ray r, float tmin, float tmax, t_hit_record *rec);
+	int			list_size;
+}				t_hitable_list;
+
+typedef struct s_hit_shpere
+{
+	t_vec3	center;
+	float	radius;
+}			t_hit_shpere;
+
+
+/******************************************************/
+
 typedef struct s_camera
 {
 	t_vec3	pos;
@@ -66,6 +96,8 @@ typedef struct s_mat4
 {
 	float	m[4][4];
 }			t_mat4;
+
+/******************************************************/
 
 typedef struct s_data
 {
@@ -96,12 +128,12 @@ t_vec3	vec3_div(t_vec3 a, t_vec3 b);
 t_vec3	vec3_div_float(t_vec3 a, float b);
 
 t_vec3	vec3_normalize(t_vec3 v);
-t_vec3	unit_vector(t_vec3 v);
+t_vec3	vec3_unit(t_vec3 v);
 float	vec3_dot(t_vec3 a, t_vec3 b);
 t_vec3	vec3_cross(t_vec3 a, t_vec3 b);
 
 t_ray	create_ray(t_vec3 origin, t_vec3 dir);
-t_vec3	ray_point_at(t_vec3 origin, t_vec3 dir, float t);
+t_vec3	ray_point_at(t_ray ray, float t);
 
 t_mat4	mat4_look_at(t_vec3 pos, t_vec3 target, t_vec3 up);
 t_vec3	mat4_mult_vec3(t_mat4 mat, t_vec3 v);
@@ -110,5 +142,10 @@ t_mat4	mat4_perspective(float fov, float aspect, float near, float far);
 
 void	render_triangle(t_data *img, t_mat4 view, t_mat4 projection);
 void	render_cube(t_data *img, t_mat4 view, t_mat4 projection);
+
+
+int	loop_hit_function(t_hitable_list l, const t_ray r, float tmin, float tmax, t_hit_record *rec);
+// int	hit_sphere(void	*obj, const t_ray r, float tmin, float tmax, t_hit_record *rec);
+
 
 #endif

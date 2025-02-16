@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/02/13 15:16:07 by safandri         ###   ########.fr       */
+/*   Updated: 2025/02/16 14:51:20 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,18 +59,51 @@ int	frame_loop(void *param)
 // v.b = (int)(255.99 * 0.2);
 // int color = ((int)v.r << 16) | ((int)v.g << 8) | (int)v.b;
 
-t_vec3	color(const t_ray r)
+t_vec3	bg_color(const t_ray r)
 {
 	t_vec3	unit_dir;
 	t_vec3	white;
 	t_vec3	blue;
 	float	t;
 
-	unit_dir = unit_vector(r.direction);
+	unit_dir = vec3_unit(r.direction);
 	t = 0.5 * (unit_dir.y + 1.0);
 	white = create_vec3(1.0, 1.0, 1.0);
 	blue = create_vec3(0.5, 0.7, 1.0);
 	return (vec3_add(vec3_mult_float(white, (1.0 - t)), vec3_mult_float(blue, t)));
+}
+
+float	hit_sphere(t_vec3 center, float radius, const t_ray r)
+{
+	t_vec3	oc = vec3_sub(r.origin, center);
+	float	a = vec3_dot(r.direction, r.direction);
+	float	b = 2 * vec3_dot(oc, r.direction);
+	float	c = vec3_dot(oc, oc) - radius * radius;
+	float	delta = b * b - 4 * a * c;
+	if (delta < 0)
+		return (-1.0);
+	return ((-b -sqrt(delta)/ (2 * a)));
+}
+
+t_vec3	color(const t_ray r)
+{
+	t_vec3	unit_dir;
+	t_vec3	begin;
+	t_vec3	end;
+	float	t;
+
+	t = hit_sphere(create_vec3(0, 0, -1), 0.5, r);
+	if (t > 0)
+	{
+		t_vec3 N = vec3_unit(vec3_sub(ray_point_at(r, t), create_vec3(0,0,-1)));
+		return (vec3_mult_float(create_vec3(N.x + 1,N.y + 1,N.z + 1), 0.5));
+	}
+
+	unit_dir = vec3_unit(r.direction);
+	t = 0.5 * (unit_dir.y + 1.0);
+	begin = create_vec3(1.0, 1.0, 1.0);
+	end = create_vec3(0.5, 0.7, 1.0);
+	return (vec3_add(vec3_mult_float(begin, (1.0 - t)), vec3_mult_float(end, t)));
 }
 
 int	main(void)
@@ -89,7 +122,7 @@ int	main(void)
 	cam.horizintal = create_vec3(4.0, 0.0, 0.0);
 	cam.vertical = create_vec3(0.0, 2.0, 0.0);
 	cam.origin = create_vec3(0.0, 0.0, 0.0);
-	
+
 	t_vec3	pixel_pos;
 	for (int y = HEIGHT - 1; y >= 0; y--)
 	{
