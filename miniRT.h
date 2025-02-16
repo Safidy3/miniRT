@@ -82,15 +82,21 @@ typedef struct s_data
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void	draw_line(t_data *img, t_vec3 p0, t_vec3 p1, int color);
 
+void	print_vec3(t_vec3 v, char *name);
 t_vec3	create_vec3(float x,float y, float z);
+float	vec3_len(t_vec3 v);
 t_vec3	vec3_add(t_vec3 a, t_vec3 b);
 t_vec3	vec3_add3(t_vec3 a, t_vec3 b, t_vec3 c);
 t_vec3	vec3_sub(t_vec3 a, t_vec3 b);
+t_vec3	vec3_sub3(t_vec3 a, t_vec3 b, t_vec3 c);
+
 t_vec3	vec3_mult(t_vec3 a, t_vec3 b);
-t_vec3	vec3_div(t_vec3 a, t_vec3 b);
 t_vec3	vec3_mult_float(t_vec3 a, float b);
+t_vec3	vec3_div(t_vec3 a, t_vec3 b);
 t_vec3	vec3_div_float(t_vec3 a, float b);
+
 t_vec3	vec3_normalize(t_vec3 v);
+t_vec3	unit_vector(t_vec3 v);
 float	vec3_dot(t_vec3 a, t_vec3 b);
 t_vec3	vec3_cross(t_vec3 a, t_vec3 b);
 

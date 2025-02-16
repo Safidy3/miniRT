@@ -5,24 +5,21 @@ t_vec3	create_vec3(float x,float y, float z)
 	return (t_vec3){x, y, z};
 }
 
+void	print_vec3(t_vec3 v, char *name)
+{
+	if (name)
+		printf("%s -> ", name);
+	printf("x: %f, y: %f, z: %f\n", v.x, v.y, v.z);
+}
+
 t_vec3	vec3_add(t_vec3 a, t_vec3 b)
 {
-	t_vec3 res;
-
-	res.x = a.x + b.x;
-	res.y = a.y + b.y;
-	res.z = a.z + b.z;
-	return (res);
+	return (t_vec3){a.x + b.x, a.y + b.y, a.z + b.z};
 }
 
 t_vec3	vec3_add3(t_vec3 a, t_vec3 b, t_vec3 c)
 {
-	t_vec3 res;
-
-	res.x = a.x + b.x + c.x;
-	res.y = a.y + b.y + c.y;
-	res.z = a.z + b.z + c.z;
-	return (res);
+	return (t_vec3){a.x + b.x + c.x, a.y + b.y + c.y, a.z + b.z + c.z};
 }
 
 t_vec3	vec3_sub(t_vec3 a, t_vec3 b)
@@ -30,14 +27,16 @@ t_vec3	vec3_sub(t_vec3 a, t_vec3 b)
 	return (t_vec3){a.x - b.x, a.y - b.y, a.z - b.z};
 }
 
+t_vec3	vec3_sub3(t_vec3 a, t_vec3 b, t_vec3 c)
+{
+	return (t_vec3){a.x - b.x - c.x, a.y - b.y - c.y, a.z - b.z - c.z};
+}
+
+/*********************************/
+
 t_vec3	vec3_mult(t_vec3 a, t_vec3 b)
 {
 	return (t_vec3){a.x * b.x, a.y * b.y, a.z * b.z};
-}
-
-t_vec3	vec3_div(t_vec3 a, t_vec3 b)
-{
-	return (t_vec3){a.x / b.x, a.y / b.y, a.z / b.z};
 }
 
 t_vec3	vec3_mult_float(t_vec3 a, float b)
@@ -45,10 +44,17 @@ t_vec3	vec3_mult_float(t_vec3 a, float b)
 	return (t_vec3){a.x * b, a.y * b, a.z * b};
 }
 
+t_vec3	vec3_div(t_vec3 a, t_vec3 b)
+{
+	return (t_vec3){a.x / b.x, a.y / b.y, a.z / b.z};
+}
+
 t_vec3	vec3_div_float(t_vec3 a, float b)
 {
 	return (t_vec3){a.x / b, a.y / b, a.z / b};
 }
+
+/*********************************/
 
 float	vec3_dot(t_vec3 a, t_vec3 b)
 {
@@ -64,10 +70,27 @@ t_vec3	vec3_cross(t_vec3 a, t_vec3 b)
 	};
 }
 
+float	vec3_len(t_vec3 v)
+{
+	return (sqrtf(v.x * v.x + v.y * v.y + v.z * v.z));
+}
+
+float	vec3_squared_len(t_vec3 v)
+{
+	return (v.x * v.x + v.y * v.y + v.z * v.z);
+}
+
 t_vec3	vec3_normalize(t_vec3 v)
 {
-	float len = sqrtf(v.x*v.x + v.y*v.y + v.z*v.z);
-	return (t_vec3){v.x/len, v.y/len, v.z/len};
+	float	len;
+
+	len = vec3_len(v);
+	return (t_vec3){v.x / len, v.y / len, v.z / len};
+}
+
+t_vec3	unit_vector(t_vec3 v)
+{
+	return (vec3_div_float(v, vec3_len(v)));
 }
 
 /****************************************************************************/
@@ -77,7 +100,7 @@ t_ray	create_ray(t_vec3 origin, t_vec3 dir)
 	t_ray	res;
 
 	res.origin = origin;
-	res.origin = dir;
+	res.direction = dir;
 	return (res);
 }
 
