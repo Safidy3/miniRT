@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/02/16 14:25:46 by safandri         ###   ########.fr       */
+/*   Updated: 2025/02/18 16:01:32 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define MINIRT_H
 
 #include "minilibx-linux/mlx.h"
+#include "libft/libft.h"
 #include "stdio.h"
 #include "unistd.h"
 #include <stdlib.h>
@@ -58,30 +59,31 @@ typedef struct s_cam
 
 typedef struct s_hit_record
 {
-	float	t;
-	t_vec3	p;
-	t_vec3	normal;
-}			t_hit_record;
-
-typedef struct s_hitable
-{
-	int		(*hit_function)(void *obj, const t_ray r, float tmin, float tmax, t_hit_record *rec);
-	void	*obj;
-}			t_hitable;
-
-typedef struct s_hitable_list
-{
-	t_hitable	*hit_list;
-	int			(*loop_hit_function)(void *obj, const t_ray r, float tmin, float tmax, t_hit_record *rec);
-	int			list_size;
-}				t_hitable_list;
+	float				t;
+	float				camDistance;
+	t_vec3				p;
+	t_vec3				normal;
+}						t_hit_record;
 
 typedef struct s_hit_shpere
 {
-	t_vec3	center;
-	float	radius;
-}			t_hit_shpere;
+	int					id;
 
+	t_vec3				center;
+	float				radius;
+}						t_hit_shpere;
+
+typedef struct s_data
+{
+	void    *mlx;               // Pointer to the MLX instance
+	void    *win;               // Pointer to the window instance
+	void    *img;               // Pointer to the image
+	char    *addr;              // Address of the image data
+	int     bits_per_pixel;     // Bits per pixel (color depth)
+	int     line_length;        // Length of a line in bytes
+	int     endian;             // Endianess of the pixel data
+	t_list	*world;
+}			t_data;
 
 /******************************************************/
 
@@ -98,18 +100,6 @@ typedef struct s_mat4
 }			t_mat4;
 
 /******************************************************/
-
-typedef struct s_data
-{
-	void    *mlx;               // Pointer to the MLX instance
-	void    *win;               // Pointer to the window instance
-	void    *img;               // Pointer to the image
-	char    *addr;              // Address of the image data
-	int     bits_per_pixel;     // Bits per pixel (color depth)
-	int     line_length;        // Length of a line in bytes
-	int     endian;             // Endianess of the pixel data
-}			t_data;
-
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void	draw_line(t_data *img, t_vec3 p0, t_vec3 p1, int color);
@@ -139,13 +129,15 @@ t_mat4	mat4_look_at(t_vec3 pos, t_vec3 target, t_vec3 up);
 t_vec3	mat4_mult_vec3(t_mat4 mat, t_vec3 v);
 t_mat4	mat4_perspective(float fov, float aspect, float near, float far);
 
-
 void	render_triangle(t_data *img, t_mat4 view, t_mat4 projection);
 void	render_cube(t_data *img, t_mat4 view, t_mat4 projection);
 
 
-int	loop_hit_function(t_hitable_list l, const t_ray r, float tmin, float tmax, t_hit_record *rec);
-// int	hit_sphere(void	*obj, const t_ray r, float tmin, float tmax, t_hit_record *rec);
+t_hit_shpere	create_sphere(t_vec3 center, float radius);
+void			scene_add_sphere(t_list **world, t_vec3 center, float radius);
 
+void			delete_obj(void *obj);
+void			clear_sceen(t_list **world);
+t_hit_shpere	*make_obj(t_list *obj);
 
 #endif

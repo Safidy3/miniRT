@@ -113,7 +113,47 @@ t_vec3	ray_point_at(t_ray ray, float t)
 
 
 /*############################################### HITABLE ###############################################*/
-/************* SPHERE **************/
+
+/********************* sphere **********************/
+
+t_hit_shpere	create_sphere(t_vec3 center, float radius)
+{
+	t_hit_shpere res;
+	res.center = center;
+	res.radius = radius;
+	res.id = 0;
+	return (res);
+}
+
+void	scene_add_sphere(t_list **world, t_vec3 center, float radius)
+{
+	t_hit_shpere	*shpere = (t_hit_shpere *)malloc(sizeof(t_hit_shpere));
+	shpere->id = 0;
+	shpere->center = center;
+	shpere->radius = radius;
+	t_list *obj = ft_lstnew((void *)shpere);
+
+	ft_lstadd_back(world, obj);
+}
+
+void	delete_obj(void *obj)
+{
+	t_list *shpere;
+
+	shpere = (t_list *)obj;
+	free(shpere->content);
+	free(shpere);
+}
+
+void	clear_sceen(t_list **world)
+{
+	ft_lstclear(world, &delete_obj);
+}
+
+t_hit_shpere	*make_obj(t_list *obj)
+{
+	return ((t_hit_shpere *)obj->content);
+}
 
 
 // int	hit_sphere(t_vec3 center, float radius, const t_ray r)
@@ -161,23 +201,23 @@ t_vec3	ray_point_at(t_ray ray, float t)
 // 	return (0);
 // }
 
-int	loop_hit_function(t_hitable_list l, const t_ray r, float tmin, float tmax, t_hit_record *rec)
-{
-	t_hit_record	tmp_rec;
-	int				hit_anything = 0;
-	float			closest_so_far = tmax;
+// int	loop_hit_function(t_hitable_list l, const t_ray r, float tmin, float tmax, t_hit_record *rec)
+// {
+// 	t_hit_record	tmp_rec;
+// 	int				hit_anything = 0;
+// 	float			closest_so_far = tmax;
 
-	for (int i = 0; i < l.list_size; i++)
-	{
-		if (l.hit_list[i].hit_function(l.hit_list[i].obj, r, tmin, tmax, rec))
-		{
-			hit_anything = 1;
-			closest_so_far = tmp_rec.t;
-			*rec = tmp_rec;
-		}
-	}
-	return (hit_anything);
-}
+// 	for (int i = 0; i < l.list_size; i++)
+// 	{
+// 		if (l.hit_list[i].hit_function(l.hit_list[i].obj, r, tmin, tmax, rec))
+// 		{
+// 			hit_anything = 1;
+// 			closest_so_far = tmp_rec.t;
+// 			*rec = tmp_rec;
+// 		}
+// 	}
+// 	return (hit_anything);
+// }
 
 
 
