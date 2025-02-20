@@ -138,21 +138,29 @@ void	scene_add_sphere(t_list **world, t_vec3 center, float radius)
 
 void	delete_obj(void *obj)
 {
-	t_list *shpere;
+	// t_list *shpere;
 
-	shpere = (t_list *)obj;
-	free(shpere->content);
-	free(shpere);
+	// shpere = (t_list *)obj;
+	// free(shpere->content);
+	// free(shpere);
+	free(obj);
 }
 
 void	clear_sceen(t_list **world)
 {
-	ft_lstclear(world, &delete_obj);
+	if (world && *world)
+	{
+		ft_lstclear(world, &delete_obj);
+		*world = NULL;
+	}
 }
 
 t_hit_shpere	*make_obj(t_list *obj)
 {
-	return ((t_hit_shpere *)obj->content);
+	if (obj)
+		return ((t_hit_shpere *)obj->content);
+	else
+		return (NULL);
 }
 
 

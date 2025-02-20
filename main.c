@@ -6,52 +6,48 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/02/18 16:03:11 by safandri         ###   ########.fr       */
+/*   Updated: 2025/02/20 13:34:55 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-// void	*exit(t_data *img)
-// {
-// 	printf("Hello World");
-// }
-
-// int	frame_loop(void *param)
-// {
-// 	t_data *img = (t_data *) param;
-// 	t_camera cam = {
-// 		.pos = {0, 0, -5}, 
-// 		.target = {0, 0, 0}, 
-// 		.up = {0, 1, 0}
-// 	};
-
-// 	mlx_clear_window(img->mlx, img->win);
-// 	t_mat4	view = mat4_look_at(cam.pos, cam.target, cam.up);
-// 	t_mat4	proj = mat4_perspective(FOV, (float)WIDTH / HEIGHT, NEAR, FAR);
-
-// 	render_triangle(img, view, proj);
-// 	render_cube(img, view, proj);
-
-// 	mlx_put_image_to_window(img->mlx, img->win, img->img, 0, 0);
-// 	return 0;
-// }
-
-int	frame_loop(void *param)
+void	free_data(t_data *data)
 {
-	int	x;
-	int	y;
-	t_data	*img;
+	t_list	*world;
 
-	img = (t_data *)param;
-	x = -1;
-	y = -1;
-	while (++x < WIDTH)
-		while (++y < HEIGHT)
-			my_mlx_pixel_put(img, x, y, 0x00FF0000);
+	world = data->world;
+	mlx_destroy_window(data->mlx, data->win);
+	mlx_destroy_image(data->mlx, data->img);
+	mlx_destroy_display(data->mlx);
+	free(data->mlx);
 
+	clear_sceen(&(data->world));
+}
+
+int	close_window(void *param)
+{
+	printf("exit\n");
+	t_data	*data;
+
+	data = (t_data *)param;
+	free_data(data);
+	exit(EXIT_SUCCESS);
 	return (0);
 }
+
+int	handle_key(int keycode, void *param)
+{
+	t_data	*data;
+	
+	// printf("Key pressed: %d\n", keycode);
+	data = (t_data *)param;
+	if (keycode == 65307)
+		close_window(data);
+	return (0);
+}
+
+/*******************************************************************************/
 
 float	hit_sphere(t_hit_shpere *obj, const t_ray r)
 {
@@ -72,8 +68,8 @@ t_vec3	color(const t_ray r, t_list *world)
 	t_vec3	end;
 	float	t;
 
-	scene_add_sphere(&world, create_vec3(0,0,-1), 0.5);
-	t_hit_shpere *shpere = make_obj(world);
+	t_hit_shpere	*shpere = make_obj(world);
+	// t_hit_shpere	shpere = create_sphere(create_vec3(0,0,-1), 0.5);
 
 	t = hit_sphere(shpere, r);
 	if (t > 0)
@@ -89,41 +85,6 @@ t_vec3	color(const t_ray r, t_list *world)
 	return (vec3_add(vec3_mult_float(begin, (1.0 - t)), vec3_mult_float(end, t)));
 }
 
-void	free_data(t_data *data)
-{
-	// clear_sceen(&(data->world));
-	mlx_destroy_window(data->mlx, data->win);
-	mlx_destroy_image(data->mlx, data->img);
-	mlx_destroy_display(data->mlx);
-	ft_lstclear(&(data->world), &delete_obj);
-	free(data->mlx);
-}
-
-int	close_window(void *param)
-{
-	t_data	*data;
-
-	data = (t_data *)param;
-	free_data(data);
-	printf("exit\n");
-	exit(EXIT_SUCCESS);
-	return (0);
-}
-
-int	handle_key(int keycode, void *param)
-{
-	t_data	*data;
-	
-	data = (t_data *)param;
-	// printf("Key pressed: %d\n", keycode);
-	if (keycode == 65307)
-	{
-		free_data(data);
-		exit(EXIT_SUCCESS);
-	}
-	return (0);
-}
-
 int	main(void)
 {
 	t_data	data;
@@ -134,6 +95,7 @@ int	main(void)
 	data.img = mlx_new_image(data.mlx, WIDTH, HEIGHT);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 	data.world = NULL;
+	scene_add_sphere(&data.world, create_vec3(0,0,-1), 0.5);
 
 	cam.lower_L = create_vec3(-2.0, -1.0, -1.0);
 	cam.horizintal = create_vec3(4.0, 0.0, 0.0);
