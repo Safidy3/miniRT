@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/02/18 16:01:32 by safandri         ###   ########.fr       */
+/*   Updated: 2025/02/20 16:15:04 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 #define NEAR 0.1
 #define FAR 100.0
 #define M_PI 3.14159265358979323846
+#define MIN_T 0.0
+#define MAX_T (float)INT_MAX
 
 typedef struct s_vec3
 {
@@ -59,11 +61,11 @@ typedef struct s_cam
 
 typedef struct s_hit_record
 {
-	float				t;
-	float				camDistance;
-	t_vec3				p;
-	t_vec3				normal;
-}						t_hit_record;
+	float			t;
+	t_vec3			hit_point;
+	t_vec3			normal;
+	t_vec3			color;
+}					t_hit_record;
 
 typedef struct s_hit_shpere
 {
@@ -71,6 +73,7 @@ typedef struct s_hit_shpere
 
 	t_vec3				center;
 	float				radius;
+	t_hit_record		hit_record;
 }						t_hit_shpere;
 
 typedef struct s_data
@@ -139,5 +142,9 @@ void			scene_add_sphere(t_list **world, t_vec3 center, float radius);
 void			delete_obj(void *obj);
 void			clear_sceen(t_list **world);
 t_hit_shpere	*make_obj(t_list *obj);
+
+
+void	free_data(t_data *data);
+int		close_window(void *param);
 
 #endif

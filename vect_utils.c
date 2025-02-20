@@ -112,6 +112,13 @@ t_vec3	ray_point_at(t_ray ray, float t)
 }
 
 
+/*############################################### HITS RECORD ###############################################*/
+
+
+
+
+
+
 /*############################################### HITABLE ###############################################*/
 
 /********************* sphere **********************/
@@ -138,11 +145,6 @@ void	scene_add_sphere(t_list **world, t_vec3 center, float radius)
 
 void	delete_obj(void *obj)
 {
-	// t_list *shpere;
-
-	// shpere = (t_list *)obj;
-	// free(shpere->content);
-	// free(shpere);
 	free(obj);
 }
 
@@ -164,68 +166,6 @@ t_hit_shpere	*make_obj(t_list *obj)
 }
 
 
-// int	hit_sphere(t_vec3 center, float radius, const t_ray r)
-// {
-// 	t_vec3	oc = vec3_sub(r.origin, center);
-// 	float	a = vec3_dot(r.direction, r.direction);
-// 	float	b = 2 * vec3_dot(oc, r.direction);
-// 	float	c = vec3_dot(oc, oc) - radius * radius;
-// 	float	delta = b * b - 4 * a * c;
-// 	if (delta < 0)
-// 		return (-1.0);
-// 	return ((-b - sqrt(delta)) / (2 * a));
-// }
-
-// int	hit_sphere(void	*obj, const t_ray r, float tmin, float tmax, t_hit_record *rec)
-// {
-// 	t_hit_shpere	sphere = *(t_hit_shpere *)obj;
-// 	t_vec3	oc = vec3_sub(r.origin, sphere.center);
-// 	float	a = vec3_dot(r.direction, r.direction);
-// 	float	b = 2.0 * vec3_dot(oc, r.direction);
-// 	float	c = vec3_dot(oc, oc) - (sphere.radius * sphere.radius);
-// 	float	delta = (b * b) - (4 * a * c);
-
-// 	if (delta > 0)
-// 	{
-// 		float sqrt_delta = sqrt(delta);
-// 		float tmp = (-b - sqrt_delta) / (2.0 * a);  // FIRST ROOT
-// 		if (tmp < tmax && tmp > tmin)
-// 		{
-// 			rec->t = tmp;
-// 			rec->p = ray_point_at(r, rec->t);
-// 			rec->normal = vec3_div_float(vec3_sub(rec->p, sphere.center), sphere.radius);
-// 			return (1);
-// 		}
-
-// 		tmp = (-b + sqrt_delta) / (2.0 * a);  // SECOND ROOT
-// 		if (tmp < tmax && tmp > tmin)
-// 		{
-// 			rec->t = tmp;
-// 			rec->p = ray_point_at(r, rec->t);
-// 			rec->normal = vec3_div_float(vec3_sub(rec->p, sphere.center), sphere.radius);
-// 			return (1);
-// 		}
-// 	}
-// 	return (0);
-// }
-
-// int	loop_hit_function(t_hitable_list l, const t_ray r, float tmin, float tmax, t_hit_record *rec)
-// {
-// 	t_hit_record	tmp_rec;
-// 	int				hit_anything = 0;
-// 	float			closest_so_far = tmax;
-
-// 	for (int i = 0; i < l.list_size; i++)
-// 	{
-// 		if (l.hit_list[i].hit_function(l.hit_list[i].obj, r, tmin, tmax, rec))
-// 		{
-// 			hit_anything = 1;
-// 			closest_so_far = tmp_rec.t;
-// 			*rec = tmp_rec;
-// 		}
-// 	}
-// 	return (hit_anything);
-// }
 
 
 

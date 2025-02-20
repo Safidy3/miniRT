@@ -1,34 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstlast.c                                       :+:      :+:    :+:   */
+/*   data_free.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/10 13:14:06 by safandri          #+#    #+#             */
-/*   Updated: 2025/02/20 16:12:20 by safandri         ###   ########.fr       */
+/*   Created: 2025/02/20 13:50:26 by safandri          #+#    #+#             */
+/*   Updated: 2025/02/20 13:53:53 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "miniRT.h"
 
-t_list	*ft_lstlast(t_list *lst)
+void	free_data(t_data *data)
 {
-	if (!lst)
-		return (NULL);
-	while (lst->next)
-		lst = lst->next;
-	return (lst);
+	t_list	*world;
+
+	world = data->world;
+	mlx_destroy_window(data->mlx, data->win);
+	mlx_destroy_image(data->mlx, data->img);
+	mlx_destroy_display(data->mlx);
+	free(data->mlx);
+
+	clear_sceen(&(data->world));
 }
 
-t_list	*ft_lst_id(t_list *lst, int id)
+int	close_window(void *param)
 {
-	int	i;
+	t_data	*data;
 
-	i = -1;
-	if (!lst || id < 0 || id > ft_lstsize(lst))
-		return (NULL);
-	while (++i != id && lst->next)
-		lst = lst->next;
-	return (lst);
+	data = (t_data *)param;
+	free_data(data);
+	exit(EXIT_SUCCESS);
+	return (0);
 }
