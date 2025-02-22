@@ -1,7 +1,7 @@
 SRC = main.c shape_renderer.c vect_utils.c mlx_drawer_utils.c data_free.c
 
-# FLAGS = -Wall -Werror -Wextra -I/usr/include
-FLAGS = -I/usr/include
+FLAGS = -Wall -Werror -Wextra -I/usr/include
+# FLAGS = -I/usr/include
 FLAGS_MINI = -Lmlx_linux -Imlx_linux -lXext -lX11 -lm -lz
 
 LIB_MLX_PATH = ./minilibx-linux

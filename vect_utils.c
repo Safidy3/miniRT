@@ -138,6 +138,10 @@ void	scene_add_sphere(t_list **world, t_vec3 center, float radius)
 	shpere->id = 0;
 	shpere->center = center;
 	shpere->radius = radius;
+	shpere->hit_record.t = -1;
+	shpere->hit_record.hit_point = create_vec3(0, 0, 0);
+	shpere->hit_record.normal = create_vec3(0, 0, 0);
+	shpere->hit_record.color = create_vec3(0, 0, 0);
 	t_list *obj = ft_lstnew((void *)shpere);
 
 	ft_lstadd_back(world, obj);

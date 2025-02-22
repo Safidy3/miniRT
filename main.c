@@ -55,7 +55,6 @@ int	hit_sphere(t_hit_shpere *obj, const t_ray r, t_hit_record *hit_rec)
 		hit_rec->color = vec3_mult_float(create_vec3(hit_rec->normal.x + 1, hit_rec->normal.y + 1, hit_rec->normal.z + 1), 0.5);
 		return (1);
 	}
-
 	return (0);
 }
 
@@ -76,7 +75,6 @@ t_vec3	bg_color(const t_ray r)
 
 t_vec3	color(const t_ray r, t_list *world)
 {
-	float	t;
 	int	obj_num = ft_lstsize(world);
 
 	t_hit_shpere	*obj;
@@ -133,20 +131,28 @@ int	main(void)
 	t_vec3	pixel_pos;
 	t_ray	r;
 	t_vec3	r_col;
+	// int		nx = 200;
+	// int		ny = 100;
+	int		ns = 100;
 	for (int y = HEIGHT - 1; y >= 0; y--)
 	{
 		for (int x = 0; x < WIDTH; x++)
 		{
+			r_col = create_vec3(0, 0, 0);
+			for (int s = 0; s < ns; s++)
+			{
+				
+				float	i = (float)(x + drand48()) / (float)WIDTH;
+				float	j = (float)(HEIGHT - y + drand48()) / (float)HEIGHT;
+				pixel_pos = vec3_add3(cam.lower_L, vec3_mult_float(cam.horizintal, i), vec3_mult_float(cam.vertical, j));
+				r = create_ray(cam.origin, vec3_sub(pixel_pos, cam.origin));
+				
+				r_col = vec3_add(r_col, color(r, data.world));
+
+			}
 			t_rgb	v;
-
-			double	i = (double)x / (double)WIDTH;
-			double	j = (double)(HEIGHT - y) / (double)HEIGHT;
-
-			pixel_pos = vec3_add3(cam.lower_L, vec3_mult_float(cam.horizintal, i), vec3_mult_float(cam.vertical, j));
-			r = create_ray(cam.origin, vec3_sub(pixel_pos, cam.origin));
-
-			r_col = color(r, data.world);
-
+			r_col = vec3_div_float(r_col, ns);
+			
 			v.r = (int)(255.99 * r_col.x);
 			v.g = (int)(255.99 * r_col.y);
 			v.b = (int)(255.99 * r_col.z);
@@ -155,7 +161,7 @@ int	main(void)
 			my_mlx_pixel_put(&data, x, y, color);
 		}
 	}
-	mlx_hook(data.win, 2, 1L << 0, handle_key, &data); // Key press event
+	mlx_hook(data.win, 2, 1L << 0, handle_key, &data);
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	mlx_loop(data.mlx);
 	mlx_hook(data.win, 17, 1L << 17, close_window, &data);
