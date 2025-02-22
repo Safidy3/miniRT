@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/02/22 14:14:09 by safandri         ###   ########.fr       */
+/*   Updated: 2025/02/22 16:40:55 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ t_vec3	bg_color(const t_ray r)
 	return (result);
 }
 
-t_vec3	random_in_unit_object()
+t_vec3	vec3_random_in_unit_object()
 {
 	t_vec3	p;
 	t_vec3	tmp;
@@ -89,6 +89,7 @@ t_vec3 color(const t_ray r, t_list *world, int depth)
 {
 	printf("%d\n", depth);
 	t_hit_shpere	*obj;
+	t_hit_shpere	*first_hit_obj;
 	t_hit_record	first_hit;
 	t_list			*world_tmp;
 	float			closest_t;
@@ -105,6 +106,7 @@ t_vec3 color(const t_ray r, t_list *world, int depth)
 			is_hiting = 1;
 			if (obj->hit_record.t < closest_t)
 			{
+				first_hit_obj = obj;
 				closest_t = obj->hit_record.t;
 				first_hit = obj->hit_record;
 			}
@@ -113,10 +115,15 @@ t_vec3 color(const t_ray r, t_list *world, int depth)
 	}
 	if (is_hiting)
 	{
-		t_vec3 target = vec3_add3(first_hit.hit_point, first_hit.normal, random_in_unit_object());
-		t_ray ray_2 = create_ray(first_hit.hit_point, vec3_sub(target, first_hit.hit_point));
-		t_vec3 color_result = vec3_mult_float(color(ray_2, world, depth + 1), 0.5);
-		return (color_result);
+		t_ray	scattered;
+		t_vec3	attenuation;
+
+		if (depth < 50 && first_hit_obj->use_metal && metal_scatter_ray(r, first_hit, &attenuation, &scattered, *first_hit_obj))
+			return (vec3_mult(color(scattered, world, depth+1), attenuation));
+		else if (depth < 50 && !first_hit_obj->use_metal && lamberian_scatter_ray(r, first_hit, &attenuation, &scattered, *first_hit_obj))
+			return (vec3_mult(color(scattered, world, depth+1), attenuation));
+		else
+			return (create_vec3(0, 0, 0));
 	}
 	return bg_color(r);
 }
@@ -132,8 +139,10 @@ int	main(void)
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 	data.world = NULL;
 
-	scene_add_sphere(&data.world, create_vec3(0, 0, -1), 0.5);
-	scene_add_sphere(&data.world, create_vec3(0, -100.5, -1), 100);
+	scene_add_sphere(&data.world, create_vec3(0, 0, -1), 0.5, create_vec3(0.8,0.3,0.3), 0, 0);
+	scene_add_sphere(&data.world, create_vec3(0, -100.5, -1), 100, create_vec3(0.8,0.3,0.3), 0, 0);
+	scene_add_sphere(&data.world, create_vec3(1, 0, -1), 0.5, create_vec3(0.8,0.3,0.3), 1, 1);
+	scene_add_sphere(&data.world, create_vec3(-1, 0, -1), 0.5, create_vec3(0.8,0.3,0.3), 1, 0);
 
 	cam.lower_L = create_vec3(-2.0, -1.0, -1.0);
 	cam.horizintal = create_vec3(4.0, 0.0, 0.0);
@@ -167,7 +176,6 @@ int	main(void)
 			my_mlx_pixel_put(&data, x, y, color);
 		}
 	}
-
 
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	mlx_hook(data.win, 2, 1L << 0, handle_key, &data);

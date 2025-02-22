@@ -111,10 +111,57 @@ t_vec3	ray_point_at(t_ray ray, float t)
 	return (vec3_add(ray.origin, vec3_mult_float(ray.direction, t)));
 }
 
+t_vec3	ray_reflected(const t_vec3 v, const t_vec3 n)
+{
+	t_vec3	dot;
 
-/*############################################### HITS RECORD ###############################################*/
+	dot = vec3_mult_float(n, (vec3_dot(v, n) * 2));
+	return (vec3_sub(v, dot));
+}
+
+int	lamberian_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj)
+{
+	t_vec3	target;
+	t_vec3	albedo;
+	(void)r_in;
+
+	albedo = obj.albedo;
+	target = vec3_add3(rec.hit_point, rec.normal, vec3_random_in_unit_object());
+	*scattered = create_ray(rec.hit_point, vec3_sub(target, rec.hit_point));
+	*attenuation = albedo;
+	return (1);
+}
+
+int	metal_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj)
+{
+	t_vec3	reflected;
+	t_vec3	ray_dir;
+	t_vec3	albedo;
+
+	albedo = obj.albedo;
+	reflected = ray_reflected(vec3_unit(r_in.direction), rec.normal);
+	ray_dir = vec3_add(reflected, vec3_mult_float(vec3_random_in_unit_object(), obj.metal_fuzz));
+	*scattered = create_ray(rec.hit_point, ray_dir);
+	*attenuation = albedo;
+	if (vec3_dot(scattered->direction, rec.normal) > 0)
+		return (1);
+	return (0);
+}
 
 
+/*############################################### MATERIAL ###############################################*/
+
+
+t_material	create_material(t_vec3 albedo, t_vec3 metal, t_vec3 lambertian, int use_metal)
+{
+	t_material	res;
+
+	res.albedo = albedo;
+	res.metal = metal;
+	res.lambertian = lambertian;
+	res.use_metal = use_metal;
+	return (res);
+}
 
 
 
@@ -132,12 +179,20 @@ t_hit_shpere	create_sphere(t_vec3 center, float radius)
 	return (res);
 }
 
-void	scene_add_sphere(t_list **world, t_vec3 center, float radius)
+void	scene_add_sphere(t_list **world, t_vec3 center, float radius, t_vec3 albedo, int use_metal, int metal_fuzz)
 {
 	t_hit_shpere	*shpere = (t_hit_shpere *)malloc(sizeof(t_hit_shpere));
 	shpere->id = 0;
 	shpere->center = center;
 	shpere->radius = radius;
+
+	shpere->albedo = albedo;
+	shpere->use_metal = use_metal;
+	if (metal_fuzz < 1)
+		shpere->metal_fuzz = metal_fuzz;
+	else
+		shpere->metal_fuzz = 1;
+
 	shpere->hit_record.t = -1;
 	shpere->hit_record.hit_point = create_vec3(0, 0, 0);
 	shpere->hit_record.normal = create_vec3(0, 0, 0);

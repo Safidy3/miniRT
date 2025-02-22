@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/02/22 14:15:42 by safandri         ###   ########.fr       */
+/*   Updated: 2025/02/22 16:40:15 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,18 +70,29 @@ typedef struct s_hit_record
 	t_vec3			color;
 }					t_hit_record;
 
+typedef struct s_material
+{
+	t_vec3	albedo;
+	t_vec3	metal;
+	t_vec3	lambertian;
+
+	int		use_metal;
+}			t_material;
+
 typedef struct s_hit_shpere
 {
-	int					id;
+	int				id;
+	t_vec3			center;
+	float			radius;
 
-	t_vec3				center;
-	float				radius;
-	t_hit_record		hit_record;
-}						t_hit_shpere;
+	t_vec3			albedo;
+	float			metal_fuzz;
+	int				use_metal;
 
-typedef struct s_mlx
-{
-}			t_mlx;
+	t_material		material;
+	t_hit_record	hit_record;
+}					t_hit_shpere;
+
 
 typedef struct s_data
 {
@@ -135,8 +146,16 @@ t_vec3	vec3_unit(t_vec3 v);
 float	vec3_dot(t_vec3 a, t_vec3 b);
 t_vec3	vec3_cross(t_vec3 a, t_vec3 b);
 
+
+t_vec3	vec3_random_in_unit_object();
+
 t_ray	create_ray(t_vec3 origin, t_vec3 dir);
 t_vec3	ray_point_at(t_ray ray, float t);
+
+
+int	metal_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj);
+int	lamberian_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj);
+
 
 t_mat4	mat4_look_at(t_vec3 pos, t_vec3 target, t_vec3 up);
 t_vec3	mat4_mult_vec3(t_mat4 mat, t_vec3 v);
@@ -147,11 +166,14 @@ void	render_cube(t_data *img, t_mat4 view, t_mat4 projection);
 
 
 t_hit_shpere	create_sphere(t_vec3 center, float radius);
-void			scene_add_sphere(t_list **world, t_vec3 center, float radius);
+void			scene_add_sphere(t_list **world, t_vec3 center, float radius, t_vec3 albedo, int use_metal, int metal_fuzz);
 
 void			delete_obj(void *obj);
 void			clear_sceen(t_list **world);
 t_hit_shpere	*make_obj(t_list *obj);
+
+
+t_material	create_material(t_vec3 albedo, t_vec3 metal, t_vec3 lambertian, int use_metal);
 
 void	free_data(t_data *data);
 int		close_window(void *param);
