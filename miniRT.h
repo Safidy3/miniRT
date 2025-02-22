@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/02/20 16:15:04 by safandri         ###   ########.fr       */
+/*   Updated: 2025/02/22 14:15:42 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,17 @@
 #include <math.h>
 #include <limits.h>
 
-#define WIDTH 1280
-#define HEIGHT 720
+// #define WIDTH 1280
+// #define HEIGHT 720
+#define WIDTH 640
+#define HEIGHT 310
 #define FOV 60
 #define NEAR 0.1
 #define FAR 100.0
 #define M_PI 3.14159265358979323846
-#define MIN_T 0.0
+#define MIN_T 0.001
 #define MAX_T (float)INT_MAX
+#define NUM_THREADS 8
 
 typedef struct s_vec3
 {
@@ -76,15 +79,21 @@ typedef struct s_hit_shpere
 	t_hit_record		hit_record;
 }						t_hit_shpere;
 
+typedef struct s_mlx
+{
+}			t_mlx;
+
 typedef struct s_data
 {
-	void    *mlx;               // Pointer to the MLX instance
-	void    *win;               // Pointer to the window instance
-	void    *img;               // Pointer to the image
-	char    *addr;              // Address of the image data
-	int     bits_per_pixel;     // Bits per pixel (color depth)
-	int     line_length;        // Length of a line in bytes
-	int     endian;             // Endianess of the pixel data
+	void    *mlx;
+	void    *win;
+	void    *img;
+	char    *addr;
+	int     bits_per_pixel;
+	int     line_length;
+	int     endian;
+	int thread_id;
+	t_cam	cam;
 	t_list	*world;
 }			t_data;
 
@@ -110,6 +119,7 @@ void	draw_line(t_data *img, t_vec3 p0, t_vec3 p1, int color);
 void	print_vec3(t_vec3 v, char *name);
 t_vec3	create_vec3(float x,float y, float z);
 float	vec3_len(t_vec3 v);
+float	vec3_squared_len(t_vec3 v);
 t_vec3	vec3_add(t_vec3 a, t_vec3 b);
 t_vec3	vec3_add3(t_vec3 a, t_vec3 b, t_vec3 c);
 t_vec3	vec3_sub(t_vec3 a, t_vec3 b);
@@ -142,7 +152,6 @@ void			scene_add_sphere(t_list **world, t_vec3 center, float radius);
 void			delete_obj(void *obj);
 void			clear_sceen(t_list **world);
 t_hit_shpere	*make_obj(t_list *obj);
-
 
 void	free_data(t_data *data);
 int		close_window(void *param);

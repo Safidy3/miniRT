@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/02/20 16:20:49 by safandri         ###   ########.fr       */
+/*   Updated: 2025/02/22 14:14:09 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	handle_key(int keycode, void *param)
 {
 	t_data	*data;
 
-	// printf("Key pressed: %d\n", keycode);
 	data = (t_data *)param;
 	if (keycode == 65307)
 		close_window(data);
@@ -42,7 +41,7 @@ int	hit_sphere(t_hit_shpere *obj, const t_ray r, t_hit_record *hit_rec)
 		hit_rec->t = t;
 		hit_rec->hit_point = ray_point_at(r, t);
 		hit_rec->normal = vec3_div_float(vec3_sub(hit_rec->hit_point, obj->center), obj->radius);
-		hit_rec->color = vec3_mult_float(create_vec3(hit_rec->normal.x + 1, hit_rec->normal.y + 1, hit_rec->normal.z + 1), 0.5);
+		// hit_rec->color = vec3_mult_float(create_vec3(hit_rec->normal.x + 1, hit_rec->normal.y + 1, hit_rec->normal.z + 1), 0.5);
 		return (1);
 	}
 
@@ -52,7 +51,7 @@ int	hit_sphere(t_hit_shpere *obj, const t_ray r, t_hit_record *hit_rec)
 		hit_rec->t = t;
 		hit_rec->hit_point = ray_point_at(r, t);
 		hit_rec->normal = vec3_div_float(vec3_sub(hit_rec->hit_point, obj->center), obj->radius);
-		hit_rec->color = vec3_mult_float(create_vec3(hit_rec->normal.x + 1, hit_rec->normal.y + 1, hit_rec->normal.z + 1), 0.5);
+		// hit_rec->color = vec3_mult_float(create_vec3(hit_rec->normal.x + 1, hit_rec->normal.y + 1, hit_rec->normal.z + 1), 0.5);
 		return (1);
 	}
 	return (0);
@@ -71,24 +70,36 @@ t_vec3	bg_color(const t_ray r)
 	return (result);
 }
 
-
-
-t_vec3	color(const t_ray r, t_list *world)
+t_vec3	random_in_unit_object()
 {
-	int	obj_num = ft_lstsize(world);
+	t_vec3	p;
+	t_vec3	tmp;
 
+	do
+	{
+		tmp = vec3_mult_float(create_vec3(drand48(), drand48(), drand48()), 2.0) ;
+		p = vec3_sub(tmp, create_vec3(1, 1, 1));
+	}
+	while (vec3_squared_len(p) >= 1.0);
+	return (p);	
+}
+
+
+t_vec3 color(const t_ray r, t_list *world, int depth)
+{
+	printf("%d\n", depth);
 	t_hit_shpere	*obj;
 	t_hit_record	first_hit;
+	t_list			*world_tmp;
+	float			closest_t;
+	int				is_hiting;
 
-	float	closest_t = MAX_T;
-	int		is_hiting = 0;
-	int	i;
-	
-
-	i = -1;
-	while (++i < obj_num)
+	closest_t = MAX_T;
+	is_hiting = 0;
+	world_tmp = world;
+	while (world_tmp)
 	{
-		obj = make_obj(world);
+		obj = make_obj(world_tmp);
 		if (hit_sphere(obj, r, &(obj->hit_record)))
 		{
 			is_hiting = 1;
@@ -98,13 +109,16 @@ t_vec3	color(const t_ray r, t_list *world)
 				first_hit = obj->hit_record;
 			}
 		}
-		world = world->next;
+		world_tmp = world_tmp->next;
 	}
-
 	if (is_hiting)
-		return (first_hit.color);
-
-	return (bg_color(r));
+	{
+		t_vec3 target = vec3_add3(first_hit.hit_point, first_hit.normal, random_in_unit_object());
+		t_ray ray_2 = create_ray(first_hit.hit_point, vec3_sub(target, first_hit.hit_point));
+		t_vec3 color_result = vec3_mult_float(color(ray_2, world, depth + 1), 0.5);
+		return (color_result);
+	}
+	return bg_color(r);
 }
 
 int	main(void)
@@ -121,8 +135,6 @@ int	main(void)
 	scene_add_sphere(&data.world, create_vec3(0, 0, -1), 0.5);
 	scene_add_sphere(&data.world, create_vec3(0, -100.5, -1), 100);
 
-	printf("%d\n", ft_lstsize(data.world));
-
 	cam.lower_L = create_vec3(-2.0, -1.0, -1.0);
 	cam.horizintal = create_vec3(4.0, 0.0, 0.0);
 	cam.vertical = create_vec3(0.0, 2.0, 0.0);
@@ -131,8 +143,6 @@ int	main(void)
 	t_vec3	pixel_pos;
 	t_ray	r;
 	t_vec3	r_col;
-	// int		nx = 200;
-	// int		ny = 100;
 	int		ns = 100;
 	for (int y = HEIGHT - 1; y >= 0; y--)
 	{
@@ -141,53 +151,27 @@ int	main(void)
 			r_col = create_vec3(0, 0, 0);
 			for (int s = 0; s < ns; s++)
 			{
-				
 				float	i = (float)(x + drand48()) / (float)WIDTH;
 				float	j = (float)(HEIGHT - y + drand48()) / (float)HEIGHT;
 				pixel_pos = vec3_add3(cam.lower_L, vec3_mult_float(cam.horizintal, i), vec3_mult_float(cam.vertical, j));
 				r = create_ray(cam.origin, vec3_sub(pixel_pos, cam.origin));
-				
-				r_col = vec3_add(r_col, color(r, data.world));
-
+				r_col = vec3_add(r_col, color(r, data.world, 0));
 			}
 			t_rgb	v;
 			r_col = vec3_div_float(r_col, ns);
-			
+			r_col = create_vec3(sqrt(r_col.x), sqrt(r_col.y), sqrt(r_col.z));
 			v.r = (int)(255.99 * r_col.x);
 			v.g = (int)(255.99 * r_col.y);
 			v.b = (int)(255.99 * r_col.z);
-
 			int color = ((int)v.r << 16) | ((int)v.g << 8) | (int)v.b;
 			my_mlx_pixel_put(&data, x, y, color);
 		}
 	}
-	mlx_hook(data.win, 2, 1L << 0, handle_key, &data);
+
+
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
-	mlx_loop(data.mlx);
+	mlx_hook(data.win, 2, 1L << 0, handle_key, &data);
 	mlx_hook(data.win, 17, 1L << 17, close_window, &data);
+	mlx_loop(data.mlx);
 	return (0);
 }
-
-
-// int main()
-// {
-// 	t_list	*world = NULL;
-// 	t_list	*tmp_list;
-// 	t_hit_shpere	*tmp;
-
-// 	scene_add_sphere(&world, create_vec3(2.6, 8.1, 3.2), 10);
-// 	scene_add_sphere(&world, create_vec3(5.4, 2.3, 1.9), 0.5);
-
-// 	printf("..................\n");
-// 	tmp_list = world;
-// 	while (tmp_list)
-// 	{
-// 		tmp = make_obj(tmp_list);
-// 		print_vec3(tmp->center, NULL);
-// 		printf("..................\n");
-// 		tmp_list = tmp_list->next;
-// 	}
-// 	clear_sceen(&world);
-// 	return (0);
-// }
-
