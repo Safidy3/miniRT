@@ -136,9 +136,11 @@ int refract(const t_vec3 v, const t_vec3 n, float ni_over_nt, t_vec3 *refracted)
 	return (0);
 }
 
-float schlick(float cosine, float ref_idx)
+float schlick_approx(float cosine, float ref_idx)
 {
-	float r0 = (1 - ref_idx) / (1 + ref_idx);
+	float	r0;
+
+	r0 = (1 - ref_idx) / (1 + ref_idx);
 	r0 = r0 * r0;
 	return r0 + (1 - r0) * pow((1 - cosine), 5);
 }
@@ -158,19 +160,24 @@ int dielectric_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *att
 	{
 		outward_normal = vec3_mult_float(rec.normal, -1);
 		ni_over_nt = obj.material_parameter;
-		cosine = sqrt(1 - ni_over_nt * ni_over_nt * (1 - vec3_dot(r_in.direction, rec.normal) * vec3_dot(r_in.direction, rec.normal)));
+		// cosine = sqrt(1 - ni_over_nt * ni_over_nt * (1 - vec3_dot(r_in.direction, rec.normal) * vec3_dot(r_in.direction, rec.normal)));
+		cosine = obj.material_parameter * vec3_dot(r_in.direction, rec.normal) / vec3_len(r_in.direction);
 	} 
 	else 
 	{
 		outward_normal = rec.normal;
 		ni_over_nt = 1.0 / obj.material_parameter;
-		cosine = -vec3_dot(r_in.direction, rec.normal);
+		// cosine = -vec3_dot(r_in.direction, rec.normal);
+		cosine = -vec3_dot(r_in.direction, rec.normal) / vec3_len(r_in.direction);
 	}
 
 	if (refract(r_in.direction, outward_normal, ni_over_nt, &refracted))
-		reflect_prob = schlick(cosine, obj.material_parameter);
+		reflect_prob = schlick_approx(cosine, obj.material_parameter);
 	else
+	{
+		*scattered = create_ray(rec.hit_point, reflected);
 		reflect_prob = 1.0;
+	}
 
 	if (drand48() < reflect_prob)
 		*scattered = create_ray(rec.hit_point, reflected);
