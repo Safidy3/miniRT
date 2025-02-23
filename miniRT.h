@@ -31,6 +31,7 @@
 #define M_PI 3.14159265358979323846
 #define MIN_T 0.001
 #define MAX_T (float)INT_MAX
+#define ANTIALIASING_SAMPLES 20
 #define NUM_THREADS 8
 
 typedef struct s_vec3

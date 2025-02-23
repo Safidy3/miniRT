@@ -41,7 +41,6 @@ int	hit_sphere(t_hit_shpere *obj, const t_ray r, t_hit_record *hit_rec)
 		hit_rec->t = t;
 		hit_rec->hit_point = ray_point_at(r, t);
 		hit_rec->normal = vec3_div_float(vec3_sub(hit_rec->hit_point, obj->center), obj->radius);
-		// hit_rec->color = vec3_mult_float(create_vec3(hit_rec->normal.x + 1, hit_rec->normal.y + 1, hit_rec->normal.z + 1), 0.5);
 		return (1);
 	}
 
@@ -51,7 +50,6 @@ int	hit_sphere(t_hit_shpere *obj, const t_ray r, t_hit_record *hit_rec)
 		hit_rec->t = t;
 		hit_rec->hit_point = ray_point_at(r, t);
 		hit_rec->normal = vec3_div_float(vec3_sub(hit_rec->hit_point, obj->center), obj->radius);
-		// hit_rec->color = vec3_mult_float(create_vec3(hit_rec->normal.x + 1, hit_rec->normal.y + 1, hit_rec->normal.z + 1), 0.5);
 		return (1);
 	}
 	return (0);
@@ -132,6 +130,7 @@ int	main(void)
 {
 	t_data	data;
 	t_cam	cam;
+	int		anti_aliasing = 1;
 
 	data.mlx = mlx_init();
 	data.win = mlx_new_window(data.mlx, WIDTH, HEIGHT, "miniRT");
@@ -152,26 +151,32 @@ int	main(void)
 	t_vec3	pixel_pos;
 	t_ray	r;
 	t_vec3	r_col;
-	int		ns = 100;
+	float i;
+	float j;
+	int AA_sample = (anti_aliasing != 0) ? ANTIALIASING_SAMPLES : 1;
+
 	for (int y = HEIGHT - 1; y >= 0; y--)
 	{
 		for (int x = 0; x < WIDTH; x++)
 		{
 			r_col = create_vec3(0, 0, 0);
-			for (int s = 0; s < ns; s++)
+
+			for (int s = 0; s < AA_sample; s++)
 			{
-				float	i = (float)(x + drand48()) / (float)WIDTH;
-				float	j = (float)(HEIGHT - y + drand48()) / (float)HEIGHT;
+				i = (float)(x + drand48()) / (float)WIDTH;
+				j = (float)(HEIGHT - y + drand48()) / (float)HEIGHT;
 				pixel_pos = vec3_add3(cam.lower_L, vec3_mult_float(cam.horizintal, i), vec3_mult_float(cam.vertical, j));
 				r = create_ray(cam.origin, vec3_sub(pixel_pos, cam.origin));
 				r_col = vec3_add(r_col, color(r, data.world, 0));
 			}
-			t_rgb	v;
-			r_col = vec3_div_float(r_col, ns);
+
+			r_col = vec3_div_float(r_col, AA_sample);
 			r_col = create_vec3(sqrt(r_col.x), sqrt(r_col.y), sqrt(r_col.z));
+			t_rgb	v;
 			v.r = (int)(255.99 * r_col.x);
 			v.g = (int)(255.99 * r_col.y);
 			v.b = (int)(255.99 * r_col.z);
+
 			int color = ((int)v.r << 16) | ((int)v.g << 8) | (int)v.b;
 			my_mlx_pixel_put(&data, x, y, color);
 		}

@@ -14,9 +14,6 @@
 
 void	free_data(t_data *data)
 {
-	t_list	*world;
-
-	world = data->world;
 	mlx_destroy_window(data->mlx, data->win);
 	mlx_destroy_image(data->mlx, data->img);
 	mlx_destroy_display(data->mlx);
