@@ -86,6 +86,10 @@ t_vec3	vec3_random_in_unit_object()
 t_vec3 color(const t_ray r, t_list *world, int depth)
 {
 	printf("%d\n", depth);
+
+	if (depth >= MAX_RECURS_DEPTH) 
+		return create_vec3(0, 0, 0); 
+
 	t_hit_shpere	*obj;
 	t_hit_shpere	*first_hit_obj;
 	t_hit_record	first_hit;
@@ -111,14 +115,16 @@ t_vec3 color(const t_ray r, t_list *world, int depth)
 		}
 		world_tmp = world_tmp->next;
 	}
-	if (is_hiting)
+	if (is_hiting && depth < MAX_RECURS_DEPTH)
 	{
 		t_ray	scattered;
 		t_vec3	attenuation;
 
-		if (depth < 50 && first_hit_obj->use_metal && metal_scatter_ray(r, first_hit, &attenuation, &scattered, *first_hit_obj))
+		if (first_hit_obj->material == METAL && metal_scatter_ray(r, first_hit, &attenuation, &scattered, *first_hit_obj))
 			return (vec3_mult(color(scattered, world, depth+1), attenuation));
-		else if (depth < 50 && !first_hit_obj->use_metal && lamberian_scatter_ray(r, first_hit, &attenuation, &scattered, *first_hit_obj))
+		else if (first_hit_obj->material == LAMBERTIAN && lamberian_scatter_ray(r, first_hit, &attenuation, &scattered, *first_hit_obj))
+			return (vec3_mult(color(scattered, world, depth+1), attenuation));
+		else if (first_hit_obj->material == DIELECTRIC && dielectric_scatter_ray(r, first_hit, &attenuation, &scattered, *first_hit_obj))
 			return (vec3_mult(color(scattered, world, depth+1), attenuation));
 		else
 			return (create_vec3(0, 0, 0));
@@ -138,10 +144,10 @@ int	main(void)
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 	data.world = NULL;
 
-	scene_add_sphere(&data.world, create_vec3(0, 0, -1), 0.5, create_vec3(0.8,0.3,0.3), 0, 0);
-	scene_add_sphere(&data.world, create_vec3(0, -100.5, -1), 100, create_vec3(0.8,0.3,0.3), 0, 0);
-	scene_add_sphere(&data.world, create_vec3(1, 0, -1), 0.5, create_vec3(0.8,0.3,0.3), 1, 1);
-	scene_add_sphere(&data.world, create_vec3(-1, 0, -1), 0.5, create_vec3(0.8,0.3,0.3), 1, 0);
+	scene_add_sphere(&data.world, create_vec3(-1, 0, -1), 0.5, create_vec3(0.1,0.2,0.5), 0, LAMBERTIAN);
+	scene_add_sphere(&data.world, create_vec3(0, -100.5, -1), 100, create_vec3(0.8,0.8,0.0), 0, LAMBERTIAN);
+	scene_add_sphere(&data.world, create_vec3(1, 0, -1), 0.5, create_vec3(0.8,0.6,0.2), 0.5, METAL);
+	scene_add_sphere(&data.world, create_vec3(0, 0, -1), 0.5, create_vec3(0.0,0.0,0.0), 1.5, DIELECTRIC);
 
 	cam.lower_L = create_vec3(-2.0, -1.0, -1.0);
 	cam.horizintal = create_vec3(4.0, 0.0, 0.0);

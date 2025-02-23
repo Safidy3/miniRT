@@ -31,8 +31,16 @@
 #define M_PI 3.14159265358979323846
 #define MIN_T 0.001
 #define MAX_T (float)INT_MAX
-#define ANTIALIASING_SAMPLES 20
+#define MAX_RECURS_DEPTH 50
+#define ANTIALIASING_SAMPLES 10
 #define NUM_THREADS 8
+
+enum e_material
+{
+	LAMBERTIAN,
+	METAL,
+	DIELECTRIC
+};
 
 typedef struct s_vec3
 {
@@ -71,15 +79,6 @@ typedef struct s_hit_record
 	t_vec3			color;
 }					t_hit_record;
 
-typedef struct s_material
-{
-	t_vec3	albedo;
-	t_vec3	metal;
-	t_vec3	lambertian;
-
-	int		use_metal;
-}			t_material;
-
 typedef struct s_hit_shpere
 {
 	int				id;
@@ -87,10 +86,9 @@ typedef struct s_hit_shpere
 	float			radius;
 
 	t_vec3			albedo;
-	float			metal_fuzz;
-	int				use_metal;
+	float			material_parameter;
+	int				material;
 
-	t_material		material;
 	t_hit_record	hit_record;
 }					t_hit_shpere;
 
@@ -156,6 +154,7 @@ t_vec3	ray_point_at(t_ray ray, float t);
 
 int	metal_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj);
 int	lamberian_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj);
+int	dielectric_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj);
 
 
 t_mat4	mat4_look_at(t_vec3 pos, t_vec3 target, t_vec3 up);
@@ -167,14 +166,12 @@ void	render_cube(t_data *img, t_mat4 view, t_mat4 projection);
 
 
 t_hit_shpere	create_sphere(t_vec3 center, float radius);
-void			scene_add_sphere(t_list **world, t_vec3 center, float radius, t_vec3 albedo, int use_metal, int metal_fuzz);
+void			scene_add_sphere(t_list **world, t_vec3 center, float radius, t_vec3 albedo, float material_parameter, int material);
 
 void			delete_obj(void *obj);
 void			clear_sceen(t_list **world);
 t_hit_shpere	*make_obj(t_list *obj);
 
-
-t_material	create_material(t_vec3 albedo, t_vec3 metal, t_vec3 lambertian, int use_metal);
 
 void	free_data(t_data *data);
 int		close_window(void *param);

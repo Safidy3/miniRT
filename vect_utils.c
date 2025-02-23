@@ -111,12 +111,73 @@ t_vec3	ray_point_at(t_ray ray, float t)
 	return (vec3_add(ray.origin, vec3_mult_float(ray.direction, t)));
 }
 
+/*############################################### MATERIAL ###############################################*/
+
 t_vec3	ray_reflected(const t_vec3 v, const t_vec3 n)
 {
 	t_vec3	dot;
 
 	dot = vec3_mult_float(n, (vec3_dot(v, n) * 2));
 	return (vec3_sub(v, dot));
+}
+
+int refract(const t_vec3 v, const t_vec3 n, float ni_over_nt, t_vec3 *refracted)
+{
+	t_vec3 uv = vec3_unit(v);
+	float dt = vec3_dot(uv, n);
+	float discriminant = 1.0 - ni_over_nt * ni_over_nt * (1 - dt * dt);
+
+	if (discriminant > 0)
+	{
+		*refracted = vec3_sub(vec3_mult_float(vec3_sub(uv, vec3_mult_float(n, dt)), ni_over_nt), 
+							  vec3_mult_float(n, sqrt(discriminant)));
+		return (1);
+	}
+	return (0);
+}
+
+float schlick(float cosine, float ref_idx)
+{
+	float r0 = (1 - ref_idx) / (1 + ref_idx);
+	r0 = r0 * r0;
+	return r0 + (1 - r0) * pow((1 - cosine), 5);
+}
+
+int dielectric_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj)
+{
+	t_vec3	outward_normal;
+	t_vec3	refracted;
+	t_vec3	reflected;
+	float	ni_over_nt;
+	float	reflect_prob;
+	float	cosine;
+
+	*attenuation = create_vec3(1.0, 1.0, 1.0);  // Glass is transparent
+	reflected = ray_reflected(r_in.direction, rec.normal);
+	if (vec3_dot(r_in.direction, rec.normal) > 0) 
+	{
+		outward_normal = vec3_mult_float(rec.normal, -1);
+		ni_over_nt = obj.material_parameter;
+		cosine = sqrt(1 - ni_over_nt * ni_over_nt * (1 - vec3_dot(r_in.direction, rec.normal) * vec3_dot(r_in.direction, rec.normal)));
+	} 
+	else 
+	{
+		outward_normal = rec.normal;
+		ni_over_nt = 1.0 / obj.material_parameter;
+		cosine = -vec3_dot(r_in.direction, rec.normal);
+	}
+
+	if (refract(r_in.direction, outward_normal, ni_over_nt, &refracted))
+		reflect_prob = schlick(cosine, obj.material_parameter);
+	else
+		reflect_prob = 1.0;
+
+	if (drand48() < reflect_prob)
+		*scattered = create_ray(rec.hit_point, reflected);
+	else
+		*scattered = create_ray(rec.hit_point, refracted);
+
+	return (1);
 }
 
 int	lamberian_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj)
@@ -140,31 +201,13 @@ int	metal_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuat
 
 	albedo = obj.albedo;
 	reflected = ray_reflected(vec3_unit(r_in.direction), rec.normal);
-	ray_dir = vec3_add(reflected, vec3_mult_float(vec3_random_in_unit_object(), obj.metal_fuzz));
+	ray_dir = vec3_add(reflected, vec3_mult_float(vec3_random_in_unit_object(), obj.material_parameter));
 	*scattered = create_ray(rec.hit_point, ray_dir);
 	*attenuation = albedo;
 	if (vec3_dot(scattered->direction, rec.normal) > 0)
 		return (1);
 	return (0);
 }
-
-
-/*############################################### MATERIAL ###############################################*/
-
-
-t_material	create_material(t_vec3 albedo, t_vec3 metal, t_vec3 lambertian, int use_metal)
-{
-	t_material	res;
-
-	res.albedo = albedo;
-	res.metal = metal;
-	res.lambertian = lambertian;
-	res.use_metal = use_metal;
-	return (res);
-}
-
-
-
 
 /*############################################### HITABLE ###############################################*/
 
@@ -179,28 +222,29 @@ t_hit_shpere	create_sphere(t_vec3 center, float radius)
 	return (res);
 }
 
-void	scene_add_sphere(t_list **world, t_vec3 center, float radius, t_vec3 albedo, int use_metal, int metal_fuzz)
+void	scene_add_sphere(t_list **world, t_vec3 center, float radius, t_vec3 albedo, float material_parameter, int material)
 {
 	t_hit_shpere	*shpere = (t_hit_shpere *)malloc(sizeof(t_hit_shpere));
 	shpere->id = 0;
 	shpere->center = center;
 	shpere->radius = radius;
-
 	shpere->albedo = albedo;
-	shpere->use_metal = use_metal;
-	if (metal_fuzz < 1)
-		shpere->metal_fuzz = metal_fuzz;
+	shpere->material = material;
+
+	if (material == METAL)
+		shpere->material_parameter = fmin(material_parameter, 1.0); // Clamped between 0 and 1
 	else
-		shpere->metal_fuzz = 1;
+		shpere->material_parameter = material_parameter;
 
 	shpere->hit_record.t = -1;
 	shpere->hit_record.hit_point = create_vec3(0, 0, 0);
 	shpere->hit_record.normal = create_vec3(0, 0, 0);
 	shpere->hit_record.color = create_vec3(0, 0, 0);
-	t_list *obj = ft_lstnew((void *)shpere);
 
+	t_list *obj = ft_lstnew((void *)shpere);
 	ft_lstadd_back(world, obj);
 }
+
 
 void	delete_obj(void *obj)
 {
@@ -223,7 +267,6 @@ t_hit_shpere	*make_obj(t_list *obj)
 	else
 		return (NULL);
 }
-
 
 
 
