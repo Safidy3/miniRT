@@ -1,4 +1,4 @@
-SRC = main.c shape_renderer.c vect_utils.c mlx_drawer_utils.c data_free.c
+SRC = main.c vect_utils.c mlx_drawer_utils.c data_free.c
 
 FLAGS = -Wall -Werror -Wextra -I/usr/include
 # FLAGS = -I/usr/include
@@ -40,6 +40,9 @@ re: fclean all
 
 run: all
 	@./$(NAME)
+
+runAA: all
+	@./$(NAME) 100
 
 debug: all
 	@valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(NAME)

@@ -162,7 +162,7 @@ int dielectric_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *att
 		ni_over_nt = obj.material_parameter;
 		// cosine = sqrt(1 - ni_over_nt * ni_over_nt * (1 - vec3_dot(r_in.direction, rec.normal) * vec3_dot(r_in.direction, rec.normal)));
 		cosine = obj.material_parameter * vec3_dot(r_in.direction, rec.normal) / vec3_len(r_in.direction);
-	} 
+	}
 	else 
 	{
 		outward_normal = rec.normal;
@@ -215,6 +215,47 @@ int	metal_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuat
 		return (1);
 	return (0);
 }
+
+/*############################################### CAMERA ###############################################*/
+
+t_cam	create_camera(t_vec3 origin, t_vec3 look_at)
+{
+	t_cam	cam;
+	t_vec3	u, v, w;
+	float	theta;
+	float	half_height;
+	float	half_width;
+	t_vec3	up;
+
+	up = create_vec3(0, 1, 0);
+	theta = FOV * M_PI / 180.0;
+	half_height = tan(theta / 2);
+	half_width = ((float)WIDTH / (float)HEIGHT) * half_height;
+
+	// Camera basis vectors
+	w = vec3_unit(vec3_sub(origin, look_at)); // Backward
+	u = vec3_unit(vec3_cross(up, w));        // Right
+	v = vec3_cross(w, u);                    // Up
+
+	// Correctly scale vectors
+	cam.origin = origin;
+	cam.horizintal = vec3_mult_float(u, 2 * half_width);  // Full width
+	cam.vertical = vec3_mult_float(v, 2 * half_height);   // Full height
+	
+	// Lower left corner is correctly set
+	cam.lower_L = vec3_sub3(origin, 
+	                        vec3_div_float(cam.horizintal, 2), 
+	                        vec3_div_float(cam.vertical, 2));
+	cam.lower_L = vec3_sub(cam.lower_L, w); // Move in the viewing direction
+
+	return (cam);
+}
+
+
+
+
+
+
 
 /*############################################### HITABLE ###############################################*/
 

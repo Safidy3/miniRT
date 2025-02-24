@@ -18,3 +18,17 @@ int	ft_isalnum(int num)
 		return (8);
 	return (0);
 }
+
+int	ft_isNumber(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isalnum(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}

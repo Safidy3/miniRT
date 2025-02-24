@@ -85,8 +85,6 @@ t_vec3	vec3_random_in_unit_object()
 
 t_vec3 color(const t_ray r, t_list *world, int depth)
 {
-	printf("%d\n", depth);
-
 	if (depth >= MAX_RECURS_DEPTH) 
 		return create_vec3(0, 0, 0); 
 
@@ -132,11 +130,23 @@ t_vec3 color(const t_ray r, t_list *world, int depth)
 	return bg_color(r);
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	t_data	data;
 	t_cam	cam;
-	int		anti_aliasing = 1;
+	int		AA_sample;
+
+	if (argc > 1)
+	{
+		if (!ft_isNumber(argv[1]))
+		{
+			printf("Usage: ./miniRT OR ./miniRT [AA_sample]\n");
+			return (1);
+		}
+		AA_sample = ft_atoi(argv[1]);
+	}
+	else
+		AA_sample = 1;
 
 	data.mlx = mlx_init();
 	data.win = mlx_new_window(data.mlx, WIDTH, HEIGHT, "miniRT");
@@ -144,29 +154,25 @@ int	main(void)
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 	data.world = NULL;
 
-	scene_add_sphere(&data.world, create_vec3(-1, 0, -1), 0.5, create_vec3(0.1,0.2,0.5), 0, LAMBERTIAN);
+	scene_add_sphere(&data.world, create_vec3(0, 0, -1), 0.5, create_vec3(0.1,0.2,0.5), 0, LAMBERTIAN);
 	scene_add_sphere(&data.world, create_vec3(0, -100.5, -1), 100, create_vec3(0.8,0.8,0.0), 0, LAMBERTIAN);
-	scene_add_sphere(&data.world, create_vec3(1, 0, -1), 0.5, create_vec3(0.8,0.6,0.2), 0.5, METAL);
-	scene_add_sphere(&data.world, create_vec3(0, 0, -1), 0.5, create_vec3(0.0,0.0,0.0), 1.5, DIELECTRIC);
+	scene_add_sphere(&data.world, create_vec3(1, 0, -1), 0.5, create_vec3(0.8,0.6,0.2), 0, METAL);
+	scene_add_sphere(&data.world, create_vec3(-1, 0, -1), 0.5, create_vec3(0.0,0.0,0.0), 1.5, DIELECTRIC);
 
-	cam.lower_L = create_vec3(-2.0, -1.0, -1.0);
-	cam.horizintal = create_vec3(4.0, 0.0, 0.0);
-	cam.vertical = create_vec3(0.0, 2.0, 0.0);
-	cam.origin = create_vec3(0.0, 0.0, 0.0);
+	cam = create_camera(create_vec3(0, 0, 0), create_vec3(0, 0, -1));
 
 	t_vec3	pixel_pos;
 	t_ray	r;
 	t_vec3	r_col;
-	float i;
-	float j;
-	int AA_sample = (anti_aliasing != 0) ? ANTIALIASING_SAMPLES : 1;
+	float	i;
+	float	j;
 
+	printf("Backing ...\n");
 	for (int y = HEIGHT - 1; y >= 0; y--)
 	{
 		for (int x = 0; x < WIDTH; x++)
 		{
 			r_col = create_vec3(0, 0, 0);
-
 			for (int s = 0; s < AA_sample; s++)
 			{
 				i = (float)(x + drand48()) / (float)WIDTH;
@@ -175,20 +181,14 @@ int	main(void)
 				r = create_ray(cam.origin, vec3_sub(pixel_pos, cam.origin));
 				r_col = vec3_add(r_col, color(r, data.world, 0));
 			}
-
 			r_col = vec3_div_float(r_col, AA_sample);
 			r_col = create_vec3(sqrt(r_col.x), sqrt(r_col.y), sqrt(r_col.z));
-			t_rgb	v;
-			v.r = (int)(255.99 * r_col.x);
-			v.g = (int)(255.99 * r_col.y);
-			v.b = (int)(255.99 * r_col.z);
-
-			int color = ((int)v.r << 16) | ((int)v.g << 8) | (int)v.b;
-			my_mlx_pixel_put(&data, x, y, color);
+			my_mlx_pixel_put(&data, x, y, r_col);
 		}
+		mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	}
+	printf("Finished.\n");
 
-	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	mlx_hook(data.win, 2, 1L << 0, handle_key, &data);
 	mlx_hook(data.win, 17, 1L << 17, close_window, &data);
 	mlx_loop(data.mlx);
