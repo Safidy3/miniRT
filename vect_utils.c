@@ -111,6 +111,19 @@ t_vec3	ray_point_at(t_ray ray, float t)
 	return (vec3_add(ray.origin, vec3_mult_float(ray.direction, t)));
 }
 
+/*############################################### TEXTURE ###############################################*/
+
+t_vec3	texture_checker(const t_vec3 point, t_vec3 color1, t_vec3 color2)
+{
+	float	sines;
+	int		checker_size = 3;
+
+	sines = sin(checker_size * point.x) * sin(checker_size * point.y) * sin(checker_size * point.z);
+	if (sines < 0)
+		return (color1);
+	return (color2);
+}
+
 /*############################################### MATERIAL ###############################################*/
 
 t_vec3	ray_reflected(const t_vec3 v, const t_vec3 n)
@@ -163,7 +176,7 @@ int dielectric_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *att
 		// cosine = sqrt(1 - ni_over_nt * ni_over_nt * (1 - vec3_dot(r_in.direction, rec.normal) * vec3_dot(r_in.direction, rec.normal)));
 		cosine = obj.material_parameter * vec3_dot(r_in.direction, rec.normal) / vec3_len(r_in.direction);
 	}
-	else 
+	else
 	{
 		outward_normal = rec.normal;
 		ni_over_nt = 1.0 / obj.material_parameter;
@@ -190,13 +203,14 @@ int dielectric_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *att
 int	lamberian_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj)
 {
 	t_vec3	target;
-	t_vec3	albedo;
 	(void)r_in;
 
-	albedo = obj.albedo;
 	target = vec3_add3(rec.hit_point, rec.normal, vec3_random_in_unit_object());
 	*scattered = create_ray(rec.hit_point, vec3_sub(target, rec.hit_point));
-	*attenuation = albedo;
+	if (obj.use_texture)
+		*attenuation = texture_checker(rec.hit_point, obj.color, create_vec3(0.12, 0.12, 0.12));
+	else
+		*attenuation = obj.color;
 	return (1);
 }
 
@@ -204,13 +218,14 @@ int	metal_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuat
 {
 	t_vec3	reflected;
 	t_vec3	ray_dir;
-	t_vec3	albedo;
 
-	albedo = obj.albedo;
 	reflected = ray_reflected(vec3_unit(r_in.direction), rec.normal);
 	ray_dir = vec3_add(reflected, vec3_mult_float(vec3_random_in_unit_object(), obj.material_parameter));
 	*scattered = create_ray(rec.hit_point, ray_dir);
-	*attenuation = albedo;
+	if (obj.use_texture)
+		*attenuation = texture_checker(rec.hit_point, obj.color, create_vec3(0.12, 0.12, 0.12));
+	else
+		*attenuation = obj.color;
 	if (vec3_dot(scattered->direction, rec.normal) > 0)
 		return (1);
 	return (0);
@@ -232,30 +247,19 @@ t_cam	create_camera(t_vec3 origin, t_vec3 look_at)
 	half_height = tan(theta / 2);
 	half_width = ((float)WIDTH / (float)HEIGHT) * half_height;
 
-	// Camera basis vectors
-	w = vec3_unit(vec3_sub(origin, look_at)); // Backward
-	u = vec3_unit(vec3_cross(up, w));        // Right
-	v = vec3_cross(w, u);                    // Up
+	w = vec3_unit(vec3_sub(origin, look_at));
+	u = vec3_unit(vec3_cross(up, w));
+	v = vec3_cross(w, u);
 
-	// Correctly scale vectors
 	cam.origin = origin;
-	cam.horizintal = vec3_mult_float(u, 2 * half_width);  // Full width
-	cam.vertical = vec3_mult_float(v, 2 * half_height);   // Full height
-	
-	// Lower left corner is correctly set
-	cam.lower_L = vec3_sub3(origin, 
-	                        vec3_div_float(cam.horizintal, 2), 
-	                        vec3_div_float(cam.vertical, 2));
-	cam.lower_L = vec3_sub(cam.lower_L, w); // Move in the viewing direction
+	cam.horizintal = vec3_mult_float(u, 2 * half_width);
+	cam.vertical = vec3_mult_float(v, 2 * half_height);
+
+	cam.lower_L = vec3_sub3(origin, vec3_div_float(cam.horizintal, 2), vec3_div_float(cam.vertical, 2));
+	cam.lower_L = vec3_sub(cam.lower_L, w);
 
 	return (cam);
 }
-
-
-
-
-
-
 
 /*############################################### HITABLE ###############################################*/
 
@@ -270,13 +274,14 @@ t_hit_shpere	create_sphere(t_vec3 center, float radius)
 	return (res);
 }
 
-void	scene_add_sphere(t_list **world, t_vec3 center, float radius, t_vec3 albedo, float material_parameter, int material)
+void	scene_add_sphere(t_list **world, t_vec3 center, float radius, t_vec3 color, int use_texture, float material_parameter, int material)
 {
 	t_hit_shpere	*shpere = (t_hit_shpere *)malloc(sizeof(t_hit_shpere));
 	shpere->id = 0;
 	shpere->center = center;
 	shpere->radius = radius;
-	shpere->albedo = albedo;
+	shpere->color = color;
+	shpere->use_texture = use_texture;
 	shpere->material = material;
 
 	if (material == METAL)

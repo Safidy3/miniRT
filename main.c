@@ -124,8 +124,7 @@ t_vec3 color(const t_ray r, t_list *world, int depth)
 			return (vec3_mult(color(scattered, world, depth+1), attenuation));
 		else if (first_hit_obj->material == DIELECTRIC && dielectric_scatter_ray(r, first_hit, &attenuation, &scattered, *first_hit_obj))
 			return (vec3_mult(color(scattered, world, depth+1), attenuation));
-		else
-			return (create_vec3(0, 0, 0));
+		return (create_vec3(0, 0, 0));
 	}
 	return bg_color(r);
 }
@@ -154,23 +153,23 @@ int	main(int argc, char **argv)
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 	data.world = NULL;
 
-	scene_add_sphere(&data.world, create_vec3(0, 0, -1), 0.5, create_vec3(0.1,0.2,0.5), 0, LAMBERTIAN);
-	scene_add_sphere(&data.world, create_vec3(0, -100.5, -1), 100, create_vec3(0.8,0.8,0.0), 0, LAMBERTIAN);
-	scene_add_sphere(&data.world, create_vec3(1, 0, -1), 0.5, create_vec3(0.8,0.6,0.2), 0, METAL);
-	scene_add_sphere(&data.world, create_vec3(-1, 0, -1), 0.5, create_vec3(0.0,0.0,0.0), 1.5, DIELECTRIC);
+	cam = create_camera(create_vec3(0, 0.5, 0), create_vec3(0, 0, -1));
 
-	cam = create_camera(create_vec3(0, 0, 0), create_vec3(0, 0, -1));
+	scene_add_sphere(&data.world, create_vec3(0, 0, -1), 0.5, create_vec3(0.1,0.2,0.5), 0, 0, LAMBERTIAN);
+	scene_add_sphere(&data.world, create_vec3(0, -100.5, -1), 100, create_vec3(0.8,0.8,0.0), 1, 0, METAL);
+	// scene_add_sphere(&data.world, create_vec3(1, 0, -1), 0.5, create_vec3(0.8,0.6,0.2), 0, METAL);
+	// scene_add_sphere(&data.world, create_vec3(-1, 0, -1), 0.5, create_vec3(0.0,0.0,0.0), 1.5, DIELECTRIC);
 
 	t_vec3	pixel_pos;
-	t_ray	r;
 	t_vec3	r_col;
+	t_ray	r;
 	float	i;
 	float	j;
 
 	printf("Backing ...\n");
-	for (int y = HEIGHT - 1; y >= 0; y--)
+	for (int x = 0; x < WIDTH; x++)
 	{
-		for (int x = 0; x < WIDTH; x++)
+		for (int y = HEIGHT - 1; y >= 0; y--)
 		{
 			r_col = create_vec3(0, 0, 0);
 			for (int s = 0; s < AA_sample; s++)
@@ -194,3 +193,40 @@ int	main(int argc, char **argv)
 	mlx_loop(data.mlx);
 	return (0);
 }
+
+// int	main()
+// {
+// 	t_data	data;
+
+// 	data.mlx = mlx_init();
+// 	data.win = mlx_new_window(data.mlx, WIDTH, HEIGHT, "miniRT");
+// 	data.img = mlx_new_image(data.mlx, WIDTH, HEIGHT);
+// 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
+// 	data.world = NULL;
+
+// 	t_vec3	col;
+	
+// 	// t_vec3	white = create_vec3(255, 255, 255);
+// 	t_vec3	r_col_1 = create_vec3(0, 255, 50);
+// 	t_vec3	r_col_2 = create_vec3(0, 70, 255);
+
+// 	// attenuation
+// 	col = vec3_mult(r_col_1, r_col_2);
+// 	col = vec3_div_float(col, 255);
+
+// 	// accumulation
+// 	// col = vec3_add(r_col_1, r_col_2);
+// 	// col = vec3_div_float(col, 2);
+
+// 	print_vec3(col, NULL);
+// 	for (int x = 0; x < WIDTH; x++)
+// 		for (int y = HEIGHT - 1; y >= 0; y--)
+// 			my_mlx_pixel_put(&data, x, y, col);
+	
+
+// 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
+// 	mlx_hook(data.win, 2, 1L << 0, handle_key, &data);
+// 	mlx_hook(data.win, 17, 1L << 17, close_window, &data);
+// 	mlx_loop(data.mlx);
+// 	return (0);
+// }

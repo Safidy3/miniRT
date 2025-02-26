@@ -85,9 +85,11 @@ typedef struct s_hit_shpere
 	t_vec3			center;
 	float			radius;
 
-	t_vec3			albedo;
+	t_vec3			color;
 	float			material_parameter;
 	int				material;
+
+	int				use_texture;
 
 	t_hit_record	hit_record;
 }					t_hit_shpere;
@@ -167,7 +169,7 @@ void	render_cube(t_data *img, t_mat4 view, t_mat4 projection);
 t_cam	create_camera(t_vec3 origin, t_vec3 look_at);
 
 t_hit_shpere	create_sphere(t_vec3 center, float radius);
-void			scene_add_sphere(t_list **world, t_vec3 center, float radius, t_vec3 albedo, float material_parameter, int material);
+void			scene_add_sphere(t_list **world, t_vec3 center, float radius, t_vec3 color, int use_texture, float material_parameter, int material);
 
 void			delete_obj(void *obj);
 void			clear_sceen(t_list **world);
