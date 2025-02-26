@@ -124,9 +124,16 @@ t_vec3 color(const t_ray r, t_list *world, int depth)
 			return (vec3_mult(color(scattered, world, depth+1), attenuation));
 		else if (first_hit_obj->material == DIELECTRIC && dielectric_scatter_ray(r, first_hit, &attenuation, &scattered, *first_hit_obj))
 			return (vec3_mult(color(scattered, world, depth+1), attenuation));
-		return (create_vec3(0, 0, 0));
+		else if (first_hit_obj->material == LIGHT && depth != 0)
+		{
+			float	intensity = 2;
+			return (vec3_mult_float(first_hit_obj->color, intensity));
+		}
+		else
+			return (create_vec3(0, 0, 0));
 	}
-	return bg_color(r);
+	return create_vec3(0, 0, 0);
+	// return bg_color(r);
 }
 
 int	main(int argc, char **argv)
@@ -153,10 +160,11 @@ int	main(int argc, char **argv)
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 	data.world = NULL;
 
-	cam = create_camera(create_vec3(0, 0.5, 0), create_vec3(0, 0, -1));
+	cam = create_camera(create_vec3(0, 0.5, 1), create_vec3(0, 0, -1));
 
 	scene_add_sphere(&data.world, create_vec3(0, 0, -1), 0.5, create_vec3(0.1,0.2,0.5), 0, 0, LAMBERTIAN);
-	scene_add_sphere(&data.world, create_vec3(0, -100.5, -1), 100, create_vec3(0.8,0.8,0.0), 1, 0, METAL);
+	scene_add_sphere(&data.world, create_vec3(0, 1.5, -1), 1, create_vec3(1, 1, 1), 0, 0, LIGHT);
+	scene_add_sphere(&data.world, create_vec3(0, -100.5, -1), 100, create_vec3(0.8,0.8,0.0), 1, 0, LAMBERTIAN);
 	// scene_add_sphere(&data.world, create_vec3(1, 0, -1), 0.5, create_vec3(0.8,0.6,0.2), 0, METAL);
 	// scene_add_sphere(&data.world, create_vec3(-1, 0, -1), 0.5, create_vec3(0.0,0.0,0.0), 1.5, DIELECTRIC);
 

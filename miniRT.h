@@ -39,7 +39,8 @@ enum e_material
 {
 	LAMBERTIAN,
 	METAL,
-	DIELECTRIC
+	DIELECTRIC,
+	LIGHT
 };
 
 typedef struct s_vec3
@@ -157,6 +158,7 @@ t_vec3	ray_point_at(t_ray ray, float t);
 int	metal_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj);
 int	lamberian_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj);
 int	dielectric_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj);
+int	light_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj);
 
 
 t_mat4	mat4_look_at(t_vec3 pos, t_vec3 target, t_vec3 up);

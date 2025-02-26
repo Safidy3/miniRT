@@ -231,6 +231,17 @@ int	metal_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuat
 	return (0);
 }
 
+int	light_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj)
+{
+	t_vec3	target;
+	(void)r_in;
+
+	target = vec3_add3(rec.hit_point, rec.normal, vec3_random_in_unit_object());
+	*scattered = create_ray(rec.hit_point, vec3_sub(target, rec.hit_point));
+	*attenuation = obj.color;
+	return (1);
+}
+
 /*############################################### CAMERA ###############################################*/
 
 t_cam	create_camera(t_vec3 origin, t_vec3 look_at)
