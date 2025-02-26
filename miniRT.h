@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/02/22 16:40:15 by safandri         ###   ########.fr       */
+/*   Updated: 2025/02/26 17:26:25 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,13 @@
 #define ANTIALIASING_SAMPLES 100
 #define NUM_THREADS 8
 
-enum e_material
+enum	e_shape
+{
+	SPHERE,
+	PLANE
+};
+
+enum	e_material
 {
 	LAMBERTIAN,
 	METAL,
@@ -80,11 +86,13 @@ typedef struct s_hit_record
 	t_vec3			color;
 }					t_hit_record;
 
-typedef struct s_hit_shpere
+typedef struct s_hit_object
 {
 	int				id;
 	t_vec3			center;
 	float			radius;
+
+	t_vec3			plane[4];
 
 	t_vec3			color;
 	float			material_parameter;
@@ -93,7 +101,7 @@ typedef struct s_hit_shpere
 	int				use_texture;
 
 	t_hit_record	hit_record;
-}					t_hit_shpere;
+}					t_hit_object;
 
 
 typedef struct s_data
@@ -140,6 +148,7 @@ t_vec3	vec3_sub3(t_vec3 a, t_vec3 b, t_vec3 c);
 
 t_vec3	vec3_mult(t_vec3 a, t_vec3 b);
 t_vec3	vec3_mult_float(t_vec3 a, float b);
+t_vec3	vec3_safe_mult_float(t_vec3 a, float b);
 t_vec3	vec3_div(t_vec3 a, t_vec3 b);
 t_vec3	vec3_div_float(t_vec3 a, float b);
 
@@ -147,6 +156,7 @@ t_vec3	vec3_normalize(t_vec3 v);
 t_vec3	vec3_unit(t_vec3 v);
 float	vec3_dot(t_vec3 a, t_vec3 b);
 t_vec3	vec3_cross(t_vec3 a, t_vec3 b);
+int		isNullVec3(t_vec3 v);
 
 
 t_vec3	vec3_random_in_unit_object();
@@ -155,10 +165,10 @@ t_ray	create_ray(t_vec3 origin, t_vec3 dir);
 t_vec3	ray_point_at(t_ray ray, float t);
 
 
-int	metal_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj);
-int	lamberian_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj);
-int	dielectric_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj);
-int	light_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj);
+int	metal_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj);
+int	lamberian_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj);
+int	dielectric_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj);
+int	light_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj);
 
 
 t_mat4	mat4_look_at(t_vec3 pos, t_vec3 target, t_vec3 up);
@@ -170,12 +180,17 @@ void	render_cube(t_data *img, t_mat4 view, t_mat4 projection);
 
 t_cam	create_camera(t_vec3 origin, t_vec3 look_at);
 
-t_hit_shpere	create_sphere(t_vec3 center, float radius);
+t_hit_object	create_sphere(t_vec3 center, float radius);
+int				hit_sphere(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec);
 void			scene_add_sphere(t_list **world, t_vec3 center, float radius, t_vec3 color, int use_texture, float material_parameter, int material);
+
+
+int				hit_plane(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec);
+t_hit_object	create_plane(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
 
 void			delete_obj(void *obj);
 void			clear_sceen(t_list **world);
-t_hit_shpere	*make_obj(t_list *obj);
+t_hit_object	*make_obj(t_list *obj);
 
 
 void	free_data(t_data *data);

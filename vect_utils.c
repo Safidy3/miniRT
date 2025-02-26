@@ -46,6 +46,18 @@ t_vec3	vec3_mult_float(t_vec3 a, float b)
 	return (t_vec3){a.x * b, a.y * b, a.z * b};
 }
 
+t_vec3	vec3_safe_mult_float(t_vec3 a, float b)
+{
+	t_vec3 v = {a.x * b, a.y * b, a.z * b};
+	if (v.x > 1)
+		v.x = 1;
+	if (v.y > 1)
+		v.y = 1;
+	if (v.z > 1)
+		v.z = 1;
+	return (v);
+}
+
 t_vec3	vec3_div(t_vec3 a, t_vec3 b)
 {
 	return (t_vec3){a.x / b.x, a.y / b.y, a.z / b.z};
@@ -93,6 +105,27 @@ t_vec3	vec3_normalize(t_vec3 v)
 t_vec3	vec3_unit(t_vec3 v)
 {
 	return (vec3_div_float(v, vec3_len(v)));
+}
+
+t_vec3	vec3_random_in_unit_object()
+{
+	t_vec3	p;
+	t_vec3	tmp;
+
+	do
+	{
+		tmp = vec3_mult_float(create_vec3(drand48(), drand48(), drand48()), 2.0) ;
+		p = vec3_sub(tmp, create_vec3(1, 1, 1));
+	}
+	while (vec3_squared_len(p) >= 1.0);
+	return (p);	
+}
+
+int		isNullVec3(t_vec3 v)
+{
+	if (v.x == 0 && v.x == 0 && v.z == 0)
+		return (1);
+	return (0);
 }
 
 /*############################################### RAYS ###############################################*/
@@ -158,7 +191,7 @@ float schlick_approx(float cosine, float ref_idx)
 	return r0 + (1 - r0) * pow((1 - cosine), 5);
 }
 
-int dielectric_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj)
+int dielectric_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj)
 {
 	t_vec3	outward_normal;
 	t_vec3	refracted;
@@ -200,7 +233,7 @@ int dielectric_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *att
 	return (1);
 }
 
-int	lamberian_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj)
+int	lamberian_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj)
 {
 	t_vec3	target;
 	(void)r_in;
@@ -214,7 +247,7 @@ int	lamberian_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *atte
 	return (1);
 }
 
-int	metal_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj)
+int	metal_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj)
 {
 	t_vec3	reflected;
 	t_vec3	ray_dir;
@@ -231,7 +264,7 @@ int	metal_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuat
 	return (0);
 }
 
-int	light_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_shpere obj)
+int	light_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj)
 {
 	t_vec3	target;
 	(void)r_in;
@@ -276,22 +309,55 @@ t_cam	create_camera(t_vec3 origin, t_vec3 look_at)
 
 /********************* sphere **********************/
 
-t_hit_shpere	create_sphere(t_vec3 center, float radius)
+t_hit_object	create_sphere(t_vec3 center, float radius)
 {
-	t_hit_shpere res;
+	t_hit_object	res;
+
 	res.center = center;
 	res.radius = radius;
 	res.id = 0;
+
 	return (res);
+}
+
+int	hit_sphere(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec)
+{
+	t_vec3	oc = vec3_sub(r.origin, obj->center);
+	float	a = vec3_dot(r.direction, r.direction);
+	float	b = 2.0 * vec3_dot(oc, r.direction);
+	float	c = vec3_dot(oc, oc) - obj->radius * obj->radius;
+	float	delta = b * b - 4.0 * a * c;
+
+	if (delta < 0)
+		return (0);
+
+	float t = (-b - sqrt(delta)) / (2.0 * a);
+	if (t > MIN_T && t < MAX_T)
+	{
+		hit_rec->t = t;
+		hit_rec->hit_point = ray_point_at(r, t);
+		hit_rec->normal = vec3_div_float(vec3_sub(hit_rec->hit_point, obj->center), obj->radius);
+		return (1);
+	}
+
+	t = (-b + sqrt(delta)) / (2.0 * a);
+	if (t > MIN_T && t < MAX_T)
+	{
+		hit_rec->t = t;
+		hit_rec->hit_point = ray_point_at(r, t);
+		hit_rec->normal = vec3_div_float(vec3_sub(hit_rec->hit_point, obj->center), obj->radius);
+		return (1);
+	}
+	return (0);
 }
 
 void	scene_add_sphere(t_list **world, t_vec3 center, float radius, t_vec3 color, int use_texture, float material_parameter, int material)
 {
-	t_hit_shpere	*shpere = (t_hit_shpere *)malloc(sizeof(t_hit_shpere));
+	t_hit_object	*shpere = (t_hit_object *)malloc(sizeof(t_hit_object));
 	shpere->id = 0;
 	shpere->center = center;
 	shpere->radius = radius;
-	shpere->color = color;
+	shpere->color = vec3_safe_mult_float(color, 1.5);
 	shpere->use_texture = use_texture;
 	shpere->material = material;
 
@@ -309,6 +375,25 @@ void	scene_add_sphere(t_list **world, t_vec3 center, float radius, t_vec3 color,
 	ft_lstadd_back(world, obj);
 }
 
+/********************* Plane **********************/
+
+t_hit_object	create_plane(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
+{
+	t_hit_object	res;
+
+	res.plane[0] = x0;
+	res.plane[1] = x1;
+	res.plane[2] = y0;
+	res.plane[3] = y1;
+	return (res);
+}
+
+// int	hit_plane(t_hit_object *obj, const t_ray r, float t0, float t1, t_hit_record *hit_rec)
+// {
+
+// }
+
+/********************* obj **********************/
 
 void	delete_obj(void *obj)
 {
@@ -324,10 +409,10 @@ void	clear_sceen(t_list **world)
 	}
 }
 
-t_hit_shpere	*make_obj(t_list *obj)
+t_hit_object	*make_obj(t_list *obj)
 {
 	if (obj)
-		return ((t_hit_shpere *)obj->content);
+		return ((t_hit_object *)obj->content);
 	else
 		return (NULL);
 }
