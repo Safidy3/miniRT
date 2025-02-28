@@ -38,7 +38,7 @@
 enum	e_shape
 {
 	SPHERE,
-	PLANE
+	RECTANGLE
 };
 
 enum	e_material
@@ -139,6 +139,7 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, t_vec3 r_col);
 
 void	print_vec3(t_vec3 v, char *name);
 t_vec3	create_vec3(float x,float y, float z);
+t_vec3	create_nullvec();
 float	vec3_len(t_vec3 v);
 float	vec3_squared_len(t_vec3 v);
 t_vec3	vec3_add(t_vec3 a, t_vec3 b);
@@ -180,13 +181,15 @@ void	render_cube(t_data *img, t_mat4 view, t_mat4 projection);
 
 t_cam	create_camera(t_vec3 origin, t_vec3 look_at);
 
-t_hit_object	create_sphere(t_vec3 center, float radius);
+t_hit_object	*create_sphere(t_vec3 center, float radius);
 int				hit_sphere(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec);
-void			scene_add_sphere(t_list **world, t_vec3 center, float radius, t_vec3 color, int use_texture, float material_parameter, int material);
+void			scene_add_obj(t_list **world, t_hit_object *shpere, t_vec3 color, int use_texture, float material_parameter, int material);
 
 
 int				hit_plane(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec);
-t_hit_object	create_plane(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
+t_hit_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
+
+int				hit_obj(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec);
 
 void			delete_obj(void *obj);
 void			clear_sceen(t_list **world);

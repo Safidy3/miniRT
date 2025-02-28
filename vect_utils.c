@@ -7,6 +7,11 @@ t_vec3	create_vec3(float x,float y, float z)
 	return (t_vec3){x, y, z};
 }
 
+t_vec3	create_nullvec()
+{
+	return (t_vec3){0, 0, 0};
+}
+
 void	print_vec3(t_vec3 v, char *name)
 {
 	if (name)
@@ -309,15 +314,20 @@ t_cam	create_camera(t_vec3 origin, t_vec3 look_at)
 
 /********************* sphere **********************/
 
-t_hit_object	create_sphere(t_vec3 center, float radius)
+t_hit_object	*create_sphere(t_vec3 center, float radius)
 {
-	t_hit_object	res;
+	t_hit_object	*shpere = (t_hit_object *)malloc(sizeof(t_hit_object));
 
-	res.center = center;
-	res.radius = radius;
-	res.id = 0;
+	shpere->id = SPHERE;
 
-	return (res);
+	shpere->center = center;
+	shpere->radius = radius;
+
+	shpere->plane[0] = create_nullvec();
+	shpere->plane[1] = create_nullvec();
+	shpere->plane[2] = create_nullvec();
+	shpere->plane[3] = create_nullvec();
+	return (shpere);
 }
 
 int	hit_sphere(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec)
@@ -351,49 +361,128 @@ int	hit_sphere(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec)
 	return (0);
 }
 
-void	scene_add_sphere(t_list **world, t_vec3 center, float radius, t_vec3 color, int use_texture, float material_parameter, int material)
-{
-	t_hit_object	*shpere = (t_hit_object *)malloc(sizeof(t_hit_object));
-	shpere->id = 0;
-	shpere->center = center;
-	shpere->radius = radius;
-	shpere->color = vec3_safe_mult_float(color, 1.5);
-	shpere->use_texture = use_texture;
-	shpere->material = material;
-
-	if (material == METAL)
-		shpere->material_parameter = fmin(material_parameter, 1.0); // Clamped between 0 and 1
-	else
-		shpere->material_parameter = material_parameter;
-
-	shpere->hit_record.t = -1;
-	shpere->hit_record.hit_point = create_vec3(0, 0, 0);
-	shpere->hit_record.normal = create_vec3(0, 0, 0);
-	shpere->hit_record.color = create_vec3(0, 0, 0);
-
-	t_list *obj = ft_lstnew((void *)shpere);
-	ft_lstadd_back(world, obj);
-}
-
 /********************* Plane **********************/
 
-t_hit_object	create_plane(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
+t_hit_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
 {
-	t_hit_object	res;
+	t_hit_object	*res = (t_hit_object *)malloc(sizeof(t_hit_object));
 
-	res.plane[0] = x0;
-	res.plane[1] = x1;
-	res.plane[2] = y0;
-	res.plane[3] = y1;
+	res->id = RECTANGLE;
+
+	res->center = create_nullvec();
+	res->radius = 0;
+
+	res->plane[0] = x0;
+	res->plane[1] = x1;
+	res->plane[2] = y0;
+	res->plane[3] = y1;
 	return (res);
 }
 
-// int	hit_plane(t_hit_object *obj, const t_ray r, float t0, float t1, t_hit_record *hit_rec)
-// {
+int hit_plane(t_hit_object *p, const t_ray r, t_hit_record *hit_rec)
+{
+	float	t;
+	float	denom;
+    t_vec3	normal;
 
+	normal = vec3_unit(vec3_cross(
+        vec3_sub(p->plane[1], p->plane[0]), 
+        vec3_sub(p->plane[3], p->plane[0])
+    ));
+
+    denom = vec3_dot(normal, r.direction);
+    if (fabs(denom) < 1e-6)
+        return (0);  // Ray is parallel to the plane
+
+    t = vec3_dot(vec3_sub(p->plane[0], r.origin), normal) / denom;
+    if (t < MIN_T || t > MAX_T)
+        return (0);  // Out of bounds
+
+    hit_rec->t = t;
+    hit_rec->hit_point = ray_point_at(r, t);
+    hit_rec->normal = normal;
+    return (1);
+}
+
+
+
+// int hit_rectangle(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec)
+// {
+// 	t_vec3 normal = vec3_unit(vec3_cross(vec3_sub(obj->plane[1], obj->plane[0]), vec3_sub(obj->plane[3], obj->plane[0])));
+// 	float denom = vec3_dot(normal, r.direction);
+// 	float t;
+
+// 	if (fabs(denom) < 1e-6)
+// 		return (0);  // Ray is parallel to the plane
+
+// 	t = vec3_dot(vec3_sub(obj->plane[0], r.origin), normal) / denom;
+// 	if (t < MIN_T || t > MAX_T)
+// 		return (0);  // Intersection is out of range
+
+// 	// Compute intersection point
+// 	t_vec3 hit_point = ray_point_at(r, t);
+	
+// 	// Define a local coordinate system for the rectangle
+// 	t_vec3 u = vec3_unit(vec3_sub(obj->plane[1], obj->plane[0])); // X-axis
+// 	t_vec3 v = vec3_unit(vec3_sub(obj->plane[3], obj->plane[0])); // Y-axis
+	
+// 	// Project hit point onto the rectangle's coordinate system
+// 	t_vec3 local_hit = vec3_sub(hit_point, obj->plane[0]);
+// 	float x_proj = vec3_dot(local_hit, u);
+// 	float y_proj = vec3_dot(local_hit, v);
+	
+// 	// Compute rectangle width and height
+// 	float width = vec3_len(vec3_sub(obj->plane[1], obj->plane[0]));
+// 	float height = vec3_len(vec3_sub(obj->plane[3], obj->plane[0]));
+
+// 	// Check if hit point is inside the rectangle bounds
+// 	if (x_proj < 0 || x_proj > width || y_proj < 0 || y_proj > height)
+// 		return (0);  // Outside the rectangle
+
+// 	// Store hit information
+// 	hit_rec->t = t;
+// 	hit_rec->hit_point = hit_point;
+// 	hit_rec->normal = normal;
+
+// 	return (1);
 // }
 
+
+
 /********************* obj **********************/
+
+void	scene_add_obj(t_list **world, t_hit_object *obj, t_vec3 color, int use_texture, float material_parameter, int material)
+{
+    if (!obj)
+        return;
+
+    obj->color = vec3_safe_mult_float(color, 1);
+    obj->use_texture = use_texture;
+    obj->material = material;
+    obj->material_parameter = (material == METAL) ? fmin(material_parameter, 1.0) : material_parameter;
+
+    obj->hit_record.t = -1;
+    obj->hit_record.hit_point = create_vec3(0, 0, 0);
+    obj->hit_record.normal = create_vec3(0, 0, 0);
+    obj->hit_record.color = color;
+
+    t_list *new_obj = ft_lstnew((void *)obj);
+    if (!new_obj)
+    {
+        free(obj);
+        return;
+    }
+    ft_lstadd_back(world, new_obj);
+}
+
+int	hit_obj(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec)
+{
+	if (obj->id == SPHERE)
+		return (hit_sphere(obj, r, hit_rec));
+	else if (obj->id == RECTANGLE)
+		return (hit_plane(obj, r, hit_rec));
+	return (0);
+}
 
 void	delete_obj(void *obj)
 {

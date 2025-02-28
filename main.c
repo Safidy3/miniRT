@@ -37,7 +37,7 @@ t_vec3	bg_color(const t_ray r)
 	return (result);
 }
 
-t_vec3 color(const t_ray r, t_list *world, int depth, int *hit_something)
+t_vec3 color(const t_ray r, t_list *world, int depth)
 {
 	if (depth >= MAX_RECURS_DEPTH) 
 		return create_vec3(0, 0, 0); 
@@ -55,7 +55,7 @@ t_vec3 color(const t_ray r, t_list *world, int depth, int *hit_something)
 	while (world_tmp)
 	{
 		obj = make_obj(world_tmp);
-		if (hit_sphere(obj, r, &(obj->hit_record)))
+		if (hit_obj(obj, r, &(obj->hit_record)))
 		{
 			is_hiting = 1;
 			if (obj->hit_record.t < closest_t)
@@ -73,23 +73,21 @@ t_vec3 color(const t_ray r, t_list *world, int depth, int *hit_something)
 		t_vec3	attenuation;
 
 		if (first_hit_obj->material == METAL && metal_scatter_ray(r, first_hit, &attenuation, &scattered, *first_hit_obj))
-			return (vec3_mult(color(scattered, world, depth+1, hit_something), attenuation));
+			return (vec3_mult(color(scattered, world, depth+1), attenuation));
 		else if (first_hit_obj->material == LAMBERTIAN && lamberian_scatter_ray(r, first_hit, &attenuation, &scattered, *first_hit_obj))
-			return (vec3_mult(color(scattered, world, depth+1, hit_something), attenuation));
+			return (vec3_mult(color(scattered, world, depth+1), attenuation));
 		else if (first_hit_obj->material == DIELECTRIC && dielectric_scatter_ray(r, first_hit, &attenuation, &scattered, *first_hit_obj))
-			return (vec3_mult(color(scattered, world, depth+1, hit_something), attenuation));
+			return (vec3_mult(color(scattered, world, depth+1), attenuation));
 		else if (first_hit_obj->material == LIGHT && depth != 0)
 		{
 			float	intensity = 1;
 			return (vec3_mult_float(first_hit_obj->color, intensity));
 		}
 		else if (first_hit_obj->material == LIGHT && depth == 0)
-			return (vec3_mult(color(r, world_tmp, depth+1, hit_something), attenuation));
+			return (vec3_mult(color(r, world_tmp, depth+1), attenuation));
 		else
 			return (vec3_mult_float(first_hit.color, 0.2));
 	}
-	else if (depth == 0 && !is_hiting)
-		*hit_something = 0;
 	return create_vec3(0, 0, 0);
 	// return bg_color(r);
 }
@@ -120,11 +118,25 @@ int	main(int argc, char **argv)
 
 	cam = create_camera(create_vec3(0, 0.5, 1), create_vec3(0, 0, -1));
 
-	scene_add_sphere(&data.world, create_vec3(0, 0, -1), 0.5, create_vec3(0.1,0.2,0.5), 0, 0.5, METAL);
-	scene_add_sphere(&data.world, create_vec3(0, 1, -1), 0.5, create_vec3(1, 1, 1), 0, 0, LIGHT);
-	scene_add_sphere(&data.world, create_vec3(0, -100.5, -1), 100, create_vec3(0.8,0.8,0.0), 1, 0, LAMBERTIAN);
-	// scene_add_sphere(&data.world, create_vec3(1, 0, -1), 0.5, create_vec3(0.8,0.6,0.2), 0, METAL);
-	// scene_add_sphere(&data.world, create_vec3(-1, 0, -1), 0.5, create_vec3(0.0,0.0,0.0), 1.5, DIELECTRIC);
+	
+	// t_hit_object *shpere = create_sphere(create_vec3(0, 0, -1), 0.5);
+	// scene_add_obj(&data.world, shpere, create_vec3(0.1,0.2,0.5), 0, 0.5, METAL);
+
+	t_hit_object *shpere_light = create_sphere(create_vec3(0, 1, -1), 0.5);
+	scene_add_obj(&data.world, shpere_light, create_vec3(1, 1, 1), 0, 0, LIGHT);
+
+	t_hit_object *rectangle = create_rectangle(
+		create_vec3(-2, 0, -2),
+		create_vec3(2, 0, -2),
+		create_vec3(-2, 2, -2),
+		create_vec3(2, 2, -2)
+	);
+	scene_add_obj(&data.world, rectangle, create_vec3(1, 1, 1), 0, 1, LAMBERTIAN);
+
+	t_hit_object *sphere_base = create_sphere(create_vec3(0, -100.5, -1), 100);
+	scene_add_obj(&data.world, sphere_base, create_vec3(0.8,0.8,0.0), 1, 0, LAMBERTIAN);
+	// scene_add_obj(&data.world, create_vec3(1, 0, -1), 0.5, create_vec3(0.8,0.6,0.2), 0, METAL);
+	// scene_add_obj(&data.world, create_vec3(-1, 0, -1), 0.5, create_vec3(0.0,0.0,0.0), 1.5, DIELECTRIC);
 
 	t_vec3	pixel_pos;
 	t_vec3	r_col;
@@ -138,7 +150,6 @@ int	main(int argc, char **argv)
 		for (int y = HEIGHT - 1; y >= 0; y--)
 		{
 			int dept = 0;
-			int	hit_something = 1;
 			r_col = create_vec3(0, 0, 0);
 			for (int s = 0; s < AA_sample; s++)
 			{
@@ -146,12 +157,11 @@ int	main(int argc, char **argv)
 				j = (float)(HEIGHT - y + drand48()) / (float)HEIGHT;
 				pixel_pos = vec3_add3(cam.lower_L, vec3_mult_float(cam.horizintal, i), vec3_mult_float(cam.vertical, j));
 				r = create_ray(cam.origin, vec3_sub(pixel_pos, cam.origin));
-				r_col = vec3_add(r_col, color(r, data.world, dept, &hit_something));
-				if (!hit_something)
-					break;
+				r_col = vec3_add(r_col, color(r, data.world, dept));
 			}
 			r_col = vec3_div_float(r_col, AA_sample);
 			r_col = create_vec3(sqrt(r_col.x), sqrt(r_col.y), sqrt(r_col.z));
+			// r_col = create_vec3(r_col.x, r_col.y, r_col.z);
 			my_mlx_pixel_put(&data, x, y, r_col);
 		}
 		mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
