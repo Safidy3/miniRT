@@ -392,12 +392,10 @@ int hit_plane(t_hit_object *p, const t_ray r, t_hit_record *hit_rec)
 
     denom = vec3_dot(normal, r.direction);
     if (fabs(denom) < 1e-6)
-        return (0);  // Ray is parallel to the plane
-
+        return (0);
     t = vec3_dot(vec3_sub(p->plane[0], r.origin), normal) / denom;
     if (t < MIN_T || t > MAX_T)
-        return (0);  // Out of bounds
-
+        return (0);
     hit_rec->t = t;
     hit_rec->hit_point = ray_point_at(r, t);
     hit_rec->normal = normal;

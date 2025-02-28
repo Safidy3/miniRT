@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/02/26 17:30:12 by safandri         ###   ########.fr       */
+/*   Updated: 2025/02/28 17:25:43 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,54 @@ int	handle_key(int keycode, void *param)
 	if (keycode == 65307)
 		close_window(data);
 	return (0);
+}
+
+
+/*******************************************************************************/
+
+void	printT(t_list *t)
+{
+	while (t)
+	{
+		int iter_val = 	(int)((t_hit_object *)(t->content))->hit_record.t;
+		printf("%d, ", iter_val);
+		t = t->next;
+	}
+	printf("\n");
+}
+
+void	list_swapp(t_list *a, t_list *b)
+{
+	void *tmp;
+
+	tmp = a->content;
+	a->content = b->content;
+	b->content = tmp;
+}
+
+void	sortlist(t_list **t)
+{
+	t_list	*iter;
+	t_list	*iter2;
+	t_list	*head;
+	int		iter_val;
+	int		iter2_val;
+
+	head = *t;
+	iter = head;
+	while (iter)
+	{
+		iter2 = iter->next;
+		while (iter2)
+		{
+			iter_val = 	(int)((t_hit_object *)(iter->content))->hit_record.t;
+			iter2_val = (int)((t_hit_object *)(iter2->content))->hit_record.t;
+			if (iter_val > iter2_val)
+				list_swapp(iter, iter2);
+			iter2 = iter2->next;
+		}
+		iter = iter->next;
+	}
 }
 
 /*******************************************************************************/
@@ -40,17 +88,31 @@ t_vec3	bg_color(const t_ray r)
 t_vec3 color(const t_ray r, t_list *world, int depth)
 {
 	if (depth >= MAX_RECURS_DEPTH) 
-		return create_vec3(0, 0, 0); 
+		return (create_vec3(0, 0, 0)); 
 
 	t_hit_object	*obj;
 	t_hit_object	*first_hit_obj;
 	t_hit_record	first_hit;
 	t_list			*world_tmp;
+	t_list			*first_hit_world;
+	t_list			*tmp_obj;
 	float			closest_t;
 	int				is_hiting;
 
 	closest_t = MAX_T;
 	is_hiting = 0;
+	tmp_obj = world;
+
+	world_tmp = world;
+	while (world_tmp)
+	{
+		obj = make_obj(world_tmp);
+		hit_obj(obj, r, &(obj->hit_record));
+		world_tmp = world_tmp->next;
+	}
+
+	sortlist(&world);
+
 	world_tmp = world;
 	while (world_tmp)
 	{
@@ -63,10 +125,12 @@ t_vec3 color(const t_ray r, t_list *world, int depth)
 				first_hit_obj = obj;
 				closest_t = obj->hit_record.t;
 				first_hit = obj->hit_record;
+				first_hit_world = world_tmp;
 			}
 		}
 		world_tmp = world_tmp->next;
 	}
+
 	if (is_hiting && depth < MAX_RECURS_DEPTH)
 	{
 		t_ray	scattered;
@@ -78,18 +142,36 @@ t_vec3 color(const t_ray r, t_list *world, int depth)
 			return (vec3_mult(color(scattered, world, depth+1), attenuation));
 		else if (first_hit_obj->material == DIELECTRIC && dielectric_scatter_ray(r, first_hit, &attenuation, &scattered, *first_hit_obj))
 			return (vec3_mult(color(scattered, world, depth+1), attenuation));
-		else if (first_hit_obj->material == LIGHT && depth != 0)
-		{
-			float	intensity = 1;
-			return (vec3_mult_float(first_hit_obj->color, intensity));
-		}
-		else if (first_hit_obj->material == LIGHT && depth == 0)
-			return (vec3_mult(color(r, world_tmp, depth+1), attenuation));
+		// else if (first_hit_obj->material == LIGHT && depth != 0)
+		// 	return (vec3_mult_float(first_hit_obj->color, 1.2));
+		else if (first_hit_obj->material == LIGHT)
+			return (vec3_mult_float(first_hit_obj->color, 1.2));
+
+		// else if (first_hit_obj->material == LIGHT && depth == 0)
+		// {
+		// 	// Skip this object and trace to the next object behind it
+		// 	t_list *next_obj = first_hit_world->next;
+		// 	while (next_obj && ((t_hit_object *)(next_obj->content))->material == LIGHT)
+		// 		next_obj = next_obj->next;
+
+		// 	// If there's another object behind the light, return its color
+		// 	if (next_obj)
+		// 		return color(r, next_obj, depth + 1);
+			
+		// 	// Otherwise, return black (or a small ambient light if desired)
+		// 	return create_vec3(0, 0, 0);
+		// }
+
+		// else if (first_hit_obj->material == LIGHT && depth == 0)
+		// {
+		// 	obj = make_obj(first_hit_world->next);
+		// 	t_vec3 col = color(r, first_hit_world->next, depth+1);
+		// 	return (col);
+		// }
 		else
 			return (vec3_mult_float(first_hit.color, 0.2));
 	}
 	return create_vec3(0, 0, 0);
-	// return bg_color(r);
 }
 
 int	main(int argc, char **argv)
@@ -110,13 +192,14 @@ int	main(int argc, char **argv)
 	else
 		AA_sample = 1;
 
+	printf("%d\n", LAMBERTIAN);
 	data.mlx = mlx_init();
 	data.win = mlx_new_window(data.mlx, WIDTH, HEIGHT, "miniRT");
 	data.img = mlx_new_image(data.mlx, WIDTH, HEIGHT);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 	data.world = NULL;
 
-	cam = create_camera(create_vec3(0, 0.5, 1), create_vec3(0, 0, -1));
+	cam = create_camera(create_vec3(0, 5, 1), create_vec3(0, 0, -1));
 
 	
 	// t_hit_object *shpere = create_sphere(create_vec3(0, 0, -1), 0.5);
@@ -161,7 +244,6 @@ int	main(int argc, char **argv)
 			}
 			r_col = vec3_div_float(r_col, AA_sample);
 			r_col = create_vec3(sqrt(r_col.x), sqrt(r_col.y), sqrt(r_col.z));
-			// r_col = create_vec3(r_col.x, r_col.y, r_col.z);
 			my_mlx_pixel_put(&data, x, y, r_col);
 		}
 		mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
@@ -209,4 +291,44 @@ int	main(int argc, char **argv)
 // 	mlx_hook(data.win, 17, 1L << 17, close_window, &data);
 // 	mlx_loop(data.mlx);
 // 	return (0);
+// }
+
+
+// int	main()
+// {
+// 	t_list	*tmp = malloc(sizeof(t_list));
+// 	int *val;
+
+// 	int i = 9;
+// 	tmp = ft_lstnew((void *) &i);
+// 	val = tmp->content;
+
+
+// 	int j = 8;
+// 	ft_lstadd_content_back(&tmp, (void *) &j);
+// 	val = tmp->content;
+
+
+// 	int k = 4;
+// 	ft_lstadd_content_back(&tmp, (void *) &k);
+// 	val = tmp->content;
+
+
+// 	int l = 6;
+// 	ft_lstadd_content_back(&tmp, (void *) &l);
+// 	val = tmp->content;
+
+
+// 	int m = 1;
+// 	ft_lstadd_content_back(&tmp, (void *) &m);
+// 	val = tmp->content;
+
+
+// 	int n = 7;
+// 	ft_lstadd_content_back(&tmp, (void *) &n);
+// 	val = tmp->content;
+
+
+// 	printT(tmp);
+// 	sortlist(&tmp);
 // }
