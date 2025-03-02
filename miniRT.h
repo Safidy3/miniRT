@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/02/26 17:26:25 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/02 16:51:05 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@
 enum	e_shape
 {
 	SPHERE,
-	RECTANGLE
+	RECTANGLE,
+	PLANE
 };
 
 enum	e_material
@@ -144,8 +145,10 @@ float	vec3_len(t_vec3 v);
 float	vec3_squared_len(t_vec3 v);
 t_vec3	vec3_add(t_vec3 a, t_vec3 b);
 t_vec3	vec3_add3(t_vec3 a, t_vec3 b, t_vec3 c);
+t_vec3	vec3_add_float(t_vec3 a, float f);
 t_vec3	vec3_sub(t_vec3 a, t_vec3 b);
 t_vec3	vec3_sub3(t_vec3 a, t_vec3 b, t_vec3 c);
+t_vec3	vec3_sub_float(t_vec3 a, float f);
 
 t_vec3	vec3_mult(t_vec3 a, t_vec3 b);
 t_vec3	vec3_mult_float(t_vec3 a, float b);
@@ -187,7 +190,11 @@ void			scene_add_obj(t_list **world, t_hit_object *shpere, t_vec3 color, int use
 
 
 int				hit_plane(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec);
+t_hit_object	*create_plane(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
+
 t_hit_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
+int				p_inside_rect(t_vec3 p, t_vec3 x0, t_vec3 x1, t_vec3 y0);
+int				hit_rectangle(t_hit_object *p, const t_ray r, t_hit_record *hit_rec);
 
 int				hit_obj(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec);
 

@@ -29,6 +29,11 @@ t_vec3	vec3_add3(t_vec3 a, t_vec3 b, t_vec3 c)
 	return (t_vec3){a.x + b.x + c.x, a.y + b.y + c.y, a.z + b.z + c.z};
 }
 
+t_vec3	vec3_add_float(t_vec3 a, float f)
+{
+	return ((t_vec3){a.x + f, a.y + f, a.z + f});
+}
+
 t_vec3	vec3_sub(t_vec3 a, t_vec3 b)
 {
 	return (t_vec3){a.x - b.x, a.y - b.y, a.z - b.z};
@@ -37,6 +42,11 @@ t_vec3	vec3_sub(t_vec3 a, t_vec3 b)
 t_vec3	vec3_sub3(t_vec3 a, t_vec3 b, t_vec3 c)
 {
 	return (t_vec3){a.x - b.x - c.x, a.y - b.y - c.y, a.z - b.z - c.z};
+}
+
+t_vec3	vec3_sub_float(t_vec3 a, float f)
+{
+	return ((t_vec3){a.x - f, a.y - f, a.z - f});
 }
 
 /*********************************/
@@ -363,11 +373,11 @@ int	hit_sphere(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec)
 
 /********************* Plane **********************/
 
-t_hit_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
+t_hit_object	*create_plane(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
 {
 	t_hit_object	*res = (t_hit_object *)malloc(sizeof(t_hit_object));
 
-	res->id = RECTANGLE;
+	res->id = PLANE;
 
 	res->center = create_nullvec();
 	res->radius = 0;
@@ -380,6 +390,43 @@ t_hit_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
 }
 
 int hit_plane(t_hit_object *p, const t_ray r, t_hit_record *hit_rec)
+{
+	float	t;
+	float	denom;
+	t_vec3	normal;
+
+	normal = vec3_unit(vec3_cross(
+		vec3_sub(p->plane[1], p->plane[0]), 
+		vec3_sub(p->plane[3], p->plane[0])
+	));
+
+	denom = vec3_dot(normal, r.direction);
+	if (fabs(denom) < 1e-6)
+		return (0);
+	t = vec3_dot(vec3_sub(p->plane[0], r.origin), normal) / denom;
+	if (t < MIN_T || t > MAX_T)
+		return (0);
+	hit_rec->t = t;
+	hit_rec->hit_point = ray_point_at(r, t);
+	hit_rec->normal = normal;
+	return (1);
+}
+
+t_hit_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
+{
+	t_hit_object	*res = create_plane(x0, x1, y0, y1);
+
+	res->id = RECTANGLE;
+	return (res);
+}
+
+// int	p_inside_rect(t_vec3 p, t_vec3 x0, t_vec3 x1, t_vec3 y0)
+// {
+// 	return (1);
+// }
+
+
+int hit_rectangle(t_hit_object *p, const t_ray r, t_hit_record *hit_rec)
 {
 	float	t;
 	float	denom;
@@ -396,13 +443,15 @@ int hit_plane(t_hit_object *p, const t_ray r, t_hit_record *hit_rec)
     t = vec3_dot(vec3_sub(p->plane[0], r.origin), normal) / denom;
     if (t < MIN_T || t > MAX_T)
         return (0);
+	
     hit_rec->t = t;
     hit_rec->hit_point = ray_point_at(r, t);
     hit_rec->normal = normal;
-    return (1);
+	// if (p_inside_rect(hit_rec->hit_point, p->plane[0], p->plane[1], p->plane[3]))
+	// 	return (1);
+
+    return (0);
 }
-
-
 
 // int hit_rectangle(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec)
 // {
@@ -451,34 +500,36 @@ int hit_plane(t_hit_object *p, const t_ray r, t_hit_record *hit_rec)
 
 void	scene_add_obj(t_list **world, t_hit_object *obj, t_vec3 color, int use_texture, float material_parameter, int material)
 {
-    if (!obj)
-        return;
+	if (!obj)
+		return;
 
-    obj->color = vec3_safe_mult_float(color, 1);
-    obj->use_texture = use_texture;
-    obj->material = material;
-    obj->material_parameter = (material == METAL) ? fmin(material_parameter, 1.0) : material_parameter;
+	obj->color = vec3_safe_mult_float(color, 1);
+	obj->use_texture = use_texture;
+	obj->material = material;
+	obj->material_parameter = (material == METAL) ? fmin(material_parameter, 1.0) : material_parameter;
 
-    obj->hit_record.t = -1;
-    obj->hit_record.hit_point = create_vec3(0, 0, 0);
-    obj->hit_record.normal = create_vec3(0, 0, 0);
-    obj->hit_record.color = color;
+	obj->hit_record.t = -1;
+	obj->hit_record.hit_point = create_vec3(0, 0, 0);
+	obj->hit_record.normal = create_vec3(0, 0, 0);
+	obj->hit_record.color = color;
 
-    t_list *new_obj = ft_lstnew((void *)obj);
-    if (!new_obj)
-    {
-        free(obj);
-        return;
-    }
-    ft_lstadd_back(world, new_obj);
+	t_list *new_obj = ft_lstnew((void *)obj);
+	if (!new_obj)
+	{
+		free(obj);
+		return;
+	}
+	ft_lstadd_back(world, new_obj);
 }
 
 int	hit_obj(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec)
 {
 	if (obj->id == SPHERE)
 		return (hit_sphere(obj, r, hit_rec));
-	else if (obj->id == RECTANGLE)
+	else if (obj->id == PLANE)
 		return (hit_plane(obj, r, hit_rec));
+	else if (obj->id == RECTANGLE)
+		return (hit_rectangle(obj, r, hit_rec));
 	return (0);
 }
 
