@@ -408,7 +408,7 @@ int hit_plane(t_hit_object *p, const t_ray r, t_hit_record *hit_rec)
 		return (0);
 	hit_rec->t = t;
 	hit_rec->hit_point = ray_point_at(r, t);
-	hit_rec->normal = normal;
+	hit_rec->normal = (denom > 0) ? vec3_mult_float(normal, -1) : normal;
 	return (1);
 }
 
