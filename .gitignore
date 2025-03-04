@@ -55,7 +55,5 @@ vgcore.*
 
 minilibx-linux
 miniRT
-RayTracingInAWeekend.pdf
-RayTracingTheNextWeek.pdf
-RayTracingTheRestOfYourLife.pdf
+pdf_resources
 .vscode
