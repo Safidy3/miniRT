@@ -31,3 +31,59 @@ int	close_window(void *param)
 	exit(EXIT_SUCCESS);
 	return (0);
 }
+
+void	delete_obj(void *obj)
+{
+	free(obj);
+}
+
+void	clear_sceen(t_list **world)
+{
+	if (world && *world)
+	{
+		ft_lstclear(world, &delete_obj);
+		*world = NULL;
+	}
+}
+
+t_hit_object	*make_obj(t_list *obj)
+{
+	if (obj)
+		return ((t_hit_object *)obj->content);
+	else
+		return (NULL);
+}
+
+void	list_swapp(t_list *a, t_list *b)
+{
+	void *tmp;
+
+	tmp = a->content;
+	a->content = b->content;
+	b->content = tmp;
+}
+
+void	sortlist(t_list **t)
+{
+	t_list	*iter;
+	t_list	*iter2;
+	t_list	*head;
+	int		iter_val;
+	int		iter2_val;
+
+	head = *t;
+	iter = head;
+	while (iter)
+	{
+		iter2 = iter->next;
+		while (iter2)
+		{
+			iter_val = 	(int)((t_hit_object *)(iter->content))->hit_record.t;
+			iter2_val = (int)((t_hit_object *)(iter2->content))->hit_record.t;
+			if (iter_val > iter2_val)
+				list_swapp(iter, iter2);
+			iter2 = iter2->next;
+		}
+		iter = iter->next;
+	}
+}

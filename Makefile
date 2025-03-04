@@ -1,4 +1,14 @@
-SRC = main.c vect_utils.c mlx_drawer_utils.c data_free.c
+VECTORS_SRCS = ./vector_maths/ray_utils.c ./vector_maths/vect_add.c ./vector_maths/vect_function.c ./vector_maths/vect_mult_div.c\
+				./vector_maths/vect_sub.c ./vector_maths/vect_utils.c
+
+OBJECTS_SRCS = ./objects/create_objects.c ./objects/hit_objects.c
+
+MATERIALS_SRCS = ./materials/materials.c
+
+RENDER_SRCS = ./render/render_image.c ./render/render_utils.c
+
+SRCS = main.c data_free.c\
+		$(VECTORS_SRCS) $(OBJECTS_SRCS) $(MATERIALS_SRCS) $(RENDER_SRCS)
 
 FLAGS = -Wall -Werror -Wextra -I/usr/include
 # FLAGS = -I/usr/include
@@ -10,7 +20,7 @@ LIB_MLX_ARCHIVE = $(LIB_MLX_PATH)/libmlx.a
 LIBFT_PATH = ./libft
 LIBFT_ARCHIVE = $(LIBFT_PATH)/libft.a
 
-OBJS = $(SRC:.c=.o)
+OBJS = $(SRCS:.c=.o)
 NAME = miniRT
 
 %.o: %.c

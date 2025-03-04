@@ -115,6 +115,7 @@ typedef struct s_data
 	int     line_length;
 	int     endian;
 	int thread_id;
+	int	AA_sample;
 	t_cam	cam;
 	t_list	*world;
 }			t_data;
@@ -135,8 +136,9 @@ typedef struct s_mat4
 
 /******************************************************/
 
+int		handle_key(int keycode, void *param);
 void	my_mlx_pixel_put(t_data *data, int x, int y, t_vec3 r_col);
-// void	draw_line(t_data *img, t_vec3 p0, t_vec3 p1, int color);
+void	put_pixel_color(t_data data);
 
 void	print_vec3(t_vec3 v, char *name);
 t_vec3	create_vec3(float x,float y, float z);
@@ -149,7 +151,6 @@ t_vec3	vec3_add_float(t_vec3 a, float f);
 t_vec3	vec3_sub(t_vec3 a, t_vec3 b);
 t_vec3	vec3_sub3(t_vec3 a, t_vec3 b, t_vec3 c);
 t_vec3	vec3_sub_float(t_vec3 a, float f);
-
 t_vec3	vec3_mult(t_vec3 a, t_vec3 b);
 t_vec3	vec3_mult_float(t_vec3 a, float b);
 t_vec3	vec3_safe_mult_float(t_vec3 a, float b);
@@ -169,18 +170,11 @@ t_ray	create_ray(t_vec3 origin, t_vec3 dir);
 t_vec3	ray_point_at(t_ray ray, float t);
 
 
-int	metal_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj);
-int	lamberian_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj);
-int	dielectric_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj);
-int	light_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj);
-
-
-t_mat4	mat4_look_at(t_vec3 pos, t_vec3 target, t_vec3 up);
-t_vec3	mat4_mult_vec3(t_mat4 mat, t_vec3 v);
-t_mat4	mat4_perspective(float fov, float aspect, float near, float far);
-
-void	render_triangle(t_data *img, t_mat4 view, t_mat4 projection);
-void	render_cube(t_data *img, t_mat4 view, t_mat4 projection);
+int		metal_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj);
+int		lamberian_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj);
+int		dielectric_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj);
+int		light_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj);
+t_vec3	texture_checker(const t_vec3 point, t_vec3 color1, t_vec3 color2);
 
 t_cam	create_camera(t_vec3 origin, t_vec3 look_at);
 
@@ -198,10 +192,11 @@ int				hit_rectangle(t_hit_object *p, const t_ray r, t_hit_record *hit_rec);
 
 int				hit_obj(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec);
 
+void			sortlist(t_list **t);
+void			list_swapp(t_list *a, t_list *b);
 void			delete_obj(void *obj);
 void			clear_sceen(t_list **world);
 t_hit_object	*make_obj(t_list *obj);
-
 
 void	free_data(t_data *data);
 int		close_window(void *param);
