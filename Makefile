@@ -5,9 +5,9 @@ OBJECTS_SRCS = ./objects/create_objects.c ./objects/hit_objects.c
 
 MATERIALS_SRCS = ./materials/materials.c
 
-RENDER_SRCS = ./render/render_image.c ./render/render_utils.c
+RENDER_SRCS = ./render/render_image.c ./render/render_utils.c ./render/render_debug.c
 
-SRCS = main.c data_free.c\
+SRCS = main.c data_free.c \
 		$(VECTORS_SRCS) $(OBJECTS_SRCS) $(MATERIALS_SRCS) $(RENDER_SRCS)
 
 FLAGS = -Wall -Werror -Wextra -I/usr/include

@@ -201,4 +201,9 @@ t_hit_object	*make_obj(t_list *obj);
 void	free_data(t_data *data);
 int		close_window(void *param);
 
+t_hit_object	*get_first_hit_obj(const t_ray r, t_list *world);
+
+void	put_pixel_color_debug(t_data data);
+t_vec3	color_debug(const t_ray r, t_list *world);
+
 #endif

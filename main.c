@@ -143,7 +143,10 @@ int	main(int argc, char **argv)
 	// scene_add_obj(&data.world, create_vec3(-1, 0, -1), 0.5, create_vec3(0.0,0.0,0.0), 1.5, DIELECTRIC);
 
 	printT(data.world);
-	put_pixel_color(data);
+	if (argc > 2)
+		put_pixel_color_debug(data);
+	else
+		put_pixel_color(data);
 
 	mlx_hook(data.win, 2, 1L << 0, handle_key, &data);
 	mlx_hook(data.win, 17, 1L << 17, close_window, &data);
