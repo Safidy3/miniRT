@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/02 16:51:05 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/05 14:28:15 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ enum	e_shape
 {
 	SPHERE,
 	RECTANGLE,
-	PLANE
+	PLANE,
+	CYLINDRE
 };
 
 enum	e_material
@@ -90,15 +91,17 @@ typedef struct s_hit_record
 typedef struct s_hit_object
 {
 	int				id;
+
 	t_vec3			center;
 	float			radius;
+
+	t_vec3			direction;
 
 	t_vec3			plane[4];
 
 	t_vec3			color;
 	float			material_parameter;
 	int				material;
-
 	int				use_texture;
 
 	t_hit_record	hit_record;
@@ -178,18 +181,14 @@ t_vec3	texture_checker(const t_vec3 point, t_vec3 color1, t_vec3 color2);
 
 t_cam	create_camera(t_vec3 origin, t_vec3 look_at);
 
+
 t_hit_object	*create_sphere(t_vec3 center, float radius);
-int				hit_sphere(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec);
-void			scene_add_obj(t_list **world, t_hit_object *shpere, t_vec3 color, int use_texture, float material_parameter, int material);
-
-
-int				hit_plane(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec);
 t_hit_object	*create_plane(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
-
 t_hit_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
-int				p_inside_rect(t_vec3 p, t_vec3 x0, t_vec3 x1, t_vec3 y0);
-int				hit_rectangle(t_hit_object *p, const t_ray r, t_hit_record *hit_rec);
+t_hit_object	*create_cylinder(t_vec3 center, t_vec3 direction, float radius);
 
+
+void			scene_add_obj(t_list **world, t_hit_object *shpere, t_vec3 color, int use_texture, float material_parameter, int material);
 int				hit_obj(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec);
 
 void			sortlist(t_list **t);

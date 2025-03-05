@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/02 17:56:06 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/05 14:31:35 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,20 @@ void	printT(t_list *t)
 {
 	while (t)
 	{
-		int iter_val = 	(int)((t_hit_object *)(t->content))->material;
+		int iter_val = 	(int)((t_hit_object *)(t->content))->id;
 		switch (iter_val)
 		{
 			case 0:
-				printf("LAMERTIAN\n");
+				printf("SPHERE\n");
 				break;
 			case 1:
-				printf("METAL\n");
+				printf("RECTANGLE\n");
 				break;
 			case 2:
-				printf("DIELECTRIC\n");
+				printf("PLANE\n");
 				break;
 			case 3:
-				printf("LIGHT\n");
+				printf("CYLINDRE\n");
 				break;
 			default:
 				break;
@@ -132,18 +132,21 @@ int	main(int argc, char **argv)
 	data.world = NULL;
 	data.cam = create_camera(create_vec3(0, 0, 1), create_vec3(0, 0, -1));
 
-
 	add_cornell_box(&data.world);
 
-	t_hit_object *shpere = create_sphere(create_vec3(0, 0, -1), 0.5);
-	scene_add_obj(&data.world, shpere, create_vec3(0.1,0.2,0.5), 0, 0, METAL);
+
+	t_hit_object *cylinder = create_cylinder(create_vec3(1, 0, -1), create_vec3(0, 1, 0), 0.5);
+	scene_add_obj(&data.world, cylinder, create_vec3(0.1,0.2,0.5), 0, 0, LAMBERTIAN);
+
+	// t_hit_object *shpere = create_sphere(create_vec3(1, 0, -1), 0.5);
+	// scene_add_obj(&data.world, shpere, create_vec3(0.1,0.2,0.5), 0, 0, METAL);
 	// t_hit_object *sphere_base = create_sphere(create_vec3(0, -100.5, -1), 100);
 	// scene_add_obj(&data.world, sphere_base, create_vec3(0.8,0.8,0.0), 1, 0, LAMBERTIAN);
 	// scene_add_obj(&data.world, create_vec3(1, 0, -1), 0.5, create_vec3(0.8,0.6,0.2), 0, METAL);
 	// scene_add_obj(&data.world, create_vec3(-1, 0, -1), 0.5, create_vec3(0.0,0.0,0.0), 1.5, DIELECTRIC);
 
 	printT(data.world);
-	if (argc > 2)
+	if (data.AA_sample == 0)
 		put_pixel_color_debug(data);
 	else
 		put_pixel_color(data);

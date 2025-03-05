@@ -40,6 +40,7 @@ t_hit_object	*create_sphere(t_vec3 center, float radius)
 	shpere->plane[1] = create_nullvec();
 	shpere->plane[2] = create_nullvec();
 	shpere->plane[3] = create_nullvec();
+	shpere->direction = create_nullvec();
 	return (shpere);
 }
 
@@ -50,6 +51,7 @@ t_hit_object	*create_plane(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
 	res = (t_hit_object *)malloc(sizeof(t_hit_object));
 	res->id = PLANE;
 	res->center = create_nullvec();
+	res->direction = create_nullvec();
 	res->radius = 0;
 	res->plane[0] = x0;
 	res->plane[1] = x1;
@@ -65,6 +67,22 @@ t_hit_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
 	res = create_plane(x0, x1, y0, y1);
 	res->id = RECTANGLE;
 	return (res);
+}
+
+t_hit_object	*create_cylinder(t_vec3 center, t_vec3 direction, float radius)
+{
+	t_hit_object	*cylinder;
+
+	cylinder = (t_hit_object *)malloc(sizeof(t_hit_object));
+	cylinder->id = CYLINDRE;
+	cylinder->center = center;
+	cylinder->radius = radius;
+	cylinder->direction = direction;
+	cylinder->plane[0] = create_nullvec();
+	cylinder->plane[1] = create_nullvec();
+	cylinder->plane[2] = create_nullvec();
+	cylinder->plane[3] = create_nullvec();
+	return (cylinder);
 }
 
 void	scene_add_obj(t_list **world, t_hit_object *obj, t_vec3 color, int use_texture, float material_parameter, int material)
