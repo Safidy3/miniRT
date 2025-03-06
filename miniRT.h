@@ -40,7 +40,7 @@ enum	e_shape
 	SPHERE,
 	RECTANGLE,
 	PLANE,
-	CYLINDRE
+	INF_CYLINDRE
 };
 
 enum	e_material
@@ -91,6 +91,8 @@ typedef struct s_hit_record
 typedef struct s_hit_object
 {
 	int				id;
+
+	int				shape;
 
 	t_vec3			center;
 	float			radius;
@@ -205,4 +207,6 @@ t_hit_object	*get_first_hit_obj(const t_ray r, t_list *world);
 void	put_pixel_color_debug(t_data data);
 t_vec3	color_debug(const t_ray r, t_list *world);
 
+
+void	printT(t_list *t);
 #endif

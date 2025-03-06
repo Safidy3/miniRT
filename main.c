@@ -24,26 +24,28 @@ int	handle_key(int keycode, void *param)
 
 void	printT(t_list *t)
 {
+	printf("size %d\n", ft_lstsize(t));
 	while (t)
 	{
 		int iter_val = 	(int)((t_hit_object *)(t->content))->id;
-		switch (iter_val)
-		{
-			case 0:
-				printf("SPHERE\n");
-				break;
-			case 1:
-				printf("RECTANGLE\n");
-				break;
-			case 2:
-				printf("PLANE\n");
-				break;
-			case 3:
-				printf("CYLINDRE\n");
-				break;
-			default:
-				break;
-		}
+		// switch (iter_val)
+		// {
+		// 	case 0:
+		// 		printf("SPHERE\n");
+		// 		break;
+		// 	case 1:
+		// 		printf("RECTANGLE\n");
+		// 		break;
+		// 	case 2:
+		// 		printf("PLANE\n");
+		// 		break;
+		// 	case 3:
+		// 		printf("INF_CYLINDRE\n");
+		// 		break;
+		// 	default:
+		// 		break;
+		// }
+		printf("id : %d\n", iter_val);
 		t = t->next;
 	}
 	printf("\n");
@@ -57,8 +59,6 @@ void	add_cornell_box(t_list **world)
 	t_vec3 red = create_vec3(1, 0, 0);
 	t_vec3 green = create_vec3(0, 1, 0);
 
-	t_hit_object *shpere_light = create_sphere(create_vec3(0, 1.2, -0.5), 0.5);
-	scene_add_obj(world, shpere_light, create_vec3(1,1,1), 0, 0, LIGHT);
 
 	t_hit_object *up = create_plane(
 		create_vec3(-2, 1.5, 0),
@@ -134,9 +134,11 @@ int	main(int argc, char **argv)
 
 	add_cornell_box(&data.world);
 
+	t_hit_object *shpere_light = create_sphere(create_vec3(-1, 0.5, -0.5), 0.5);
+	scene_add_obj(&data.world, shpere_light, create_vec3(1, 1, 1), 0, 0, LIGHT);
 
 	t_hit_object *cylinder = create_cylinder(create_vec3(1, 0, -1), create_vec3(0, 1, 0), 0.5);
-	scene_add_obj(&data.world, cylinder, create_vec3(0.1,0.2,0.5), 0, 0, LAMBERTIAN);
+	scene_add_obj(&data.world, cylinder, create_vec3(0.1, 0.2, 0.5), 0, 0, LAMBERTIAN);
 
 	// t_hit_object *shpere = create_sphere(create_vec3(1, 0, -1), 0.5);
 	// scene_add_obj(&data.world, shpere, create_vec3(0.1,0.2,0.5), 0, 0, METAL);

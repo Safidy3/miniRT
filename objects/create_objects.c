@@ -33,7 +33,7 @@ t_hit_object	*create_sphere(t_vec3 center, float radius)
 	t_hit_object	*shpere;
 
 	shpere = (t_hit_object *)malloc(sizeof(t_hit_object));;
-	shpere->id = SPHERE;
+	shpere->shape = SPHERE;
 	shpere->center = center;
 	shpere->radius = radius;
 	shpere->plane[0] = create_nullvec();
@@ -49,7 +49,7 @@ t_hit_object	*create_plane(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
 	t_hit_object	*res;
 
 	res = (t_hit_object *)malloc(sizeof(t_hit_object));
-	res->id = PLANE;
+	res->shape = PLANE;
 	res->center = create_nullvec();
 	res->direction = create_nullvec();
 	res->radius = 0;
@@ -65,7 +65,7 @@ t_hit_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
 	t_hit_object	*res;
 
 	res = create_plane(x0, x1, y0, y1);
-	res->id = RECTANGLE;
+	res->shape = RECTANGLE;
 	return (res);
 }
 
@@ -74,7 +74,7 @@ t_hit_object	*create_cylinder(t_vec3 center, t_vec3 direction, float radius)
 	t_hit_object	*cylinder;
 
 	cylinder = (t_hit_object *)malloc(sizeof(t_hit_object));
-	cylinder->id = CYLINDRE;
+	cylinder->shape = INF_CYLINDRE;
 	cylinder->center = center;
 	cylinder->radius = radius;
 	cylinder->direction = direction;
@@ -103,4 +103,5 @@ void	scene_add_obj(t_list **world, t_hit_object *obj, t_vec3 color, int use_text
 	obj->hit_record.normal = create_vec3(0, 0, 0);
 	obj->hit_record.color = color;
 	ft_lstadd_back(world, new_obj);
+	obj->id = ft_lstsize(*world) - 1;
 }

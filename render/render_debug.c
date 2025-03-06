@@ -11,6 +11,15 @@ t_vec3	color_debug(const t_ray r, t_list *world)
 	return create_vec3(0, 0, 0);
 }
 
+int	isSame(t_hit_object *obj, t_hit_object *obj2)
+{
+	if (!obj2)
+		return (0);
+	if (obj->id != obj2->id)
+		return (0);
+	return (1);
+}
+
 void	put_pixel_color_debug(t_data data)
 {
 	t_vec3	pix_pos;
@@ -20,19 +29,42 @@ void	put_pixel_color_debug(t_data data)
 	float	j;
 	int		x, y;
 
-	printf("Backing ...\n");
+	t_hit_object *hit_objects[WIDTH][HEIGHT];
 	for (x = 0; x < WIDTH; x++)
 	{
+		i = (float)x / (float)WIDTH;
 		for (y = HEIGHT - 1; y >= 0; y--)
 		{
-			i = (float)x / (float)WIDTH;
 			j = (float)(HEIGHT - y) / (float)HEIGHT;
 			pix_pos = vec3_add3(data.cam.lower_L, vec3_mult_float(data.cam.horizintal, i), vec3_mult_float(data.cam.vertical, j));
 			r = create_ray(data.cam.origin, vec3_sub(pix_pos, data.cam.origin));
 			pix_col = color_debug(r, data.world);
 			my_mlx_pixel_put(&data, x, y, pix_col);
+			hit_objects[x][y] = get_first_hit_obj(r, data.world);
 		}
-		mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	}
-	printf("Finished.\n");
+
+	for (x = 0; x < WIDTH - 1; x++)
+	{
+		i = (float)x / (float)WIDTH;
+		if (x == 0 || x == WIDTH - 1)
+			continue;
+		for (y = HEIGHT - 1; y >= 0; y--)
+		{
+			j = (float)(HEIGHT - y) / (float)HEIGHT;
+			t_hit_object *obj = hit_objects[x][y];
+			if (!obj)
+				continue;
+			t_hit_object *R_obj = hit_objects[x+1][y];
+			t_hit_object *L_obj = hit_objects[x-1][y];
+			t_hit_object *D_obj = hit_objects[x][y+1];
+			t_hit_object *U_obj = hit_objects[x][y-1];
+			if (isSame(R_obj, obj) && isSame(L_obj, obj) && isSame(D_obj, obj) && isSame(U_obj, obj))
+				continue;
+			else
+				my_mlx_pixel_put(&data, x, y, create_vec3(0.627, 0.125, 0.941));
+		}
+	}
+	printT(data.world);
+	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 }

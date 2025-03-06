@@ -139,13 +139,13 @@ static int	hit_cylindre(t_hit_object *cylinder, const t_ray r, t_hit_record *hit
 
 int	hit_obj(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec)
 {
-	if (obj->id == SPHERE)
+	if (obj->shape == SPHERE)
 		return (hit_sphere(obj, r, hit_rec));
-	else if (obj->id == PLANE)
+	else if (obj->shape == PLANE)
 		return (hit_plane(obj, r, hit_rec));
-	else if (obj->id == RECTANGLE)
+	else if (obj->shape == RECTANGLE)
 		return (hit_rectangle(obj, r, hit_rec));
-	else if (obj->id == CYLINDRE)
+	else if (obj->shape == INF_CYLINDRE)
 		return (hit_cylindre(obj, r, hit_rec));
 	return (0);
 }
