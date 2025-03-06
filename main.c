@@ -56,24 +56,24 @@ void	printT(t_list *t)
 void	add_cornell_box(t_list **world)
 {
 	t_proprieties white_lamb = create_proprieties(create_vec3(1, 1, 1), LAMBERTIAN, 0, 0);
-	t_proprieties red_lamb = create_proprieties(create_vec3(1, 0, 0), LAMBERTIAN, 0, 0);
-	t_proprieties green_lamb = create_proprieties(create_vec3(0, 1, 0), LAMBERTIAN, 0, 0);
+	// t_proprieties red_lamb = create_proprieties(create_vec3(1, 0, 0), LAMBERTIAN, 0, 0);
+	// t_proprieties green_lamb = create_proprieties(create_vec3(0, 1, 0), LAMBERTIAN, 0, 0);
 
-	t_object *up = create_plane(
-		create_vec3(-2, 1.5, 0),
-		create_vec3(2, 1.5, 0),
-		create_vec3(-2, 1.5, -2),
-		create_vec3(2, 1.5, -2)
-	);
-	scene_add_obj(world, up, white_lamb);
+	// t_object *up = create_plane(
+	// 	create_vec3(-2, 1.5, 0),
+	// 	create_vec3(2, 1.5, 0),
+	// 	create_vec3(-2, 1.5, -2),
+	// 	create_vec3(2, 1.5, -2)
+	// );
+	// scene_add_obj(world, up, white_lamb);
 
-	t_object *down = create_plane(
-		create_vec3(-2, -1.5, 0),
-		create_vec3(2, -1.5, 0),
-		create_vec3(-2, -1.5, -2),
-		create_vec3(2, -1.5, -2)
-	);
-	scene_add_obj(world, down, white_lamb);
+	// t_object *down = create_plane(
+	// 	create_vec3(-2, -1.5, 0),
+	// 	create_vec3(2, -1.5, 0),
+	// 	create_vec3(-2, -1.5, -2),
+	// 	create_vec3(2, -1.5, -2)
+	// );
+	// scene_add_obj(world, down, white_lamb);
 
 	t_object *fw = create_plane(
 		create_vec3(-2, 0, -2),
@@ -83,29 +83,29 @@ void	add_cornell_box(t_list **world)
 	);
 	scene_add_obj(world, fw, white_lamb);
 
-	t_object *left = create_plane(
-		create_vec3(-2, 0, 0),
-		create_vec3(-2, 0, -2),
-		create_vec3(-2, 2, 0),
-		create_vec3(-2, 2, -2)
-	);
-	scene_add_obj(world, left, red_lamb);
+	// t_object *left = create_plane(
+	// 	create_vec3(-2, 0, 0),
+	// 	create_vec3(-2, 0, -2),
+	// 	create_vec3(-2, 2, 0),
+	// 	create_vec3(-2, 2, -2)
+	// );
+	// scene_add_obj(world, left, red_lamb);
 
-	t_object *right = create_plane(
-		create_vec3(2, 0, 0),
-		create_vec3(2, 0, -2),
-		create_vec3(2, 2, 0),
-		create_vec3(2, 2, -2)
-	);
-	scene_add_obj(world, right, green_lamb);
+	// t_object *right = create_plane(
+	// 	create_vec3(2, 0, 0),
+	// 	create_vec3(2, 0, -2),
+	// 	create_vec3(2, 2, 0),
+	// 	create_vec3(2, 2, -2)
+	// );
+	// scene_add_obj(world, right, green_lamb);
 
-	t_object *back = create_plane(
-		create_vec3(-2, 0, 1),
-		create_vec3(2, 0, 1),
-		create_vec3(-2, 2, 1),
-		create_vec3(2, 2, 1)
-	);
-	scene_add_obj(world, back, white_lamb);
+	// t_object *back = create_plane(
+	// 	create_vec3(-2, 0, 1),
+	// 	create_vec3(2, 0, 1),
+	// 	create_vec3(-2, 2, 1),
+	// 	create_vec3(2, 2, 1)
+	// );
+	// scene_add_obj(world, back, white_lamb);
 }
 
 int	main(int argc, char **argv)
@@ -131,16 +131,20 @@ int	main(int argc, char **argv)
 	data.world = NULL;
 	data.cam = create_camera(create_vec3(0, 0, 1), create_vec3(0, 0, -1));
 
-	add_cornell_box(&data.world);
+	// add_cornell_box(&data.world);
 
 	t_proprieties p_white_light = create_proprieties(create_vec3(1, 1, 1), LIGHT, 0, 0);
-	t_proprieties Blue_lamb = create_proprieties(create_vec3(0.1, 0.2, 0.5), LAMBERTIAN, 0, 0);
+	t_proprieties white_lamb = create_proprieties(create_vec3(1, 1, 1), LAMBERTIAN, 0, 0);
+	// t_proprieties Blue_lamb = create_proprieties(create_vec3(0.1, 0.2, 0.5), LAMBERTIAN, 0, 0);
 
 	t_object *shpere_light = create_sphere(create_vec3(-1, 0.5, -0.5), 0.5);
 	scene_add_obj(&data.world, shpere_light, p_white_light);
 
-	t_object *cylinder = create_cylinder(create_vec3(1, 0, -1), create_vec3(0, 1, 0), 0.5);
-	scene_add_obj(&data.world, cylinder, Blue_lamb);
+	t_object *shpere = create_sphere(create_vec3(1, 0.5, 0), 0.5);
+	scene_add_obj(&data.world, shpere, white_lamb);
+
+	t_object *cylinder = create_cylinder(create_vec3(0.3, 0, -1), create_vec3(0, 1, 0), 0.5);
+	scene_add_obj(&data.world, cylinder, white_lamb);
 
 	printT(data.world);
 	if (data.AA_sample == 0)
