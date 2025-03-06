@@ -33,7 +33,7 @@
 #define MAX_T (float)INT_MAX
 #define MAX_RECURS_DEPTH 50
 #define ANTIALIASING_SAMPLES 100
-#define NUM_THREADS 8
+#define NUM_THREADS 12
 
 enum	e_shape
 {
@@ -211,6 +211,6 @@ t_object	*get_first_hit_obj(const t_ray r, t_list *world);
 void	put_pixel_color_debug(t_data data);
 t_vec3	color_debug(const t_ray r, t_list *world);
 
-
 void	printT(t_list *t);
+
 #endif

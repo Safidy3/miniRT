@@ -13,7 +13,7 @@ t_vec3	color_debug(const t_ray r, t_list *world)
 
 int	isSame(t_object *obj, t_object *obj2)
 {
-	if (!obj2)
+	if (!obj)
 		return (0);
 	if (obj->id != obj2->id)
 		return (0);

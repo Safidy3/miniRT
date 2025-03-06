@@ -61,8 +61,6 @@ t_vec3	color(const t_ray r, t_list *world, int depth, t_object	*src_obj)
 	t_ray			continued_ray;
 	t_proprieties	prts;
 
-	if (depth >= MAX_RECURS_DEPTH)
-		return (create_vec3(0, 0, 0)); 
 	first_hit_obj = get_first_hit_obj(r, world);
 	if (first_hit_obj && depth < MAX_RECURS_DEPTH)
 	{
@@ -86,24 +84,82 @@ t_vec3	color(const t_ray r, t_list *world, int depth, t_object	*src_obj)
 				return (color(continued_ray, world, depth + 1, first_hit_obj));
         }
 	}
-	return create_vec3(0, 0, 0);
+	return (create_vec3(0, 0, 0));
+}
+
+t_object	*get_safe_hit_obj(const t_ray r, t_list *world)
+{
+	t_object	*obj;
+	t_object	*first_hit_obj;
+	float		closest_t;
+	int			is_hiting;
+
+	closest_t = MAX_T;
+	is_hiting = 0;
+	while (world)
+	{
+		obj = make_obj(world);
+		if (hit_obj(obj, r, &(obj->hit_record)))
+		{
+			is_hiting = 1;
+			if (obj->hit_record.t < closest_t)
+			{
+				first_hit_obj = obj;
+				closest_t = obj->hit_record.t;
+			}
+		}
+		world = world->next;
+	}
+	if (is_hiting && first_hit_obj->proprieties.material != LIGHT)
+		return (first_hit_obj);
+	else if (is_hiting && first_hit_obj->proprieties.material == LIGHT)
+	{
+		while (first_hit_obj && first_hit_obj->proprieties.material == LIGHT)
+		{
+			t_ray	continued_ray = create_ray(first_hit_obj->hit_record.hit_point, r.direction);
+			first_hit_obj = get_first_hit_obj(continued_ray, world);
+		}
+		if (first_hit_obj)
+			return (first_hit_obj);
+	}
+	return (NULL);
+}
+
+int	isVoid(float x, float y, t_data data)
+{
+	t_object *c = get_safe_hit_obj(
+		create_ray(
+			data.cam.origin,
+			vec3_sub(vec3_add3(data.cam.lower_L, 
+				vec3_mult_float(data.cam.horizintal, (float)x / (float)WIDTH),
+				vec3_mult_float(data.cam.vertical, (float)(HEIGHT - y) / (float)HEIGHT)),
+			data.cam.origin)
+		),
+		data.world
+	);
+	if (c == NULL || c->proprieties.material == LIGHT)
+		return (1);
+	return (0);
 }
 
 void	put_pixel_color(t_data data)
 {
-	t_vec3	pix_pos;
-	t_vec3	pix_col;
+	t_vec3	pix_pos, pix_col;
 	t_ray	r;
-	float	i;
-	float	j;
+	float	i, j;
 	int		x, y, s;
 
-	printf("Backing ...\n");
+	printf("Loading ...\n");
 	for (x = 0; x < WIDTH; x++)
 	{
 		for (y = HEIGHT - 1; y >= 0; y--)
 		{
 			pix_col = create_vec3(0, 0, 0);
+			if (isVoid(x, y, data))
+			{
+				my_mlx_pixel_put(&data, x, y, pix_col);
+				continue;
+			}
 			for (s = 0; s < data.AA_sample; s++)
 			{
 				i = (float)(x + drand48()) / (float)WIDTH;
