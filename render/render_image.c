@@ -25,12 +25,12 @@ t_vec3	bg_color(const t_ray r)
 	return (result);
 }
 
-t_hit_object	*get_first_hit_obj(const t_ray r, t_list *world)
+t_object	*get_first_hit_obj(const t_ray r, t_list *world)
 {
-	t_hit_object	*obj;
-	t_hit_object	*first_hit_obj;
-	float			closest_t;
-	int				is_hiting;
+	t_object	*obj;
+	t_object	*first_hit_obj;
+	float		closest_t;
+	int			is_hiting;
 
 	closest_t = MAX_T;
 	is_hiting = 0;
@@ -53,29 +53,31 @@ t_hit_object	*get_first_hit_obj(const t_ray r, t_list *world)
 	return (NULL);
 }
 
-t_vec3	color(const t_ray r, t_list *world, int depth, t_hit_object	*src_obj)
+t_vec3	color(const t_ray r, t_list *world, int depth, t_object	*src_obj)
 {
-	t_hit_object	*first_hit_obj;
+	t_object		*first_hit_obj;
 	t_ray			scattered;
 	t_vec3			attenuation;
 	t_ray			continued_ray;
+	t_proprieties	prts;
 
 	if (depth >= MAX_RECURS_DEPTH)
 		return (create_vec3(0, 0, 0)); 
 	first_hit_obj = get_first_hit_obj(r, world);
 	if (first_hit_obj && depth < MAX_RECURS_DEPTH)
 	{
-		if (first_hit_obj->material == METAL && metal_scatter_ray(r, first_hit_obj->hit_record, &attenuation, &scattered, *first_hit_obj))
+		prts = first_hit_obj->proprieties;
+		if (prts.material == METAL && metal_scatter_ray(r, first_hit_obj->hit_record, &attenuation, &scattered, *first_hit_obj))
 			return (vec3_mult(color(scattered, world, depth+1, first_hit_obj), attenuation));
-		else if (first_hit_obj->material == LAMBERTIAN && lamberian_scatter_ray(r, first_hit_obj->hit_record, &attenuation, &scattered, *first_hit_obj))
+		else if (prts.material == LAMBERTIAN && lamberian_scatter_ray(r, first_hit_obj->hit_record, &attenuation, &scattered, *first_hit_obj))
 			return (vec3_mult(color(scattered, world, depth+1, first_hit_obj), attenuation));
-		else if (first_hit_obj->material == DIELECTRIC && dielectric_scatter_ray(r, first_hit_obj->hit_record, &attenuation, &scattered, *first_hit_obj))
+		else if (prts.material == DIELECTRIC && dielectric_scatter_ray(r, first_hit_obj->hit_record, &attenuation, &scattered, *first_hit_obj))
 			return (vec3_mult(color(scattered, world, depth+1, first_hit_obj), attenuation));
-		else if (first_hit_obj->material == LIGHT && depth != 0)
-			return (vec3_mult(src_obj->color, first_hit_obj->color));
-        else if (first_hit_obj->material == LIGHT && depth == 0)
+		else if (prts.material == LIGHT && depth != 0)
+			return (vec3_mult(src_obj->proprieties.color, prts.color));
+        else if (prts.material == LIGHT && depth == 0)
 		{
-			while (first_hit_obj && first_hit_obj->material == LIGHT)
+			while (first_hit_obj && first_hit_obj->proprieties.material == LIGHT)
 			{
 				continued_ray = create_ray(first_hit_obj->hit_record.hit_point, r.direction);
 				first_hit_obj = get_first_hit_obj(continued_ray, world);

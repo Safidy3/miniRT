@@ -46,10 +46,10 @@ void	clear_sceen(t_list **world)
 	}
 }
 
-t_hit_object	*make_obj(t_list *obj)
+t_object	*make_obj(t_list *obj)
 {
 	if (obj)
-		return ((t_hit_object *)obj->content);
+		return ((t_object *)obj->content);
 	else
 		return (NULL);
 }
@@ -78,8 +78,8 @@ void	sortlist(t_list **t)
 		iter2 = iter->next;
 		while (iter2)
 		{
-			iter_val = 	(int)((t_hit_object *)(iter->content))->hit_record.t;
-			iter2_val = (int)((t_hit_object *)(iter2->content))->hit_record.t;
+			iter_val = 	(int)((t_object *)(iter->content))->hit_record.t;
+			iter2_val = (int)((t_object *)(iter2->content))->hit_record.t;
 			if (iter_val > iter2_val)
 				list_swapp(iter, iter2);
 			iter2 = iter2->next;

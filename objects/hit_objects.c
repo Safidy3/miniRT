@@ -12,7 +12,7 @@
 
 #include "../miniRT.h"
 
-static int	hit_sphere(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec)
+static int	hit_sphere(t_object *obj, const t_ray r, t_hit_record *hit_rec)
 {
 	t_vec3	oc = vec3_sub(r.origin, obj->center);
 	float	a = vec3_dot(r.direction, r.direction);
@@ -43,7 +43,7 @@ static int	hit_sphere(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec)
 	return (0);
 }
 
-static int hit_plane(t_hit_object *p, const t_ray r, t_hit_record *hit_rec)
+static int hit_plane(t_object *p, const t_ray r, t_hit_record *hit_rec)
 {
 	float	t;
 	float	denom;
@@ -71,7 +71,7 @@ static int hit_plane(t_hit_object *p, const t_ray r, t_hit_record *hit_rec)
 // 	return (1);
 // }
 
-static int hit_rectangle(t_hit_object *p, const t_ray r, t_hit_record *hit_rec)
+static int hit_rectangle(t_object *p, const t_ray r, t_hit_record *hit_rec)
 {
 	float	t;
 	float	denom;
@@ -98,7 +98,7 @@ static int hit_rectangle(t_hit_object *p, const t_ray r, t_hit_record *hit_rec)
     return (0);
 }
 
-static int	hit_cylindre(t_hit_object *cylinder, const t_ray r, t_hit_record *hit_rec)
+static int	hit_cylindre(t_object *cylinder, const t_ray r, t_hit_record *hit_rec)
 {
 	t_vec3 a1 = vec3_cross(cylinder->direction, vec3_sub(r.origin, cylinder->center));
 	t_vec3 a2 = vec3_cross(cylinder->direction, r.direction);
@@ -137,7 +137,7 @@ static int	hit_cylindre(t_hit_object *cylinder, const t_ray r, t_hit_record *hit
 	return (0);
 }
 
-int	hit_obj(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec)
+int	hit_obj(t_object *obj, const t_ray r, t_hit_record *hit_rec)
 {
 	if (obj->shape == SPHERE)
 		return (hit_sphere(obj, r, hit_rec));

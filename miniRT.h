@@ -88,7 +88,15 @@ typedef struct s_hit_record
 	t_vec3			color;
 }					t_hit_record;
 
-typedef struct s_hit_object
+typedef struct s_obj_proprieties
+{
+	t_vec3	color;
+	float	material_parameter;
+	int		material;
+	int		use_texture;
+}			t_proprieties;
+
+typedef struct s_object
 {
 	int				id;
 
@@ -101,13 +109,10 @@ typedef struct s_hit_object
 
 	t_vec3			plane[4];
 
-	t_vec3			color;
-	float			material_parameter;
-	int				material;
-	int				use_texture;
+	t_proprieties		proprieties;
 
 	t_hit_record	hit_record;
-}					t_hit_object;
+}					t_object;
 
 
 typedef struct s_data
@@ -175,34 +180,33 @@ t_ray	create_ray(t_vec3 origin, t_vec3 dir);
 t_vec3	ray_point_at(t_ray ray, float t);
 
 
-int		metal_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj);
-int		lamberian_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj);
-int		dielectric_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj);
-int		light_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj);
-t_vec3	texture_checker(const t_vec3 point, t_vec3 color1, t_vec3 color2);
+int				metal_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_object obj);
+int				lamberian_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_object obj);
+int				dielectric_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_object obj);
+int				light_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_object obj);
+t_vec3			texture_checker(const t_vec3 point, t_vec3 color1, t_vec3 color2);
+t_proprieties	create_proprieties(t_vec3 color, int material, float material_parameter, int use_texture);
 
-t_cam	create_camera(t_vec3 origin, t_vec3 look_at);
+t_cam		create_camera(t_vec3 origin, t_vec3 look_at);
+t_object	*create_sphere(t_vec3 center, float radius);
+t_object	*create_plane(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
+t_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
+t_object	*create_cylinder(t_vec3 center, t_vec3 direction, float radius);
 
 
-t_hit_object	*create_sphere(t_vec3 center, float radius);
-t_hit_object	*create_plane(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
-t_hit_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
-t_hit_object	*create_cylinder(t_vec3 center, t_vec3 direction, float radius);
+void		scene_add_obj(t_list **world, t_object *obj, t_proprieties prts);
+int			hit_obj(t_object *obj, const t_ray r, t_hit_record *hit_rec);
 
-
-void			scene_add_obj(t_list **world, t_hit_object *shpere, t_vec3 color, int use_texture, float material_parameter, int material);
-int				hit_obj(t_hit_object *obj, const t_ray r, t_hit_record *hit_rec);
-
-void			sortlist(t_list **t);
-void			list_swapp(t_list *a, t_list *b);
-void			delete_obj(void *obj);
-void			clear_sceen(t_list **world);
-t_hit_object	*make_obj(t_list *obj);
+void		sortlist(t_list **t);
+void		list_swapp(t_list *a, t_list *b);
+void		delete_obj(void *obj);
+void		clear_sceen(t_list **world);
+t_object	*make_obj(t_list *obj);
 
 void	free_data(t_data *data);
 int		close_window(void *param);
 
-t_hit_object	*get_first_hit_obj(const t_ray r, t_list *world);
+t_object	*get_first_hit_obj(const t_ray r, t_list *world);
 
 void	put_pixel_color_debug(t_data data);
 t_vec3	color_debug(const t_ray r, t_list *world);

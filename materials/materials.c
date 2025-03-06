@@ -43,7 +43,7 @@ float schlick_approx(float cosine, float ref_idx)
 	return r0 + (1 - r0) * pow((1 - cosine), 5);
 }
 
-int dielectric_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj)
+int dielectric_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_object obj)
 {
 	t_vec3	outward_normal;
 	t_vec3	refracted;
@@ -57,20 +57,18 @@ int dielectric_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *att
 	if (vec3_dot(r_in.direction, rec.normal) > 0) 
 	{
 		outward_normal = vec3_mult_float(rec.normal, -1);
-		ni_over_nt = obj.material_parameter;
-		// cosine = sqrt(1 - ni_over_nt * ni_over_nt * (1 - vec3_dot(r_in.direction, rec.normal) * vec3_dot(r_in.direction, rec.normal)));
-		cosine = obj.material_parameter * vec3_dot(r_in.direction, rec.normal) / vec3_len(r_in.direction);
+		ni_over_nt = obj.proprieties.material_parameter;
+		cosine = obj.proprieties.material_parameter * vec3_dot(r_in.direction, rec.normal) / vec3_len(r_in.direction);
 	}
 	else
 	{
 		outward_normal = rec.normal;
-		ni_over_nt = 1.0 / obj.material_parameter;
-		// cosine = -vec3_dot(r_in.direction, rec.normal);
+		ni_over_nt = 1.0 / obj.proprieties.material_parameter;
 		cosine = -vec3_dot(r_in.direction, rec.normal) / vec3_len(r_in.direction);
 	}
 
 	if (refract(r_in.direction, outward_normal, ni_over_nt, &refracted))
-		reflect_prob = schlick_approx(cosine, obj.material_parameter);
+		reflect_prob = schlick_approx(cosine, obj.proprieties.material_parameter);
 	else
 	{
 		*scattered = create_ray(rec.hit_point, reflected);
@@ -85,44 +83,55 @@ int dielectric_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *att
 	return (1);
 }
 
-int	lamberian_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj)
+int	lamberian_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_object obj)
 {
 	t_vec3	target;
 	(void)r_in;
 
 	target = vec3_add3(rec.hit_point, rec.normal, vec3_random_in_unit_object());
 	*scattered = create_ray(rec.hit_point, vec3_sub(target, rec.hit_point));
-	if (obj.use_texture)
-		*attenuation = texture_checker(rec.hit_point, obj.color, create_vec3(0.12, 0.12, 0.12));
+	if (obj.proprieties.use_texture)
+		*attenuation = texture_checker(rec.hit_point, obj.proprieties.color, create_vec3(0.12, 0.12, 0.12));
 	else
-		*attenuation = obj.color;
+		*attenuation = obj.proprieties.color;
 	return (1);
 }
 
-int	metal_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj)
+int	metal_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_object obj)
 {
 	t_vec3	reflected;
 	t_vec3	ray_dir;
 
 	reflected = ray_reflected(vec3_unit(r_in.direction), rec.normal);
-	ray_dir = vec3_add(reflected, vec3_mult_float(vec3_random_in_unit_object(), obj.material_parameter));
+	ray_dir = vec3_add(reflected, vec3_mult_float(vec3_random_in_unit_object(), obj.proprieties.material_parameter));
 	*scattered = create_ray(rec.hit_point, ray_dir);
-	if (obj.use_texture)
-		*attenuation = texture_checker(rec.hit_point, obj.color, create_vec3(0.12, 0.12, 0.12));
+	if (obj.proprieties.use_texture)
+		*attenuation = texture_checker(rec.hit_point, obj.proprieties.color, create_vec3(0.12, 0.12, 0.12));
 	else
-		*attenuation = obj.color;
+		*attenuation = obj.proprieties.color;
 	if (vec3_dot(scattered->direction, rec.normal) > 0)
 		return (1);
 	return (0);
 }
 
-int	light_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_hit_object obj)
+int	light_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_object obj)
 {
 	t_vec3	target;
 	(void)r_in;
 
 	target = vec3_add3(rec.hit_point, rec.normal, vec3_random_in_unit_object());
 	*scattered = create_ray(rec.hit_point, vec3_sub(target, rec.hit_point));
-	*attenuation = obj.color;
+	*attenuation = obj.proprieties.color;
 	return (1);
+}
+
+t_proprieties	create_proprieties(t_vec3 color, int material, float material_parameter, int use_texture)
+{
+	t_proprieties	prts;
+
+	prts.color = color;
+	prts.material_parameter = material_parameter;
+	prts.material = material;
+	prts.use_texture = use_texture;
+	return (prts);
 }

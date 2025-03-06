@@ -28,11 +28,11 @@ t_cam	create_camera(t_vec3 origin, t_vec3 look_at)
 	return (cam);
 }
 
-t_hit_object	*create_sphere(t_vec3 center, float radius)
+t_object	*create_sphere(t_vec3 center, float radius)
 {
-	t_hit_object	*shpere;
+	t_object	*shpere;
 
-	shpere = (t_hit_object *)malloc(sizeof(t_hit_object));;
+	shpere = (t_object *)malloc(sizeof(t_object));;
 	shpere->shape = SPHERE;
 	shpere->center = center;
 	shpere->radius = radius;
@@ -44,11 +44,11 @@ t_hit_object	*create_sphere(t_vec3 center, float radius)
 	return (shpere);
 }
 
-t_hit_object	*create_plane(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
+t_object	*create_plane(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
 {
-	t_hit_object	*res;
+	t_object	*res;
 
-	res = (t_hit_object *)malloc(sizeof(t_hit_object));
+	res = (t_object *)malloc(sizeof(t_object));
 	res->shape = PLANE;
 	res->center = create_nullvec();
 	res->direction = create_nullvec();
@@ -60,20 +60,20 @@ t_hit_object	*create_plane(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
 	return (res);
 }
 
-t_hit_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
+t_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
 {
-	t_hit_object	*res;
+	t_object	*res;
 
 	res = create_plane(x0, x1, y0, y1);
 	res->shape = RECTANGLE;
 	return (res);
 }
 
-t_hit_object	*create_cylinder(t_vec3 center, t_vec3 direction, float radius)
+t_object	*create_cylinder(t_vec3 center, t_vec3 direction, float radius)
 {
-	t_hit_object	*cylinder;
+	t_object	*cylinder;
 
-	cylinder = (t_hit_object *)malloc(sizeof(t_hit_object));
+	cylinder = (t_object *)malloc(sizeof(t_object));
 	cylinder->shape = INF_CYLINDRE;
 	cylinder->center = center;
 	cylinder->radius = radius;
@@ -85,7 +85,7 @@ t_hit_object	*create_cylinder(t_vec3 center, t_vec3 direction, float radius)
 	return (cylinder);
 }
 
-void	scene_add_obj(t_list **world, t_hit_object *obj, t_vec3 color, int use_texture, float material_parameter, int material)
+void	scene_add_obj(t_list **world, t_object *obj, t_proprieties prts)
 {
 	t_list	*new_obj;
 
@@ -94,14 +94,14 @@ void	scene_add_obj(t_list **world, t_hit_object *obj, t_vec3 color, int use_text
 	new_obj = ft_lstnew((void *)obj);
 	if (!new_obj)
 		return free(obj);
-	obj->color = vec3_safe_mult_float(color, 1);
-	obj->use_texture = use_texture;
-	obj->material = material;
-	obj->material_parameter = (material == METAL) ? fmin(material_parameter, 1.0) : material_parameter;
+	obj->proprieties.color = vec3_safe_mult_float(prts.color, 1);
+	obj->proprieties.use_texture = prts.use_texture;
+	obj->proprieties.material = prts.material;
+	obj->proprieties.material_parameter = (prts.material == METAL) ? fmin(prts.material_parameter, 1.0) : prts.material_parameter;
 	obj->hit_record.t = -1;
 	obj->hit_record.hit_point = create_vec3(0, 0, 0);
 	obj->hit_record.normal = create_vec3(0, 0, 0);
-	obj->hit_record.color = color;
+	obj->hit_record.color = prts.color;
 	ft_lstadd_back(world, new_obj);
 	obj->id = ft_lstsize(*world) - 1;
 }
