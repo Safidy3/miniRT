@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/05 14:28:15 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/07 13:29:39 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@
 #define MAX_T (float)INT_MAX
 #define MAX_RECURS_DEPTH 5
 #define ANTIALIASING_SAMPLES 100
-#define NUM_THREADS 12
+#define NUM_THREADS 20
+#define PIX_UNIT (WIDTH / NUM_THREADS)
 
 enum	e_shape
 {
@@ -115,6 +116,7 @@ typedef struct s_object
 	t_hit_record	hit_record;
 }					t_object;
 
+struct s_threads;
 
 typedef struct s_data
 {
@@ -126,14 +128,24 @@ typedef struct s_data
 	int     line_length;
 	int     endian;
 
-	pthread_mutex_t lock;
+	struct s_threads *thread;
 	int		thread_id;
-	int		px_unit;
+
+	t_vec3	pix_col[WIDTH][HEIGHT];
 
 	int		AA_sample;
 	t_cam	cam;
 	t_list	*world;
 }			t_data;
+
+typedef struct s_threads
+{
+	pthread_t	threads[NUM_THREADS];
+	int			thread_id;
+	t_data		*data;
+	pthread_mutex_t lock;
+	
+}	t_threads;
 
 /******************************************************/
 
@@ -154,7 +166,7 @@ typedef struct s_mat4
 int		handle_key(int keycode, void *param);
 void	my_mlx_pixel_put(t_data *data, int x, int y, t_vec3 r_col);
 void	put_pixel_color(t_data data);
-void	put_pixel_color_thread(t_data data);
+void	put_pixel_color_thread(t_data *data);
 t_vec3	color(const t_ray r, t_list *world, int depth, t_object	*src_obj);
 int	isVoid(float x, float y, t_data data);
 

@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/07 12:38:30 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/07 13:45:45 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,16 +117,13 @@ void	*thread_routing(void *param)
 	int		x, y, s;
 
 	data = (t_data *)param;
-	for (x = data->thread_id * data->px_unit; x < (data->thread_id + 1) * data->px_unit; x++)
+	for (x = data->thread_id * PIX_UNIT; x < (data->thread_id + 1) * PIX_UNIT; x++)
 	{
 		for (y = HEIGHT - 1; y >= 0; y--)
 		{
 			pix_col = create_vec3(0, 0, 0);
-			if (isVoid(x, y, *data))
-			{
-				my_mlx_pixel_put(data, x, y, pix_col);
-				continue;
-			}
+			// if (isVoid(x, y, *data))
+			// 	continue;
 			for (s = 0; s < data->AA_sample; s++)
 			{
 				i = (float)(x + drand48()) / (float)WIDTH;
@@ -137,37 +134,32 @@ void	*thread_routing(void *param)
 			}
 			pix_col = vec3_div_float(pix_col, data->AA_sample);
 			pix_col = create_vec3(sqrt(pix_col.x), sqrt(pix_col.y), sqrt(pix_col.z));
+			// data->pix_col[x][y] = pix_col;
 			my_mlx_pixel_put(data, x, y, pix_col);
 		}
 	}
-	pthread_mutex_lock(&data->lock);
+	pthread_mutex_lock(&data->thread->lock);
 	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
-	pthread_mutex_unlock(&data->lock);
+	pthread_mutex_unlock(&data->thread->lock);
+
+	// pthread_join(data->thread->threads[data->thread_id], NULL);
+	// printf("Thread %d finished\n", data->thread_id);
 
 	return (NULL);
 }
 
-void	put_pixel_color_thread(t_data data)
+void	put_pixel_color_thread(t_data *data)
 {
-	pthread_t	threads[NUM_THREADS];
-	data.px_unit = WIDTH / NUM_THREADS;
-
 	printf("Loading ...\n");
 	for (int i = 0; i < NUM_THREADS; i++)
 	{
-		pthread_mutex_lock(&data.lock);
-		data.thread_id = i;
-		pthread_mutex_unlock(&data.lock);
-		printf("Thread %d\n", i);
-		if (pthread_create(&threads[i], NULL, thread_routing, (void *)&data))
-			return perror("Failed to create thread");
+		data->thread_id = i;
+		printf("Thread %d started\n", i);
+		pthread_create(&data->thread->threads[i], NULL, thread_routing, (void *)data);
 		usleep(10000);
 	}
 	for (int i = 0; i < NUM_THREADS; i++)
-	{
-		if (pthread_join(threads[i], NULL) != 0)
-			return perror("Failed to join thread");
-	}
+		pthread_join(data->thread->threads[i], NULL);
 	printf("Finished.\n");
 }
 
@@ -192,15 +184,18 @@ int	main(int argc, char **argv)
 	data.img = mlx_new_image(data.mlx, WIDTH, HEIGHT);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 	data.world = NULL;
-	data.px_unit = WIDTH / NUM_THREADS;
-	pthread_mutex_init(&data.lock, NULL);
 	data.cam = create_camera(create_vec3(0, 0, 1), create_vec3(0, 0, -1));
 
-	// add_cornell_box(&data.world);
+	t_threads	thread;
+	thread.data = &data;
+	data.thread = &thread;
+
+
+	add_cornell_box(&data.world);
 
 	t_proprieties p_white_light = create_proprieties(create_vec3(1, 1, 1), LIGHT, 0, 0);
 	t_proprieties white_lamb = create_proprieties(create_vec3(1, 1, 1), LAMBERTIAN, 0, 0);
-	// t_proprieties Blue_lamb = create_proprieties(create_vec3(0.1, 0.2, 0.5), LAMBERTIAN, 0, 0);
+	t_proprieties Blue_lamb = create_proprieties(create_vec3(0.1, 0.2, 0.5), LAMBERTIAN, 0, 0);
 
 	t_object *shpere_light = create_sphere(create_vec3(-1, 0.5, -0.5), 0.5);
 	scene_add_obj(&data.world, shpere_light, p_white_light);
@@ -209,14 +204,27 @@ int	main(int argc, char **argv)
 	scene_add_obj(&data.world, shpere, white_lamb);
 
 	t_object *cylinder = create_cylinder(create_vec3(0.3, 0, -1), create_vec3(0, 1, 0), 0.5);
-	scene_add_obj(&data.world, cylinder, white_lamb);
+	scene_add_obj(&data.world, cylinder, Blue_lamb);
+
 
 	printT(data.world);
 	if (data.AA_sample == 0)
 		put_pixel_color_debug(data);
 	else
-		put_pixel_color(data);
-		// put_pixel_color_thread(data);
+	{
+		if (argc <= 2)
+			put_pixel_color(data);
+		else
+		{
+			put_pixel_color_thread(&data);
+			// for (int x = WIDTH; x < HEIGHT; x++)
+			// 	for (int y = HEIGHT - 1; y >= 0; y--)
+			// 		my_mlx_pixel_put(&data, x, y, data.pix_col[x][y]);
+			// mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
+		}
+	}
+
+	// mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 
 	mlx_hook(data.win, 2, 1L << 0, handle_key, &data);
 	mlx_hook(data.win, 17, 1L << 17, close_window, &data);
