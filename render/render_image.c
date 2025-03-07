@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mlx_drawer_utils.c                                 :+:      :+:    :+:   */
+/*   render_image.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 09:15:23 by safandri          #+#    #+#             */
-/*   Updated: 2025/02/13 10:49:19 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/07 12:37:15 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,30 +89,12 @@ t_vec3	color(const t_ray r, t_list *world, int depth, t_object	*src_obj)
 
 t_object	*get_safe_hit_obj(const t_ray r, t_list *world)
 {
-	t_object	*obj;
 	t_object	*first_hit_obj;
-	float		closest_t;
-	int			is_hiting;
 
-	closest_t = MAX_T;
-	is_hiting = 0;
-	while (world)
-	{
-		obj = make_obj(world);
-		if (hit_obj(obj, r, &(obj->hit_record)))
-		{
-			is_hiting = 1;
-			if (obj->hit_record.t < closest_t)
-			{
-				first_hit_obj = obj;
-				closest_t = obj->hit_record.t;
-			}
-		}
-		world = world->next;
-	}
-	if (is_hiting && first_hit_obj->proprieties.material != LIGHT)
+	first_hit_obj = get_first_hit_obj(r, world);
+	if (first_hit_obj && first_hit_obj->proprieties.material != LIGHT)
 		return (first_hit_obj);
-	else if (is_hiting && first_hit_obj->proprieties.material == LIGHT)
+	else if (first_hit_obj && first_hit_obj->proprieties.material == LIGHT)
 	{
 		while (first_hit_obj && first_hit_obj->proprieties.material == LIGHT)
 		{
@@ -137,7 +119,7 @@ int	isVoid(float x, float y, t_data data)
 		),
 		data.world
 	);
-	if (c == NULL || c->proprieties.material == LIGHT)
+	if (c == NULL || (c && c->proprieties.material == LIGHT))
 		return (1);
 	return (0);
 }

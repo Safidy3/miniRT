@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/05 14:31:35 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/07 12:38:30 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,7 @@ int	main(int argc, char **argv)
 	pthread_mutex_init(&data.lock, NULL);
 	data.cam = create_camera(create_vec3(0, 0, 1), create_vec3(0, 0, -1));
 
-	add_cornell_box(&data.world);
+	// add_cornell_box(&data.world);
 
 	t_proprieties p_white_light = create_proprieties(create_vec3(1, 1, 1), LIGHT, 0, 0);
 	t_proprieties white_lamb = create_proprieties(create_vec3(1, 1, 1), LAMBERTIAN, 0, 0);
@@ -215,8 +215,8 @@ int	main(int argc, char **argv)
 	if (data.AA_sample == 0)
 		put_pixel_color_debug(data);
 	else
-	put_pixel_color_thread(data);
-		// put_pixel_color(data);
+		put_pixel_color(data);
+		// put_pixel_color_thread(data);
 
 	mlx_hook(data.win, 2, 1L << 0, handle_key, &data);
 	mlx_hook(data.win, 17, 1L << 17, close_window, &data);
