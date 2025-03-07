@@ -73,7 +73,7 @@ t_vec3	color(const t_ray r, t_list *world, int depth, t_object	*src_obj)
 			return (vec3_mult(color(scattered, world, depth+1, first_hit_obj), attenuation));
 		else if (prts.material == LIGHT && depth != 0)
 			return (vec3_mult(src_obj->proprieties.color, prts.color));
-        else if (prts.material == LIGHT && depth == 0)
+		else if (prts.material == LIGHT && depth == 0)
 		{
 			while (first_hit_obj && first_hit_obj->proprieties.material == LIGHT)
 			{
@@ -82,7 +82,7 @@ t_vec3	color(const t_ray r, t_list *world, int depth, t_object	*src_obj)
 			}
 			if (first_hit_obj)
 				return (color(continued_ray, world, depth + 1, first_hit_obj));
-        }
+		}
 	}
 	return (create_vec3(0, 0, 0));
 }

@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <limits.h>
+#include <pthread.h>
 
 // #define WIDTH 1280
 // #define HEIGHT 720
@@ -31,7 +32,7 @@
 #define M_PI 3.14159265358979323846
 #define MIN_T 0.001
 #define MAX_T (float)INT_MAX
-#define MAX_RECURS_DEPTH 50
+#define MAX_RECURS_DEPTH 5
 #define ANTIALIASING_SAMPLES 100
 #define NUM_THREADS 12
 
@@ -124,8 +125,12 @@ typedef struct s_data
 	int     bits_per_pixel;
 	int     line_length;
 	int     endian;
-	int thread_id;
-	int	AA_sample;
+
+	pthread_mutex_t lock;
+	int		thread_id;
+	int		px_unit;
+
+	int		AA_sample;
 	t_cam	cam;
 	t_list	*world;
 }			t_data;
@@ -149,6 +154,9 @@ typedef struct s_mat4
 int		handle_key(int keycode, void *param);
 void	my_mlx_pixel_put(t_data *data, int x, int y, t_vec3 r_col);
 void	put_pixel_color(t_data data);
+void	put_pixel_color_thread(t_data data);
+t_vec3	color(const t_ray r, t_list *world, int depth, t_object	*src_obj);
+int	isVoid(float x, float y, t_data data);
 
 void	print_vec3(t_vec3 v, char *name);
 t_vec3	create_vec3(float x,float y, float z);
