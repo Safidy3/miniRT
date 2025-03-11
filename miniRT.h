@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/11 11:36:55 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/11 16:24:19 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 #define MAX_T (float)INT_MAX
 #define MAX_RECURS_DEPTH 50
 #define ANTIALIASING_SAMPLES 100
-#define NUM_THREADS 15
+#define NUM_THREADS 18
 #define PIX_UNIT (WIDTH / NUM_THREADS)
 
 enum	e_shape
@@ -42,7 +42,8 @@ enum	e_shape
 	SPHERE,
 	RECTANGLE,
 	PLANE,
-	INF_CYLINDRE
+	INF_CYLINDRE,
+	CYLINDRE
 };
 
 enum	e_material
@@ -105,6 +106,7 @@ typedef struct s_object
 	int				shape;
 
 	t_vec3			center;
+	t_vec3			center2;
 	float			radius;
 
 	t_vec3			direction;
@@ -141,7 +143,15 @@ typedef struct s_threads
 	pthread_t	threads[NUM_THREADS];
 	int			thread_id;
 	t_data		*data;
-	pthread_mutex_t lock;	
+	pthread_mutex_t lock;
+
+	void    *mlx;
+	void    *win;
+	void    *img;
+	char    *addr;
+	int     bits_per_pixel;
+	int     line_length;
+	int     endian;
 }	t_threads;
 
 /******************************************************/
@@ -207,7 +217,8 @@ t_cam		create_camera(t_vec3 origin, t_vec3 look_at);
 t_object	*create_sphere(t_vec3 center, float radius);
 t_object	*create_plane(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
 t_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
-t_object	*create_cylinder(t_vec3 center, t_vec3 direction, float radius);
+t_object	*create_inf_cylinder(t_vec3 center, t_vec3 direction, float radius);
+t_object	*create_cylinder(t_vec3 center, t_vec3 center2, float radius);
 
 
 void		scene_add_obj(t_list **world, t_object *obj, t_proprieties prts);

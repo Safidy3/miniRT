@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:52:43 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/05 14:37:55 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/11 16:14:57 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ static int hit_rectangle(t_object *p, const t_ray r, t_hit_record *hit_rec)
     return (0);
 }
 
-static int	hit_cylindre(t_object *cylinder, const t_ray r, t_hit_record *hit_rec)
+static int	hit_inf_cylindre(t_object *cylinder, const t_ray r, t_hit_record *hit_rec)
 {
 	t_vec3 a1 = vec3_cross(cylinder->direction, vec3_sub(r.origin, cylinder->center));
 	t_vec3 a2 = vec3_cross(cylinder->direction, r.direction);
@@ -107,7 +107,7 @@ static int	hit_cylindre(t_object *cylinder, const t_ray r, t_hit_record *hit_rec
 
 	float a = vec3_dot(a2, a2);
 	float b = vec3_dot(a1, a2) * 2;
-	float c = vec3_dot(a1, a1) - cylinder->radius;
+	float c = vec3_dot(a1, a1) - cylinder->radius * cylinder->radius;
 
 	float delta = b * b - 4 * a * c;
 	if (delta < 0)
@@ -137,6 +137,55 @@ static int	hit_cylindre(t_object *cylinder, const t_ray r, t_hit_record *hit_rec
 	return (0);
 }
 
+static int	hit_cylindre(t_object *cylinder, const t_ray r, t_hit_record *hit_rec)
+{
+	t_vec3	a1;
+	t_vec3	a2;
+
+	a1 = vec3_cross(cylinder->direction, vec3_sub(r.origin, cylinder->center));
+	a1 = vec3_cross(a1, cylinder->direction);
+	a2 = vec3_cross(cylinder->direction, r.direction);
+	a2 = vec3_cross(a2, cylinder->direction);
+
+	float a = vec3_dot(a2, a2);
+	float b = vec3_dot(a1, a2) * 2;
+	float c = vec3_dot(a1, a1) - cylinder->radius * cylinder->radius;
+
+	float delta = b * b - 4 * a * c;
+	if (delta < 0)
+		return (0);
+
+	float t = (-b - sqrt(delta)) / (2.0 * a);
+	if (t > MIN_T && t < MAX_T)
+	{
+		hit_rec->t = t;
+		hit_rec->hit_point = ray_point_at(r, t);
+		float m = vec3_dot(cylinder->direction, vec3_sub(hit_rec->hit_point, cylinder->center)) / vec3_dot(cylinder->direction, cylinder->direction);
+		hit_rec->normal = vec3_sub(hit_rec->hit_point, vec3_mult_float(cylinder->direction, m));
+		hit_rec->normal = vec3_normalize(hit_rec->normal);
+
+		if (vec3_dot(cylinder->direction, vec3_sub(hit_rec->hit_point, cylinder->center)) > 0)
+			if (vec3_dot(cylinder->direction, vec3_sub(hit_rec->hit_point, cylinder->center2)) < 0)
+				return (1);
+			
+	}
+
+	t = (-b + sqrt(delta)) / (2.0 * a);
+	if (t > MIN_T && t < MAX_T)
+	{
+		hit_rec->t = t;
+		hit_rec->hit_point = ray_point_at(r, t);
+		float m = vec3_dot(cylinder->direction, vec3_sub(hit_rec->hit_point, cylinder->center)) / vec3_dot(cylinder->direction, cylinder->direction);
+		hit_rec->normal = vec3_sub(hit_rec->hit_point, vec3_mult_float(cylinder->direction, m));
+		hit_rec->normal = vec3_normalize(hit_rec->normal);
+
+		if (vec3_dot(cylinder->direction, vec3_sub(hit_rec->hit_point, cylinder->center)) > 0)
+			if (vec3_dot(cylinder->direction, vec3_sub(hit_rec->hit_point, cylinder->center2)) < 0)
+				return (1);
+	}
+	return (0);
+}
+
 int	hit_obj(t_object *obj, const t_ray r, t_hit_record *hit_rec)
 {
 	if (obj->shape == SPHERE)
@@ -146,6 +195,8 @@ int	hit_obj(t_object *obj, const t_ray r, t_hit_record *hit_rec)
 	else if (obj->shape == RECTANGLE)
 		return (hit_rectangle(obj, r, hit_rec));
 	else if (obj->shape == INF_CYLINDRE)
+		return (hit_inf_cylindre(obj, r, hit_rec));
+	else if (obj->shape == CYLINDRE)
 		return (hit_cylindre(obj, r, hit_rec));
 	return (0);
 }

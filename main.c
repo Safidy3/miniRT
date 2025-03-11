@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/11 11:33:03 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/11 16:24:15 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,25 @@ void	add_cornell_box(t_list **world)
 	scene_add_obj(world, back, white_lamb);
 }
 
+void	add_sceen(t_data *data)
+{
+	data->cam = create_camera(create_vec3(0, 0, 1), create_vec3(0, 0, -1));
+	add_cornell_box(&data->world);
+
+	t_proprieties p_white_light = create_proprieties(create_vec3(1, 1, 1), LIGHT, 0, 0);
+	t_proprieties white_lamb = create_proprieties(create_vec3(1, 1, 1), LAMBERTIAN, 0, 0);
+	t_proprieties Blue_lamb = create_proprieties(create_vec3(0.1, 0.2, 0.5), LAMBERTIAN, 0, 0);
+
+	t_object *shpere_light = create_sphere(create_vec3(-1, 0.5, -0.5), 0.5);
+	scene_add_obj(&data->world, shpere_light, p_white_light);
+
+	t_object *shpere = create_sphere(create_vec3(1, 0.5, 0), 0.5);
+	scene_add_obj(&data->world, shpere, white_lamb);
+
+	t_object *cylinder = create_cylinder(create_vec3(-1, 0.5, -1), create_vec3(0.5, 0.5, -1), 0.5);
+	scene_add_obj(&data->world, cylinder, Blue_lamb);
+}
+
 int	main(int argc, char **argv)
 {
 	t_data	data;
@@ -135,21 +154,7 @@ int	main(int argc, char **argv)
 	pthread_mutex_init(&thread.lock, NULL);
 	data.thread = &thread;
 
-	// data.cam = create_camera(create_vec3(0, 0, 1), create_vec3(0, 0, -1));
-	// add_cornell_box(&data.world);
-
-	// t_proprieties p_white_light = create_proprieties(create_vec3(1, 1, 1), LIGHT, 0, 0);
-	// t_proprieties white_lamb = create_proprieties(create_vec3(1, 1, 1), LAMBERTIAN, 0, 0);
-	// t_proprieties Blue_lamb = create_proprieties(create_vec3(0.1, 0.2, 0.5), LAMBERTIAN, 0, 0);
-
-	// t_object *shpere_light = create_sphere(create_vec3(-1, 0.5, -0.5), 0.5);
-	// scene_add_obj(&data.world, shpere_light, p_white_light);
-
-	// t_object *shpere = create_sphere(create_vec3(1, 0.5, 0), 0.5);
-	// scene_add_obj(&data.world, shpere, white_lamb);
-
-	// t_object *cylinder = create_cylinder(create_vec3(0.3, 0, -1), create_vec3(0, 1, 0), 0.5);
-	// scene_add_obj(&data.world, cylinder, Blue_lamb);
+	add_sceen(&data);
 
 	if (data.AA_sample == 0)
 		put_pixel_color_debug(data);

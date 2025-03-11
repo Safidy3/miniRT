@@ -35,6 +35,7 @@ t_object	*create_sphere(t_vec3 center, float radius)
 	shpere = (t_object *)malloc(sizeof(t_object));;
 	shpere->shape = SPHERE;
 	shpere->center = center;
+	shpere->center2 = create_nullvec();
 	shpere->radius = radius;
 	shpere->plane[0] = create_nullvec();
 	shpere->plane[1] = create_nullvec();
@@ -51,6 +52,7 @@ t_object	*create_plane(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
 	res = (t_object *)malloc(sizeof(t_object));
 	res->shape = PLANE;
 	res->center = create_nullvec();
+	res->center2 = create_nullvec();
 	res->direction = create_nullvec();
 	res->radius = 0;
 	res->plane[0] = x0;
@@ -65,19 +67,40 @@ t_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
 	t_object	*res;
 
 	res = create_plane(x0, x1, y0, y1);
+	res->center2 = create_nullvec();
 	res->shape = RECTANGLE;
 	return (res);
 }
 
-t_object	*create_cylinder(t_vec3 center, t_vec3 direction, float radius)
+t_object	*create_inf_cylinder(t_vec3 center, t_vec3 direction, float radius)
 {
 	t_object	*cylinder;
 
 	cylinder = (t_object *)malloc(sizeof(t_object));
 	cylinder->shape = INF_CYLINDRE;
 	cylinder->center = center;
+	cylinder->center2 = create_nullvec();
 	cylinder->radius = radius;
 	cylinder->direction = direction;
+	cylinder->plane[0] = create_nullvec();
+	cylinder->plane[1] = create_nullvec();
+	cylinder->plane[2] = create_nullvec();
+	cylinder->plane[3] = create_nullvec();
+	return (cylinder);
+}
+
+t_object	*create_cylinder(t_vec3 center, t_vec3 center2, float radius)
+{
+	t_object	*cylinder;
+	t_vec3		tmp;
+
+	tmp = vec3_sub(center2, center);
+	cylinder = (t_object *)malloc(sizeof(t_object));
+	cylinder->shape = CYLINDRE;
+	cylinder->center = center;
+	cylinder->center2 = center2;
+	cylinder->radius = radius;
+	cylinder->direction = vec3_div_float(tmp, vec3_len(tmp));
 	cylinder->plane[0] = create_nullvec();
 	cylinder->plane[1] = create_nullvec();
 	cylinder->plane[2] = create_nullvec();
@@ -93,7 +116,7 @@ void	scene_add_obj(t_list **world, t_object *obj, t_proprieties prts)
 		return;
 	new_obj = ft_lstnew((void *)obj);
 	if (!new_obj)
-		return free(obj);
+		return (free(obj));
 	obj->proprieties.color = vec3_safe_mult_float(prts.color, 1);
 	obj->proprieties.use_texture = prts.use_texture;
 	obj->proprieties.material = prts.material;
