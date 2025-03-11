@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/07 13:29:39 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/11 11:36:55 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@
 #define M_PI 3.14159265358979323846
 #define MIN_T 0.001
 #define MAX_T (float)INT_MAX
-#define MAX_RECURS_DEPTH 5
+#define MAX_RECURS_DEPTH 50
 #define ANTIALIASING_SAMPLES 100
-#define NUM_THREADS 20
+#define NUM_THREADS 15
 #define PIX_UNIT (WIDTH / NUM_THREADS)
 
 enum	e_shape
@@ -131,8 +131,6 @@ typedef struct s_data
 	struct s_threads *thread;
 	int		thread_id;
 
-	t_vec3	pix_col[WIDTH][HEIGHT];
-
 	int		AA_sample;
 	t_cam	cam;
 	t_list	*world;
@@ -143,8 +141,7 @@ typedef struct s_threads
 	pthread_t	threads[NUM_THREADS];
 	int			thread_id;
 	t_data		*data;
-	pthread_mutex_t lock;
-	
+	pthread_mutex_t lock;	
 }	t_threads;
 
 /******************************************************/
@@ -166,7 +163,6 @@ typedef struct s_mat4
 int		handle_key(int keycode, void *param);
 void	my_mlx_pixel_put(t_data *data, int x, int y, t_vec3 r_col);
 void	put_pixel_color(t_data data);
-void	put_pixel_color_thread(t_data *data);
 t_vec3	color(const t_ray r, t_list *world, int depth, t_object	*src_obj);
 int	isVoid(float x, float y, t_data data);
 
@@ -232,5 +228,12 @@ void	put_pixel_color_debug(t_data data);
 t_vec3	color_debug(const t_ray r, t_list *world);
 
 void	printT(t_list *t);
+
+/************  thread  *************/
+
+void	add_sceen(t_data *data);
+void	*thread_routing(void *param);
+void	put_pixel_color_thread(t_data *data);
+void	add_cornell_box(t_list **world);
 
 #endif

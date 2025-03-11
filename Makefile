@@ -5,7 +5,8 @@ OBJECTS_SRCS = ./objects/create_objects.c ./objects/hit_objects.c
 
 MATERIALS_SRCS = ./materials/materials.c
 
-RENDER_SRCS = ./render/render_image.c ./render/render_utils.c ./render/render_debug.c
+RENDER_SRCS = ./render/render_image.c ./render/render_utils.c ./render/render_debug.c\
+			  ./render/thread_render.c
 
 SRCS = main.c data_free.c \
 		$(VECTORS_SRCS) $(OBJECTS_SRCS) $(MATERIALS_SRCS) $(RENDER_SRCS)
@@ -56,5 +57,12 @@ runAA: all
 
 debug: all
 	@valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(NAME)
+
+
+thread_debug: all
+	@valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(NAME) 1 1
+
+hel_thread_debug: all
+	@valgrind --tool=helgrind ./$(NAME) 1 1
 
 .PHONY: all clean fclean re
