@@ -34,8 +34,6 @@
 #define MAX_T (float)INT_MAX
 #define MAX_RECURS_DEPTH 50
 #define ANTIALIASING_SAMPLES 100
-#define NUM_THREADS 18
-#define PIX_UNIT (WIDTH / NUM_THREADS)
 
 enum	e_shape
 {
@@ -140,8 +138,9 @@ typedef struct s_data
 
 typedef struct s_threads
 {
-	pthread_t	threads[NUM_THREADS];
+	pthread_t	threads[1000];
 	int			thread_id;
+	int			pix_unit;
 	t_data		*data;
 	pthread_mutex_t lock;
 
@@ -152,6 +151,7 @@ typedef struct s_threads
 	int     bits_per_pixel;
 	int     line_length;
 	int     endian;
+	int     thread_num;
 }	t_threads;
 
 /******************************************************/
@@ -244,7 +244,7 @@ void	printT(t_list *t);
 
 void	add_sceen(t_data *data);
 void	*thread_routing(void *param);
-void	put_pixel_color_thread(t_data *data);
+void	put_pixel_color_thread(t_threads *thread);
 void	add_cornell_box(t_list **world);
 
 #endif

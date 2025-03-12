@@ -123,7 +123,7 @@ void	add_sceen(t_data *data)
 	t_object *shpere = create_sphere(create_vec3(1, 0.5, 0), 0.5);
 	scene_add_obj(&data->world, shpere, white_lamb);
 
-	t_object *cylinder = create_cylinder(create_vec3(-1, 0.5, -1), create_vec3(0.5, 0.5, -1), 0.5);
+	t_object *cylinder = create_cylinder(create_vec3(0, 0.5, -0.5), create_vec3(0, 0.5, -1), 0.5);
 	scene_add_obj(&data->world, cylinder, Blue_lamb);
 }
 
@@ -163,7 +163,7 @@ int	main(int argc, char **argv)
 		if (argc <= 2)
 			put_pixel_color(data);
 		else
-			put_pixel_color_thread(&data);
+			put_pixel_color_thread(&thread);
 	}
 
 	pthread_mutex_destroy(&thread.lock);
