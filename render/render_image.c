@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 09:15:23 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/14 10:33:02 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/14 12:35:06 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,36 +53,28 @@ t_object	*get_first_hit_obj(const t_ray r, t_list *world)
 	return (NULL);
 }
 
-t_vec3	color(const t_ray r, t_list *world, int depth, t_object	*src_obj)
+t_vec3	path_traced_color(const t_ray r, t_list *world, int depth, t_object	*src_obj)
 {
 	t_object		*first_hit_obj;
 	t_ray			scattered;
 	t_vec3			attenuation;
-	t_ray			continued_ray;
 	t_proprieties	prts;
 
-	first_hit_obj = get_first_hit_obj(r, world);
+	if (depth == 0)
+		first_hit_obj = get_safe_hit_obj(r, world);
+	else
+		first_hit_obj = get_first_hit_obj(r, world);
 	if (first_hit_obj && depth < MAX_RECURS_DEPTH)
 	{
 		prts = first_hit_obj->proprieties;
 		if (prts.material == METAL && metal_scatter_ray(r, first_hit_obj->hit_record, &attenuation, &scattered, *first_hit_obj))
-			return (vec3_mult(color(scattered, world, depth+1, first_hit_obj), attenuation));
+			return (vec3_mult(path_traced_color(scattered, world, depth+1, first_hit_obj), attenuation));
 		else if (prts.material == LAMBERTIAN && lamberian_scatter_ray(r, first_hit_obj->hit_record, &attenuation, &scattered, *first_hit_obj))
-			return (vec3_mult(color(scattered, world, depth+1, first_hit_obj), attenuation));
+			return (vec3_mult(path_traced_color(scattered, world, depth+1, first_hit_obj), attenuation));
 		else if (prts.material == DIELECTRIC && dielectric_scatter_ray(r, first_hit_obj->hit_record, &attenuation, &scattered, *first_hit_obj))
-			return (vec3_mult(color(scattered, world, depth+1, first_hit_obj), attenuation));
+			return (vec3_mult(path_traced_color(scattered, world, depth+1, first_hit_obj), attenuation));
 		else if (prts.material == LIGHT && depth != 0)
 			return (vec3_mult(src_obj->proprieties.color, prts.color));
-		else if (prts.material == LIGHT && depth == 0)
-		{
-			while (first_hit_obj && first_hit_obj->proprieties.material == LIGHT)
-			{
-				continued_ray = create_ray(first_hit_obj->hit_record.hit_point, r.direction);
-				first_hit_obj = get_first_hit_obj(continued_ray, world);
-			}
-			if (first_hit_obj)
-				return (color(continued_ray, world, depth + 1, first_hit_obj));
-		}
 	}
 	return (create_vec3(0, 0, 0));
 }
@@ -109,13 +101,23 @@ t_object	*get_safe_hit_obj(const t_ray r, t_list *world)
 
 int	isVoid(float x, float y, t_data data)
 {
-	t_object *c = get_safe_hit_obj(
-		create_ray(
+	t_object *c;
+
+	c = get_safe_hit_obj
+	(
+		create_ray
+		(
 			data.cam.origin,
-			vec3_sub(vec3_add3(data.cam.lower_L, 
-				vec3_mult_float(data.cam.horizintal, (float)x / (float)WIDTH),
-				vec3_mult_float(data.cam.vertical, (float)(HEIGHT - y) / (float)HEIGHT)),
-			data.cam.origin)
+			vec3_sub
+			(
+				vec3_add3
+				(
+					data.cam.lower_L, 
+					vec3_mult_float(data.cam.horizintal, (float)x / (float)WIDTH),
+					vec3_mult_float(data.cam.vertical, (float)(HEIGHT - y) / (float)HEIGHT)
+				),
+				data.cam.origin
+			)
 		),
 		data.world
 	);
@@ -140,7 +142,7 @@ t_vec3	compute_color(t_data *data, int x, int y)
 		j = (float)(HEIGHT - y + drand48()) / (float)HEIGHT;
 		pix_pos = vec3_add3(data->cam.lower_L, vec3_mult_float(data->cam.horizintal, i), vec3_mult_float(data->cam.vertical, j));
 		r = create_ray(data->cam.origin, vec3_sub(pix_pos, data->cam.origin));
-		pix_col = vec3_add(pix_col, color(r, data->world, 0, NULL));
+		pix_col = vec3_add(pix_col, path_traced_color(r, data->world, 0, NULL));
 	}
 	pix_col = vec3_div_float(pix_col, data->AA_sample);
 	pix_col = create_vec3(sqrt(pix_col.x), sqrt(pix_col.y), sqrt(pix_col.z));
