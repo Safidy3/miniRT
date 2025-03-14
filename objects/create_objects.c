@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   create_objects.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/14 13:23:11 by safandri          #+#    #+#             */
+/*   Updated: 2025/03/14 13:23:26 by safandri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../miniRT.h"
 
 t_cam	create_camera(t_vec3 origin, t_vec3 look_at)
@@ -106,6 +118,23 @@ t_object	*create_cylinder(t_vec3 center, t_vec3 center2, float radius)
 	cylinder->plane[2] = create_nullvec();
 	cylinder->plane[3] = create_nullvec();
 	return (cylinder);
+}
+
+t_object	*create_point_light(t_vec3 center)
+{
+	t_object	*pl;
+
+	pl = (t_object *)malloc(sizeof(t_object));
+	pl->shape = POINT_LIGHT;
+	pl->center = center;
+	pl->center2 = create_nullvec();
+	pl->radius = 0;
+	pl->direction = create_nullvec();
+	pl->plane[0] = create_nullvec();
+	pl->plane[1] = create_nullvec();
+	pl->plane[2] = create_nullvec();
+	pl->plane[3] = create_nullvec();
+	return (pl);
 }
 
 void	scene_add_obj(t_list **world, t_object *obj, t_proprieties prts)

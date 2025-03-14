@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/14 12:34:43 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/14 14:47:11 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ enum	e_shape
 	RECTANGLE,
 	PLANE,
 	INF_CYLINDRE,
-	CYLINDRE
+	CYLINDRE,
+	POINT_LIGHT
 };
 
 enum	e_material
@@ -156,26 +157,12 @@ typedef struct s_threads
 
 /******************************************************/
 
-typedef struct s_camera
-{
-	t_vec3	pos;
-	t_vec3	target;
-	t_vec3	up;
-}			t_camera;
-
-typedef struct s_mat4
-{
-	float	m[4][4];
-}			t_mat4;
-
-/******************************************************/
-
 int		handle_key(int keycode, void *param);
 void	my_mlx_pixel_put(t_data *data, int x, int y, t_vec3 r_col);
-void	put_pixel_color(t_data data);
+void	put_pixel_color(t_data *data);
 t_vec3	path_traced_color(const t_ray r, t_list *world, int depth, t_object	*src_obj);
-t_vec3	compute_color(t_data *data, int x, int y);
-int	isVoid(float x, float y, t_data data);
+t_vec3	compute_path_traced_color(t_data *data, int x, int y);
+t_vec3	ray_casted_color(t_data *data, int x, int y);
 
 void	print_vec3(t_vec3 v, char *name);
 t_vec3	create_vec3(float x,float y, float z);
@@ -198,6 +185,7 @@ t_vec3	vec3_normalize(t_vec3 v);
 t_vec3	vec3_unit(t_vec3 v);
 float	vec3_dot(t_vec3 a, t_vec3 b);
 t_vec3	vec3_cross(t_vec3 a, t_vec3 b);
+t_vec3	vec3_inverse(t_vec3 v);
 int		isNullVec3(t_vec3 v);
 
 
@@ -236,6 +224,7 @@ int		close_window(void *param);
 
 t_object	*get_first_hit_obj(const t_ray r, t_list *world);
 t_object	*get_safe_hit_obj(const t_ray r, t_list *world);
+int			isVoid(float x, float y, t_data data);
 
 void	put_pixel_color_debug(t_data data);
 t_vec3	color_debug(const t_ray r, t_list *world);

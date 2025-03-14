@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 11:32:29 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/14 10:40:58 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:09:18 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ void	*thread_routing(void *param)
 	{
 		for (y = HEIGHT - 1; y >= 0; y--)
 		{
-			pix_col = compute_color(&data, x, y);
+			// pix_col = compute_path_traced_color(&data, x, y);
+			pix_col = ray_casted_color(&data, x, y);
 			my_mlx_pixel_put(og_data, x, y, pix_col);
 		}
 		pthread_mutex_lock(&og_data->thread->lock);
@@ -77,7 +78,7 @@ void	put_pixel_color_thread(t_threads *thread)
 		printf("Thread %d started : ", i);
 		pthread_mutex_unlock(&thread->lock);
 		pthread_create(&thread->threads[i], NULL, thread_routing, (void *)thread);
-		usleep(10000);
+		usleep(100);
 	}
 	for (int i = 0; i < thread->thread_num; i++)
 		pthread_join(thread->threads[i], NULL);

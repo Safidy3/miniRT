@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 11:32:34 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/14 12:40:10 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/14 13:51:59 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,3 +103,31 @@ t_object	*get_first_hit_obj(const t_ray r, t_list *world)
 		return (first_hit_obj);
 	return (NULL);
 }
+
+// t_object	*get_point_lights(t_list *og_world)
+// {
+// 	t_object	*point_lights;
+// 	t_object	*obj;
+// 	t_list		*world;
+// 	int 		counter;
+
+// 	counter = 0;
+// 	world = og_world;
+// 	while (world)
+// 	{
+// 		obj = make_obj(world);
+// 		if (obj->shape == POINT_LIGHT)
+// 			counter++;
+// 		world = world->next;
+// 	}
+// 	point_lights = (t_object *)malloc(sizeof(t_object) * counter);
+// 	counter = 0;
+// 	world = og_world;
+// 	while (world)
+// 	{
+// 		obj = make_obj(world);
+// 		if (obj->shape == POINT_LIGHT)
+// 			point_lights[counter++] = obj;
+// 		world = world->next;
+// 	}
+// }

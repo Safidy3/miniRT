@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 09:15:23 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/14 12:40:24 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/14 16:10:16 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,53 @@ t_vec3	path_traced_color(const t_ray r, t_list *world, int depth, t_object	*src_
 		else if (prts.material == LIGHT && depth != 0)
 			return (vec3_mult(src_obj->proprieties.color, prts.color));
 	}
-	return (create_vec3(0, 0, 0));
+	return (create_nullvec());
 }
 
-t_vec3	compute_color(t_data *data, int x, int y)
+t_vec3	ray_casted_color(t_data *data, int x, int y)
+{
+	t_vec3		pix_pos;
+	float		i, j;
+	t_vec3		point_light = create_vec3(1, 0, 0.8);
+	t_vec3		ambient_light = create_vec3(1, 1, 1);
+	float		intensity;
+	t_vec3		result;
+
+	i = (float)(x) / (float)WIDTH;
+	j = (float)(HEIGHT - y) / (float)HEIGHT;
+	pix_pos = vec3_add3(data->cam.lower_L, vec3_mult_float(data->cam.horizintal, i), vec3_mult_float(data->cam.vertical, j));
+
+	t_ray		r = create_ray(data->cam.origin, vec3_sub(pix_pos, data->cam.origin));
+	t_object	*first_hit_obj = get_safe_hit_obj(r, data->world);
+
+	if (!first_hit_obj)
+		return (create_nullvec());
+
+	intensity = 0.5;
+	ambient_light = vec3_mult_float(ambient_light, intensity);
+	t_vec3		sh_direction = vec3_normalize(vec3_sub(point_light, first_hit_obj->hit_record.hit_point));
+
+	t_ray		shadow_ray = create_ray(first_hit_obj->hit_record.hit_point, sh_direction);
+	t_object	*sec_hit_obj = get_safe_hit_obj(shadow_ray, data->world);
+
+	if (sec_hit_obj)
+	{
+		result = vec3_add(create_nullvec(), ambient_light);
+		result = vec3_div_float(result, 2);
+		result = vec3_mult_float(result, 0.2);
+		return (result);
+	}
+	else
+	{
+		float	n = vec3_dot(first_hit_obj->hit_record.normal, vec3_inverse(shadow_ray.direction));
+		result = vec3_mult_float(first_hit_obj->proprieties.color, -n);
+		result = vec3_add(result, ambient_light);
+		result = vec3_div_float(result, 2);
+		return (result);
+	}
+}
+
+t_vec3	compute_path_traced_color(t_data *data, int x, int y)
 {
 	t_vec3	pix_pos, pix_col;
 	float	i, j;
@@ -74,7 +117,7 @@ t_vec3	compute_color(t_data *data, int x, int y)
 	return (pix_col);
 }
 
-void	put_pixel_color(t_data data)
+void	put_pixel_color(t_data *data)
 {
 	t_vec3	pix_col;
 	int		x, y;
@@ -84,10 +127,11 @@ void	put_pixel_color(t_data data)
 	{
 		for (y = HEIGHT - 1; y >= 0; y--)
 		{
-			pix_col = compute_color(&data, x, y);
-			my_mlx_pixel_put(&data, x, y, pix_col);
+			// pix_col = compute_path_traced_color(data, x, y);
+			pix_col = ray_casted_color(data, x, y);
+			my_mlx_pixel_put(data, x, y, pix_col);
 		}
-		mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
+		mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	}
 	printf("Finished.\n");
 }
