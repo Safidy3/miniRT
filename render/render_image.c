@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 09:15:23 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/07 12:57:44 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/14 10:33:02 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,34 +124,40 @@ int	isVoid(float x, float y, t_data data)
 	return (0);
 }
 
-void	put_pixel_color(t_data data)
+t_vec3	compute_color(t_data *data, int x, int y)
 {
 	t_vec3	pix_pos, pix_col;
-	t_ray	r;
 	float	i, j;
-	int		x, y, s;
+	int		s;
+	t_ray	r;
+
+	pix_col = create_vec3(0, 0, 0);
+	if (isVoid(x, y, *data))
+		return (create_nullvec());
+	for (s = 0; s < data->AA_sample; s++)
+	{
+		i = (float)(x + drand48()) / (float)WIDTH;
+		j = (float)(HEIGHT - y + drand48()) / (float)HEIGHT;
+		pix_pos = vec3_add3(data->cam.lower_L, vec3_mult_float(data->cam.horizintal, i), vec3_mult_float(data->cam.vertical, j));
+		r = create_ray(data->cam.origin, vec3_sub(pix_pos, data->cam.origin));
+		pix_col = vec3_add(pix_col, color(r, data->world, 0, NULL));
+	}
+	pix_col = vec3_div_float(pix_col, data->AA_sample);
+	pix_col = create_vec3(sqrt(pix_col.x), sqrt(pix_col.y), sqrt(pix_col.z));
+	return (pix_col);
+}
+
+void	put_pixel_color(t_data data)
+{
+	t_vec3	pix_col;
+	int		x, y;
 
 	printf("Loading ...\n");
 	for (x = 0; x < WIDTH; x++)
 	{
 		for (y = HEIGHT - 1; y >= 0; y--)
 		{
-			pix_col = create_vec3(0, 0, 0);
-			if (isVoid(x, y, data))
-			{
-				my_mlx_pixel_put(&data, x, y, pix_col);
-				continue;
-			}
-			for (s = 0; s < data.AA_sample; s++)
-			{
-				i = (float)(x + drand48()) / (float)WIDTH;
-				j = (float)(HEIGHT - y + drand48()) / (float)HEIGHT;
-				pix_pos = vec3_add3(data.cam.lower_L, vec3_mult_float(data.cam.horizintal, i), vec3_mult_float(data.cam.vertical, j));
-				r = create_ray(data.cam.origin, vec3_sub(pix_pos, data.cam.origin));
-				pix_col = vec3_add(pix_col, color(r, data.world, 0, NULL));
-			}
-			pix_col = vec3_div_float(pix_col, data.AA_sample);
-			pix_col = create_vec3(sqrt(pix_col.x), sqrt(pix_col.y), sqrt(pix_col.z));
+			pix_col = compute_color(&data, x, y);
 			my_mlx_pixel_put(&data, x, y, pix_col);
 		}
 		mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);

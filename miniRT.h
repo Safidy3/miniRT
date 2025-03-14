@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/11 16:24:19 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/14 10:33:07 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,7 @@ int		handle_key(int keycode, void *param);
 void	my_mlx_pixel_put(t_data *data, int x, int y, t_vec3 r_col);
 void	put_pixel_color(t_data data);
 t_vec3	color(const t_ray r, t_list *world, int depth, t_object	*src_obj);
+t_vec3	compute_color(t_data *data, int x, int y);
 int	isVoid(float x, float y, t_data data);
 
 void	print_vec3(t_vec3 v, char *name);
