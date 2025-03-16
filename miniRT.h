@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/14 14:47:11 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/16 17:04:32 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,8 +131,8 @@ typedef struct s_data
 
 	struct s_threads *thread;
 	int		thread_id;
-
 	int		AA_sample;
+
 	t_cam	cam;
 	t_list	*world;
 }			t_data;
