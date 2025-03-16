@@ -40,8 +40,8 @@ void	*thread_routing(void *param)
 	{
 		for (y = HEIGHT - 1; y >= 0; y--)
 		{
-			// pix_col = compute_path_traced_color(&data, x, y);
-			pix_col = ray_casted_color(&data, x, y);
+			pix_col = compute_path_traced_color(&data, x, y);
+			// pix_col = ray_casted_color(&data, x, y);
 			my_mlx_pixel_put(og_data, x, y, pix_col);
 		}
 		pthread_mutex_lock(&og_data->thread->lock);

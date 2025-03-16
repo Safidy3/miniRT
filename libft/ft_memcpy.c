@@ -27,3 +27,13 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 		d[i] = s[i];
 	return (dest);
 }
+
+void	*ft_memswap(void *dest, void *src)
+{
+	void	*tmp;
+
+	tmp = dest;
+	dest = src;
+	src = tmp;
+	return (dest);
+}

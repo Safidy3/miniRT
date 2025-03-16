@@ -53,12 +53,12 @@ t_vec3	path_traced_color(const t_ray r, t_list *world, int depth, t_object	*src_
 
 t_vec3	ray_casted_color(t_data *data, int x, int y)
 {
-	t_vec3		pix_pos;
-	float		i, j;
-	t_vec3		point_light = create_vec3(1, 0, 0.8);
-	t_vec3		ambient_light = create_vec3(1, 1, 1);
-	float		intensity;
-	t_vec3		result;
+	t_vec3	pix_pos;
+	float	i, j;
+	t_vec3	point_light = create_vec3(0, 0, -0.5);
+	t_vec3	ambient_light = create_vec3(1, 1, 1);
+	float	intensity;
+	t_vec3	result;
 
 	i = (float)(x) / (float)WIDTH;
 	j = (float)(HEIGHT - y) / (float)HEIGHT;
@@ -70,26 +70,22 @@ t_vec3	ray_casted_color(t_data *data, int x, int y)
 	if (!first_hit_obj)
 		return (create_nullvec());
 
-	intensity = 0.5;
+	intensity = 0.1;
 	ambient_light = vec3_mult_float(ambient_light, intensity);
-	t_vec3		sh_direction = vec3_normalize(vec3_sub(point_light, first_hit_obj->hit_record.hit_point));
 
+	t_vec3		sh_direction = vec3_normalize(vec3_sub(point_light, first_hit_obj->hit_record.hit_point));
 	t_ray		shadow_ray = create_ray(first_hit_obj->hit_record.hit_point, sh_direction);
 	t_object	*sec_hit_obj = get_safe_hit_obj(shadow_ray, data->world);
 
 	if (sec_hit_obj)
 	{
-		result = vec3_add(create_nullvec(), ambient_light);
-		result = vec3_div_float(result, 2);
-		result = vec3_mult_float(result, 0.2);
+		result = vec3_mult(first_hit_obj->proprieties.color, ambient_light);
 		return (result);
 	}
 	else
 	{
-		float	n = vec3_dot(first_hit_obj->hit_record.normal, vec3_inverse(shadow_ray.direction));
-		result = vec3_mult_float(first_hit_obj->proprieties.color, -n);
-		result = vec3_add(result, ambient_light);
-		result = vec3_div_float(result, 2);
+		float n = fmax(intensity, vec3_dot(first_hit_obj->hit_record.normal, shadow_ray.direction));
+		result = vec3_mult_float(first_hit_obj->proprieties.color, n);
 		return (result);
 	}
 }

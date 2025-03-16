@@ -27,20 +27,23 @@ void	printT(t_list *t)
 	printf("size %d\n", ft_lstsize(t));
 	while (t)
 	{
-		int iter_val = 	(int)((t_object *)(t->content))->id;
+		int iter_val = 	(int)((t_object *)(t->content))->shape;
 		switch (iter_val)
 		{
 			case 0:
-				printf("SPHERE\n");
+				printf("SPHERE : %d\n", (int)((t_object *)(t->content))->id);
 				break;
 			case 1:
-				printf("RECTANGLE\n");
+				printf("RECTANGLE : %d\n", (int)((t_object *)(t->content))->id);
 				break;
 			case 2:
-				printf("PLANE\n");
+				printf("PLANE : %d\n", (int)((t_object *)(t->content))->id);
 				break;
 			case 3:
-				printf("INF_CYLINDRE\n");
+				printf("INF_CYLINDRE : %d\n", (int)((t_object *)(t->content))->id);
+				break;
+			case 4:
+				printf("CYLINDRE : %d\n", (int)((t_object *)(t->content))->id);
 				break;
 			default:
 				break;
@@ -112,10 +115,10 @@ void	add_sceen(t_data *data)
 {
 	data->cam = create_camera(create_vec3(0, 0, 1), create_vec3(0, 0, -1));
 	// add_cornell_box(&data->world);
-
-	t_proprieties p_white_light = create_proprieties(create_vec3(2, 2, 2), LIGHT, 0, 0);
+	
 	t_proprieties white_lamb = create_proprieties(create_vec3(1, 1, 1), LAMBERTIAN, 0, 0);
-	t_proprieties Blue_lamb = create_proprieties(create_vec3(0, 1, 0), LAMBERTIAN, 0, 0);
+	t_proprieties green_lamb = create_proprieties(create_vec3(0, 1, 0), LAMBERTIAN, 0, 0);
+	t_proprieties Blue_lamb = create_proprieties(create_vec3(0, 0, 1), LAMBERTIAN, 0, 0);
 
 	t_object *fw = create_plane(
 		create_vec3(-2, 0, -2),
@@ -125,14 +128,15 @@ void	add_sceen(t_data *data)
 	);
 	scene_add_obj(&data->world, fw, white_lamb);
 
+	t_proprieties p_white_light = create_proprieties(create_vec3(2, 2, 2), LIGHT, 0, 0);
 	t_object *shpere_light = create_sphere(create_vec3(1, 0, 1), 0.5);
 	scene_add_obj(&data->world, shpere_light, p_white_light);
 
-	t_object *shpere = create_sphere(create_vec3(-0.5, 0, 0), 0.3);
+	t_object *shpere = create_sphere(create_vec3(1, 0, -1), 0.3);
 	scene_add_obj(&data->world, shpere, Blue_lamb);
 
-	// t_object *cylinder = create_cylinder(create_vec3(-1, 0.5, -0.5), create_vec3(-1, 0.5, -1), 0.5);
-	// scene_add_obj(&data->world, cylinder, Blue_lamb);
+	t_object *cylinder = create_cylinder(create_vec3(-0, 1, -1), create_vec3(-0, -1, -1), 0.3);
+	scene_add_obj(&data->world, cylinder, green_lamb);
 }
 
 int	main(int argc, char **argv)
@@ -163,7 +167,7 @@ int	main(int argc, char **argv)
 	data.thread = &thread;
 
 	add_sceen(&data);
-
+	printT(data.world);
 	if (data.AA_sample == 0)
 		put_pixel_color_debug(data);
 	else
