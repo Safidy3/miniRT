@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 09:15:23 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/14 16:10:16 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/18 15:11:35 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ t_vec3	ray_casted_color(t_data *data, int x, int y)
 {
 	t_vec3	pix_pos;
 	float	i, j;
-	t_vec3	point_light = create_vec3(0, 0, -0.5);
+	t_vec3	point_light = create_vec3(1, -0.5, 0);
 	t_vec3	ambient_light = create_vec3(1, 1, 1);
 	float	intensity;
 	t_vec3	result;
@@ -66,7 +66,7 @@ t_vec3	ray_casted_color(t_data *data, int x, int y)
 
 	t_ray		r = create_ray(data->cam.origin, vec3_sub(pix_pos, data->cam.origin));
 	t_object	*first_hit_obj = get_safe_hit_obj(r, data->world);
-
+	
 	if (!first_hit_obj)
 		return (create_nullvec());
 
@@ -77,11 +77,17 @@ t_vec3	ray_casted_color(t_data *data, int x, int y)
 	t_ray		shadow_ray = create_ray(first_hit_obj->hit_record.hit_point, sh_direction);
 	t_object	*sec_hit_obj = get_safe_hit_obj(shadow_ray, data->world);
 
+	float dist_first_sec;
+	float dist_first_light;
+
 	if (sec_hit_obj)
 	{
-		result = vec3_mult(first_hit_obj->proprieties.color, ambient_light);
-		return (result);
+		dist_first_sec = vec3_len(vec3_sub(sec_hit_obj->hit_record.hit_point, first_hit_obj->hit_record.hit_point));
+		dist_first_light = vec3_len(vec3_sub(point_light, first_hit_obj->hit_record.hit_point));
 	}
+
+	if (sec_hit_obj && dist_first_sec < dist_first_light)
+		return (vec3_mult(first_hit_obj->proprieties.color, ambient_light));
 	else
 	{
 		float n = fmax(intensity, vec3_dot(first_hit_obj->hit_record.normal, shadow_ray.direction));
@@ -119,9 +125,10 @@ void	put_pixel_color(t_data *data)
 	int		x, y;
 
 	printf("Loading ...\n");
+	// for (x = WIDTH / 2; x < (WIDTH / 2) + 1; x++)
 	for (x = 0; x < WIDTH; x++)
 	{
-		for (y = HEIGHT - 1; y >= 0; y--)
+		for (y = 0; y < HEIGHT - 1; y++)
 		{
 			// pix_col = compute_path_traced_color(data, x, y);
 			pix_col = ray_casted_color(data, x, y);

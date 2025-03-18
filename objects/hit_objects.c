@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:52:43 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/18 14:05:11 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/18 14:10:49 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ static int	hit_inf_cylindre(t_object *cylinder, const t_ray r, t_hit_record *hit
 		hit_rec->t = t;
 		hit_rec->hit_point = ray_point_at(r, t);
 		float m = vec3_dot(cylinder->direction, vec3_sub(hit_rec->hit_point, cylinder->center)) / vec3_dot(cylinder->direction, cylinder->direction);
-		hit_rec->normal = vec3_sub(hit_rec->hit_point, vec3_mult_float(cylinder->direction, m));
+		hit_rec->normal = vec3_sub(vec3_sub(hit_rec->hit_point, cylinder->center), vec3_mult_float(cylinder->direction, m));
 		hit_rec->normal = vec3_normalize(hit_rec->normal);
 		return (1);
 	}
@@ -130,7 +130,7 @@ static int	hit_inf_cylindre(t_object *cylinder, const t_ray r, t_hit_record *hit
 		hit_rec->t = t;
 		hit_rec->hit_point = ray_point_at(r, t);
 		float m = vec3_dot(cylinder->direction, vec3_sub(hit_rec->hit_point, cylinder->center)) / vec3_dot(cylinder->direction, cylinder->direction);
-		hit_rec->normal = vec3_sub(hit_rec->hit_point, vec3_mult_float(cylinder->direction, m));
+		hit_rec->normal = vec3_sub(vec3_sub(hit_rec->hit_point, cylinder->center), vec3_mult_float(cylinder->direction, m));
 		hit_rec->normal = vec3_normalize(hit_rec->normal);
 		return (1);
 	}
