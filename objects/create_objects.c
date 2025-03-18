@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 13:23:11 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/14 13:23:26 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/18 15:54:40 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,10 @@ t_object	*create_cylinder(t_vec3 center, t_vec3 center2, float radius)
 	return (cylinder);
 }
 
-t_object	*create_point_light(t_vec3 center)
+t_object	*create_point_light(t_vec3 center, t_vec3 color, float brightness)
 {
-	t_object	*pl;
+	t_object		*pl;
+	t_proprieties	prts;
 
 	pl = (t_object *)malloc(sizeof(t_object));
 	pl->shape = POINT_LIGHT;
@@ -134,6 +135,34 @@ t_object	*create_point_light(t_vec3 center)
 	pl->plane[1] = create_nullvec();
 	pl->plane[2] = create_nullvec();
 	pl->plane[3] = create_nullvec();
+	prts.color = vec3_mult_float(color, brightness);
+	prts.material = 0;
+	prts.material_parameter = brightness;
+	prts.use_texture = 0;
+	pl->proprieties = prts;
+	return (pl);
+}
+
+t_object	*create_ambient(t_vec3 color, float brightness)
+{
+	t_object		*pl;
+	t_proprieties	prts;
+
+	pl = (t_object *)malloc(sizeof(t_object));
+	pl->shape = AMBIENT_LIGHT;
+	pl->center = create_nullvec();
+	pl->center2 = create_nullvec();
+	pl->radius = 0;
+	pl->direction = create_nullvec();
+	pl->plane[0] = create_nullvec();
+	pl->plane[1] = create_nullvec();
+	pl->plane[2] = create_nullvec();
+	pl->plane[3] = create_nullvec();
+	prts.color = vec3_mult_float(color, brightness);
+	prts.material = 0;
+	prts.material_parameter = brightness;
+	prts.use_texture = 0;
+	pl->proprieties = prts;
 	return (pl);
 }
 
@@ -146,14 +175,17 @@ void	scene_add_obj(t_list **world, t_object *obj, t_proprieties prts)
 	new_obj = ft_lstnew((void *)obj);
 	if (!new_obj)
 		return (free(obj));
-	obj->proprieties.color = vec3_safe_mult_float(prts.color, 1);
-	obj->proprieties.use_texture = prts.use_texture;
-	obj->proprieties.material = prts.material;
-	obj->proprieties.material_parameter = (prts.material == METAL) ? fmin(prts.material_parameter, 1.0) : prts.material_parameter;
+	obj->id = ft_lstsize(*world) - 1;
 	obj->hit_record.t = -1;
 	obj->hit_record.hit_point = create_vec3(0, 0, 0);
 	obj->hit_record.normal = create_vec3(0, 0, 0);
 	obj->hit_record.color = prts.color;
+	if (obj->shape != POINT_LIGHT && obj->shape != AMBIENT_LIGHT)
+	{
+		obj->proprieties.color = vec3_safe_mult_float(prts.color, 1);
+		obj->proprieties.use_texture = prts.use_texture;
+		obj->proprieties.material = prts.material;
+		obj->proprieties.material_parameter = (prts.material == METAL) ? fmin(prts.material_parameter, 1.0) : prts.material_parameter;
+	}
 	ft_lstadd_back(world, new_obj);
-	obj->id = ft_lstsize(*world) - 1;
 }

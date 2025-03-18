@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/14 14:47:11 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/18 17:36:47 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 #define M_PI 3.14159265358979323846
 #define MIN_T 0.001
 #define MAX_T (float)INT_MAX
-#define MAX_RECURS_DEPTH 50
+#define MAX_RECURS_DEPTH 10
 #define ANTIALIASING_SAMPLES 100
 
 enum	e_shape
@@ -42,7 +42,8 @@ enum	e_shape
 	PLANE,
 	INF_CYLINDRE,
 	CYLINDRE,
-	POINT_LIGHT
+	POINT_LIGHT,
+	AMBIENT_LIGHT
 };
 
 enum	e_material
@@ -208,6 +209,8 @@ t_object	*create_plane(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
 t_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
 t_object	*create_inf_cylinder(t_vec3 center, t_vec3 direction, float radius);
 t_object	*create_cylinder(t_vec3 center, t_vec3 center2, float radius);
+t_object	*create_point_light(t_vec3 center, t_vec3 color, float brightness);
+t_object	*create_ambient(t_vec3 color, float brightness);
 
 
 void		scene_add_obj(t_list **world, t_object *obj, t_proprieties prts);
@@ -225,6 +228,7 @@ int		close_window(void *param);
 t_object	*get_first_hit_obj(const t_ray r, t_list *world);
 t_object	*get_safe_hit_obj(const t_ray r, t_list *world);
 int			isVoid(float x, float y, t_data data);
+t_object	*get_light(t_list *og_world, int light_type);
 
 void	put_pixel_color_debug(t_data data);
 t_vec3	color_debug(const t_ray r, t_list *world);
