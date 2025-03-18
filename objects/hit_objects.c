@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:52:43 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/11 16:14:57 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/18 14:05:11 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,47 +137,95 @@ static int	hit_inf_cylindre(t_object *cylinder, const t_ray r, t_hit_record *hit
 	return (0);
 }
 
-static int hit_cylindre(t_object *cylinder, const t_ray r, t_hit_record *hit_rec)
+// static int hit_cylindre(t_object *cylinder, const t_ray r, t_hit_record *hit_rec)
+// {
+// 	t_vec3 oc = vec3_sub(r.origin, cylinder->center);
+// 	t_vec3 d_cross_a = vec3_cross(r.direction, cylinder->direction);
+// 	t_vec3 oc_cross_a = vec3_cross(oc, cylinder->direction);
+
+// 	float a = vec3_dot(d_cross_a, d_cross_a);
+// 	float b = 2 * vec3_dot(d_cross_a, oc_cross_a);
+// 	float c = vec3_dot(oc_cross_a, oc_cross_a) - cylinder->radius * cylinder->radius;
+
+// 	float delta = b * b - 4 * a * c;
+// 	if (delta < 0)
+// 		return 0;
+
+// 	float sqrt_delta = sqrt(delta);
+// 	float t1 = (-b - sqrt_delta) / (2.0 * a);
+// 	float t2 = (-b + sqrt_delta) / (2.0 * a);
+
+// 	if (t1 > t2)
+// 		ft_memswap(&t1, &t2);
+
+// 	for (int i = 0; i < 2; i++)
+// 	{
+// 		float t = (i == 0) ? t1 : t2;
+// 		if (t < MIN_T || t > MAX_T)
+// 			continue;
+
+// 		t_vec3 hit_point = ray_point_at(r, t);
+// 		float m = vec3_dot(cylinder->direction, vec3_sub(hit_point, cylinder->center));
+
+// 		if (m < 0 || m > vec3_dot(cylinder->direction, vec3_sub(cylinder->center2, cylinder->center)))
+// 			continue;
+
+// 		hit_rec->t = t;
+// 		hit_rec->hit_point = hit_point;
+// 		hit_rec->normal = vec3_normalize(vec3_sub(vec3_sub(hit_point, cylinder->center), vec3_mult_float(cylinder->direction, m)));
+// 		return 1;
+// 	}
+// 	return 0;
+// }
+
+static int	hit_cylindre(t_object *cylinder, const t_ray r, t_hit_record *hit_rec)
 {
-    t_vec3 oc = vec3_sub(r.origin, cylinder->center);
-    t_vec3 d_cross_a = vec3_cross(r.direction, cylinder->direction);
-    t_vec3 oc_cross_a = vec3_cross(oc, cylinder->direction);
+	t_vec3	a1;
+	t_vec3	a2;
 
-    float a = vec3_dot(d_cross_a, d_cross_a);
-    float b = 2 * vec3_dot(d_cross_a, oc_cross_a);
-    float c = vec3_dot(oc_cross_a, oc_cross_a) - cylinder->radius * cylinder->radius;
+	a1 = vec3_cross(cylinder->direction, vec3_sub(r.origin, cylinder->center));
+	a1 = vec3_cross(a1, cylinder->direction);
+	a2 = vec3_cross(cylinder->direction, r.direction);
+	a2 = vec3_cross(a2, cylinder->direction);
 
-    float delta = b * b - 4 * a * c;
-    if (delta < 0)
-        return 0;
+	float a = vec3_dot(a2, a2);
+	float b = vec3_dot(a1, a2) * 2;
+	float c = vec3_dot(a1, a1) - cylinder->radius * cylinder->radius;
 
-    float sqrt_delta = sqrt(delta);
-    float t1 = (-b - sqrt_delta) / (2.0 * a);
-    float t2 = (-b + sqrt_delta) / (2.0 * a);
+	float delta = b * b - 4 * a * c;
+	if (delta < 0)
+		return (0);
 
-    if (t1 > t2)
-		ft_memswap(&t1, &t2);
-
-    for (int i = 0; i < 2; i++)
+	float t = (-b - sqrt(delta)) / (2.0 * a);
+	if (t > MIN_T && t < MAX_T)
 	{
-        float t = (i == 0) ? t1 : t2;
-        if (t < MIN_T || t > MAX_T)
-            continue;
+		hit_rec->t = t;
+		hit_rec->hit_point = ray_point_at(r, t);
+		float m = vec3_dot(cylinder->direction, vec3_sub(hit_rec->hit_point, cylinder->center)) / vec3_dot(cylinder->direction, cylinder->direction);
+		hit_rec->normal = vec3_sub(vec3_sub(hit_rec->hit_point, cylinder->center), vec3_mult_float(cylinder->direction, m));
+		hit_rec->normal = vec3_normalize(hit_rec->normal);
 
-        t_vec3 hit_point = ray_point_at(r, t);
-        float m = vec3_dot(cylinder->direction, vec3_sub(hit_point, cylinder->center));
+		if (vec3_dot(cylinder->direction, vec3_sub(hit_rec->hit_point, cylinder->center)) > 0)
+			if (vec3_dot(cylinder->direction, vec3_sub(hit_rec->hit_point, cylinder->center2)) < 0)
+				return (1);
+			
+	}
 
-        if (m < 0 || m > vec3_dot(cylinder->direction, vec3_sub(cylinder->center2, cylinder->center)))
-            continue;
+	t = (-b + sqrt(delta)) / (2.0 * a);
+	if (t > MIN_T && t < MAX_T)
+	{
+		hit_rec->t = t;
+		hit_rec->hit_point = ray_point_at(r, t);
+		float m = vec3_dot(cylinder->direction, vec3_sub(hit_rec->hit_point, cylinder->center)) / vec3_dot(cylinder->direction, cylinder->direction);
+		hit_rec->normal = vec3_sub(vec3_sub(hit_rec->hit_point, cylinder->center), vec3_mult_float(cylinder->direction, m));
+		hit_rec->normal = vec3_normalize(hit_rec->normal);
 
-        hit_rec->t = t;
-        hit_rec->hit_point = hit_point;
-        hit_rec->normal = vec3_normalize(vec3_sub(vec3_sub(hit_point, cylinder->center), vec3_mult_float(cylinder->direction, m)));
-        return 1;
-    }
-    return 0;
+		if (vec3_dot(cylinder->direction, vec3_sub(hit_rec->hit_point, cylinder->center)) > 0)
+			if (vec3_dot(cylinder->direction, vec3_sub(hit_rec->hit_point, cylinder->center2)) < 0)
+				return (1);
+	}
+	return (0);
 }
-
 
 int	hit_obj(t_object *obj, const t_ray r, t_hit_record *hit_rec)
 {
