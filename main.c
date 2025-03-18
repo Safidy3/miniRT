@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/16 17:53:54 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:30:08 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,49 +111,38 @@ void	add_cornell_box(t_list **world)
 	scene_add_obj(world, back, white_lamb);
 }
 
-	// t_proprieties p_white_light = create_proprieties(create_vec3(2, 2, 2), LIGHT, 0, 0);
-	// t_object *shpere_light = create_sphere(create_vec3(1, 0, 1), 0.5);
-	// scene_add_obj(&data->world, shpere_light, p_white_light);
-
 void	add_sceen(t_data *data)
 {
+	data->cam = create_camera(create_vec3(0, 0, 1), create_vec3(0, 0, -1));
 	// add_cornell_box(&data->world);
 	
-	// t_proprieties yellow_lamb = create_proprieties(create_vec3(0.6, 1, 0.5), LAMBERTIAN, 0, 0);
-	// t_proprieties purple_lamb = create_proprieties(create_vec3(0.128, 0, 0.128), LAMBERTIAN, 0, 0);
-	t_proprieties green_lamb = create_proprieties(create_vec3(0, 1, 0), LAMBERTIAN, 0, 0);
-
-	data->cam = create_camera(create_vec3(0, 0, 3), create_vec3(0, 0, -1));
 	t_proprieties white_lamb = create_proprieties(create_vec3(1, 1, 1), LAMBERTIAN, 0, 0);
-	t_object *down = create_plane(
-		create_vec3(-2, -5, 0),
-		create_vec3(2, -5, 0),
-		create_vec3(-2, -5, -2),
-		create_vec3(2, -5, -2)
-	);
-	scene_add_obj(&data->world, down, white_lamb);
+	t_proprieties green_lamb = create_proprieties(create_vec3(0, 1, 0), LAMBERTIAN, 0, 0);
+	t_proprieties Blue_lamb = create_proprieties(create_vec3(0, 0, 1), LAMBERTIAN, 0, 0);
 
 	t_object *fw = create_plane(
-		create_vec3(-2, 0, -10),
-		create_vec3(2, 0, -10),
-		create_vec3(-2, 2, -10),
-		create_vec3(2, 2, -10)
+		create_vec3(-2, 0, -2),
+		create_vec3(2, 0, -2),
+		create_vec3(-2, 2, -2),
+		create_vec3(2, 2, -2)
 	);
 	scene_add_obj(&data->world, fw, white_lamb);
 
-	t_object *cylinder = create_cylinder(create_vec3(-1, 1, -1), create_vec3(-1, -1, -1), 0.5);
-	scene_add_obj(&data->world, cylinder, green_lamb);
+	t_proprieties p_white_light = create_proprieties(create_vec3(2, 2, 2), LIGHT, 0, 0);
+	t_object *shpere_light = create_sphere(create_vec3(1, 0, 1), 0.5);
+	scene_add_obj(&data->world, shpere_light, p_white_light);
 
-	t_proprieties Blue_lamb = create_proprieties(create_vec3(0, 0, 1), LAMBERTIAN, 0, 0);
-	t_object *shpere = create_sphere(create_vec3(1, 0, -1), 0.5);
+	t_object *shpere = create_sphere(create_vec3(1, 0, -1), 0.3);
 	scene_add_obj(&data->world, shpere, Blue_lamb);
+
+	t_object *cylinder = create_cylinder(create_vec3(-0, 1, -1), create_vec3(-0, -1, -1), 0.3);
+	scene_add_obj(&data->world, cylinder, green_lamb);
 }
 
 int	main(int argc, char **argv)
 {
-	t_data	*data;
+	t_data	data;
 
-	data = (t_data *)malloc(sizeof(t_data));
 	if (argc > 1)
 	{
 		if (!ft_isNumber(argv[1]))
@@ -161,39 +150,38 @@ int	main(int argc, char **argv)
 			printf("Usage: ./miniRT OR ./miniRT [AA_sample]\n");
 			return (1);
 		}
-		data->AA_sample = ft_atoi(argv[1]);
+		data.AA_sample = ft_atoi(argv[1]);
 	}
 	else
-		data->AA_sample = 1;
+		data.AA_sample = 1;
 
-	data->mlx = mlx_init();
-	data->win = mlx_new_window(data->mlx, WIDTH, HEIGHT, "miniRT");
-	data->img = mlx_new_image(data->mlx, WIDTH, HEIGHT);
-	data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel, &data->line_length, &data->endian);
-	data->world = NULL;
+	data.mlx = mlx_init();
+	data.win = mlx_new_window(data.mlx, WIDTH, HEIGHT, "miniRT");
+	data.img = mlx_new_image(data.mlx, WIDTH, HEIGHT);
+	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
+	data.world = NULL;
 
 	t_threads	thread;
-	thread.data = data;
+	thread.data = &data;
 	pthread_mutex_init(&thread.lock, NULL);
-	data->thread = &thread;
+	data.thread = &thread;
 
-	add_sceen(data);
-
-	printT(data->world);
-	if (data->AA_sample == 0)
-		put_pixel_color_debug(*data);
+	add_sceen(&data);
+	printT(data.world);
+	if (data.AA_sample == 0)
+		put_pixel_color_debug(data);
 	else
 	{
 		if (argc <= 2)
-			put_pixel_color(data);
+			put_pixel_color(&data);
 		else
 			put_pixel_color_thread(&thread);
 	}
 
 	pthread_mutex_destroy(&thread.lock);
-	mlx_hook(data->win, 2, 1L << 0, handle_key, data);
-	mlx_hook(data->win, 17, 1L << 17, close_window, data);
-	mlx_loop(data->mlx);
+	mlx_hook(data.win, 2, 1L << 0, handle_key, &data);
+	mlx_hook(data.win, 17, 1L << 17, close_window, &data);
+	mlx_loop(data.mlx);
 	return (0);
 }
 

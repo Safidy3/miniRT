@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 09:15:23 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/16 17:55:31 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/14 16:10:16 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ t_vec3	ray_casted_color(t_data *data, int x, int y)
 {
 	t_vec3	pix_pos;
 	float	i, j;
-	t_vec3	point_light = create_vec3(2, 2, 1);
+	t_vec3	point_light = create_vec3(0, 0, -0.5);
 	t_vec3	ambient_light = create_vec3(1, 1, 1);
 	float	intensity;
 	t_vec3	result;
@@ -70,7 +70,7 @@ t_vec3	ray_casted_color(t_data *data, int x, int y)
 	if (!first_hit_obj)
 		return (create_nullvec());
 
-	intensity = 0.2;
+	intensity = 0.1;
 	ambient_light = vec3_mult_float(ambient_light, intensity);
 
 	t_vec3		sh_direction = vec3_normalize(vec3_sub(point_light, first_hit_obj->hit_record.hit_point));
@@ -84,14 +84,6 @@ t_vec3	ray_casted_color(t_data *data, int x, int y)
 	}
 	else
 	{
-		// if (first_hit_obj->shape == PLANE)
-		// {
-		// 	sh_direction = vec3_normalize(vec3_sub(pix_pos, point_light));
-		// 	shadow_ray = create_ray(first_hit_obj->hit_record.hit_point, sh_direction);
-		// 	sec_hit_obj = get_safe_hit_obj(shadow_ray, data->world);
-		// 	if (sec_hit_obj)
-		// 		return (vec3_mult(first_hit_obj->proprieties.color, ambient_light));
-		// }
 		float n = fmax(intensity, vec3_dot(first_hit_obj->hit_record.normal, shadow_ray.direction));
 		result = vec3_mult_float(first_hit_obj->proprieties.color, n);
 		return (result);
