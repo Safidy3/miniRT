@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 09:15:23 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/18 17:41:19 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:09:07 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	put_pixel_color(t_data *data)
 	printf("rendering ...\n");
 	for (x = 0; x < WIDTH; x++)
 	{
-		for (y = 0; y < HEIGHT - 1; y++)
+		for (y = 0; y < HEIGHT; y++)
 		{
 			if (isVoid(x, y, *data))
 				continue;
