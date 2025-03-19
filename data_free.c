@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:50:26 by safandri          #+#    #+#             */
-/*   Updated: 2025/02/20 13:53:53 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:33:29 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	free_data(t_data *data)
 	mlx_destroy_window(data->mlx, data->win);
 	mlx_destroy_window(data->mlx, data->option_win);
 	mlx_destroy_image(data->mlx, data->img);
+	mlx_destroy_image(data->mlx, data->option_img);
 	mlx_destroy_display(data->mlx);
 	free(data->mlx);
 

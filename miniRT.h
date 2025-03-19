@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/18 17:36:47 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:23:55 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ typedef struct s_data
 	void	*mlx;
 	void	*win;
 	void	*img;
+	void	*option_img;
 	char	*addr;
 	void	*option_win;
 	int		bits_per_pixel;
@@ -194,7 +195,8 @@ int		isNullVec3(t_vec3 v);
 void	put_vector3(t_data *data, t_vec3 center, char *str, int px, int *py);
 void	put_obj_type(t_object *obj, t_data *data, int px, int *py);
 void	put_int(t_data *data, int value, char *str, int px, int *py);
-void	option_window(t_data *data);
+void	option_window(t_data *data, t_object *object);
+void	erase_screen(t_data *data);
 
 t_vec3	vec3_random_in_unit_object();
 

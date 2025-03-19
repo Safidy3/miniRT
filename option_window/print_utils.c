@@ -47,6 +47,7 @@ void	put_vector3(t_data *data, t_vec3 center, char *str, int px, int *py)
 	mlx_string_put(data->mlx, data->option_win, ft_strlen(str) * px + padding, *py, 0xFFFFFF, final);
 	free(tmp);
 	free(final);
+	free(x);free(y);free(z);
 	*py += 15;
 }
 
@@ -77,19 +78,53 @@ void	put_int(t_data *data, int value, char *str, int px, int *py)
 	*py += 15;
 }
 
-void option_window(t_data *data)
+void	black_pixel_put(t_data *data, int x, int y)
 {
-    data->option_win = mlx_new_window(data->mlx, HEIGHT, WIDTH, "Options");
-	int x = 7;
+	char	*dst;
+
+	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+	*(unsigned int*)dst = 0xFFFFFF;
+}
+
+void	erase_screen(t_data *data)
+{
+	int	x;
+	int	y;
+
+	x = HEIGHT;
+	y = WIDTH;
+	while (--y > 0)
+		while (--x > 0)
+			black_pixel_put(data, x, y);
+	mlx_put_image_to_window(data->mlx, data->option_win, data->option_img, 0, 0);
+	printf("inside\n");
+}
+
+void option_window(t_data *data, t_object *object)
+{
+    int x = 7;
 	int y = 10;
-	
-	while (data->world)
+	t_list	*tmp;
+
+	erase_screen(data);
+	if (object == NULL)
 	{
-		t_object *obj = (t_object *)data->world->content;
-		put_obj_type(obj, data, x, &y);
-		put_vector3(data, obj->center, "Center : ", x, &y);
-		put_int(data, obj->radius, "Radius : ", x, &y);
-		data->world = data->world->next;
+		tmp = data->world;
+		while (tmp)
+		{
+			t_object *obj = (t_object *)tmp->content;
+			put_obj_type(obj, data, x, &y);
+			put_vector3(data, obj->center, "Center : ", x, &y);
+			put_int(data, obj->radius, "Radius : ", x, &y);
+			y += 15;
+			tmp = tmp->next;
+		}
+	}
+	else
+	{
+		put_obj_type(object, data, x, &y);
+		put_vector3(data, object->center, "Center : ", x, &y);
+		put_int(data, object->radius, "Radius : ", x, &y);
 		y += 15;
 	}
 }
