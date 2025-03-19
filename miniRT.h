@@ -122,13 +122,14 @@ struct s_threads;
 
 typedef struct s_data
 {
-	void    *mlx;
-	void    *win;
-	void    *img;
-	char    *addr;
-	int     bits_per_pixel;
-	int     line_length;
-	int     endian;
+	void	*mlx;
+	void	*win;
+	void	*img;
+	char	*addr;
+	void	*option_win;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
 
 	struct s_threads *thread;
 	int		thread_id;
@@ -189,6 +190,11 @@ t_vec3	vec3_cross(t_vec3 a, t_vec3 b);
 t_vec3	vec3_inverse(t_vec3 v);
 int		isNullVec3(t_vec3 v);
 
+
+void	put_vector3(t_data *data, t_vec3 center, char *str, int px, int *py);
+void	put_obj_type(t_object *obj, t_data *data, int px, int *py);
+void	put_int(t_data *data, int value, char *str, int px, int *py);
+void	option_window(t_data *data);
 
 t_vec3	vec3_random_in_unit_object();
 

@@ -1,3 +1,5 @@
+OPTION_WINDOW_SRCS = ./option_window/print_utils.c
+
 VECTORS_SRCS = ./vector_maths/ray_utils.c ./vector_maths/vect_add.c ./vector_maths/vect_function.c ./vector_maths/vect_mult_div.c\
 				./vector_maths/vect_sub.c ./vector_maths/vect_utils.c
 
@@ -9,7 +11,7 @@ RENDER_SRCS = ./render/render_image.c ./render/render_utils.c ./render/render_de
 			  ./render/thread_render.c
 
 SRCS = main.c data_free.c \
-		$(VECTORS_SRCS) $(OBJECTS_SRCS) $(MATERIALS_SRCS) $(RENDER_SRCS)
+		$(VECTORS_SRCS) $(OBJECTS_SRCS) $(MATERIALS_SRCS) $(RENDER_SRCS) $(OPTION_WINDOW_SRCS)
 
 FLAGS = -Wall -Werror -Wextra -I/usr/include
 # FLAGS = -I/usr/include

@@ -120,12 +120,17 @@ void	add_cornell_box(t_list **world)
 void	add_sceen(t_data *data)
 {
 	data->cam = create_camera(create_vec3(0, 0, 1), create_vec3(0, 0, -1));
-	add_cornell_box(&data->world);
 
 	// t_proprieties white_lamb = create_proprieties(create_vec3(1, 1, 1), LAMBERTIAN, 0, 0);
 	t_proprieties green_lamb = create_proprieties(create_vec3(0, 1, 0), LAMBERTIAN, 0, 0);
 	t_proprieties Blue_lamb = create_proprieties(create_vec3(0, 0, 1), LAMBERTIAN, 0, 0);
 	t_proprieties purple = create_proprieties(create_vec3(0.490196078, 0, 1), LAMBERTIAN, 0, 0);
+
+	t_object *shpere = create_sphere(create_vec3(1, 0, -1), 0.3);
+	scene_add_obj(&data->world, shpere, Blue_lamb);
+	
+	t_object *cylinder = create_cylinder(create_vec3(-0, 1, -1), create_vec3(-0, -1, -1), 0.3);
+	scene_add_obj(&data->world, cylinder, purple);
 
 	t_proprieties p_white_light = create_proprieties(create_vec3(1, 1, 1), LIGHT, 0, 0);
 	t_object *shpere_light = create_sphere(create_vec3(-1, 0, -0.5), 0.5);
@@ -136,11 +141,8 @@ void	add_sceen(t_data *data)
 	t_object *ambent_light = create_ambient(create_vec3(1, 1, 1), 0.2);
 	scene_add_obj(&data->world, ambent_light, green_lamb);
 
-	t_object *shpere = create_sphere(create_vec3(1, 0, -1), 0.3);
-	scene_add_obj(&data->world, shpere, Blue_lamb);
 
-	t_object *cylinder = create_cylinder(create_vec3(-0, 1, -1), create_vec3(-0, -1, -1), 0.3);
-	scene_add_obj(&data->world, cylinder, purple);
+	add_cornell_box(&data->world);
 }
 
 int	main(int argc, char **argv)
@@ -171,6 +173,7 @@ int	main(int argc, char **argv)
 	data.thread = &thread;
 
 	add_sceen(&data);
+	option_window(&data);
 	printT(data.world);
 	if (data.AA_sample == 0)
 		put_pixel_color_debug(data);
@@ -192,16 +195,13 @@ int	main(int argc, char **argv)
 // int	main()
 // {
 // 	t_data	data;
-
 // 	data.mlx = mlx_init();
 // 	data.win = mlx_new_window(data.mlx, WIDTH, HEIGHT, "miniRT");
 // 	data.img = mlx_new_image(data.mlx, WIDTH, HEIGHT);
 // 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 // 	pthread_mutex_init(&data.lock, NULL);
 // 	data.world = NULL;
-
 // 	put_pixel_color_thread(data);
-
 // 	mlx_hook(data.win, 2, 1L << 0, handle_key, &data);
 // 	mlx_hook(data.win, 17, 1L << 17, close_window, &data);
 // 	mlx_loop(data.mlx);
