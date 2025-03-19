@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 13:23:11 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/18 15:54:40 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/19 11:53:17 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ void	scene_add_obj(t_list **world, t_object *obj, t_proprieties prts)
 	new_obj = ft_lstnew((void *)obj);
 	if (!new_obj)
 		return (free(obj));
-	obj->id = ft_lstsize(*world) - 1;
+	obj->id = ft_lstsize(*world);
 	obj->hit_record.t = -1;
 	obj->hit_record.hit_point = create_vec3(0, 0, 0);
 	obj->hit_record.normal = create_vec3(0, 0, 0);
