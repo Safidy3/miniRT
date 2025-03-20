@@ -125,12 +125,17 @@ typedef struct s_data
 	void	*mlx;
 	void	*win;
 	void	*img;
-	void	*option_img;
 	char	*addr;
-	void	*option_win;
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
+	
+	void	*option_img;
+	void	*option_win;
+	char	*option_addr;
+	int		o_bits_per_pixel;
+	int		o_line_length;
+	int		o_endian;
 
 	struct s_threads *thread;
 	int		thread_id;

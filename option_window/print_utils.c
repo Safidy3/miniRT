@@ -82,7 +82,7 @@ void	black_pixel_put(t_data *data, int x, int y)
 {
 	char	*dst;
 
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+	dst = data->option_addr + (y * data->o_line_length + x * (data->o_bits_per_pixel / 8));
 	*(unsigned int*)dst = 0xFFFFFF;
 }
 
@@ -97,7 +97,6 @@ void	erase_screen(t_data *data)
 		while (--x > 0)
 			black_pixel_put(data, x, y);
 	mlx_put_image_to_window(data->mlx, data->option_win, data->option_img, 0, 0);
-	printf("inside\n");
 }
 
 void option_window(t_data *data, t_object *object)
@@ -105,6 +104,7 @@ void option_window(t_data *data, t_object *object)
     int x = 7;
 	int y = 10;
 	t_list	*tmp;
+	t_object *obj;
 
 	erase_screen(data);
 	if (object == NULL)
@@ -112,7 +112,7 @@ void option_window(t_data *data, t_object *object)
 		tmp = data->world;
 		while (tmp)
 		{
-			t_object *obj = (t_object *)tmp->content;
+			obj = (t_object *)tmp->content;
 			put_obj_type(obj, data, x, &y);
 			put_vector3(data, obj->center, "Center : ", x, &y);
 			put_int(data, obj->radius, "Radius : ", x, &y);
