@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/19 14:23:55 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/21 00:36:08 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,6 +220,7 @@ t_vec3			texture_checker(const t_vec3 point, t_vec3 color1, t_vec3 color2);
 t_proprieties	create_proprieties(t_vec3 color, int material, float material_parameter, int use_texture);
 
 t_cam		create_camera(t_vec3 origin, t_vec3 look_at);
+t_cam		dup_camera(t_cam cam);
 t_object	*create_sphere(t_vec3 center, float radius);
 t_object	*create_plane(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
 t_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
@@ -231,6 +232,7 @@ t_object	*create_ambient(t_vec3 color, float brightness);
 void	translate_object(t_object *obj, t_vec3 translation);
 void	compute_camera_rays(t_data *data);
 
+t_list		*deep_copy_world(t_list *world);
 void		scene_add_obj(t_list **world, t_object *obj, t_proprieties prts);
 int			hit_obj(t_object *obj, const t_ray r, t_hit_record *hit_rec);
 

@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 13:23:11 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/19 11:53:17 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/21 00:35:26 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,18 @@ t_cam	create_camera(t_vec3 origin, t_vec3 look_at)
 
 	return (cam);
 }
+
+t_cam	dup_camera(t_cam cam)
+{
+	t_cam	new_cam;
+
+	new_cam.horizintal = cam .horizintal;
+	new_cam.lower_L = cam .lower_L;
+	new_cam.origin = cam .origin;
+	new_cam.vertical = cam .vertical;
+	return (new_cam);
+}
+
 
 t_object	*create_sphere(t_vec3 center, float radius)
 {
@@ -173,8 +185,6 @@ void	scene_add_obj(t_list **world, t_object *obj, t_proprieties prts)
 	if (!obj)
 		return;
 	new_obj = ft_lstnew((void *)obj);
-	if (!new_obj)
-		return (free(obj));
 	obj->id = ft_lstsize(*world);
 	obj->hit_record.t = -1;
 	obj->hit_record.hit_point = create_vec3(0, 0, 0);
@@ -188,4 +198,48 @@ void	scene_add_obj(t_list **world, t_object *obj, t_proprieties prts)
 		obj->proprieties.material_parameter = (prts.material == METAL) ? fmin(prts.material_parameter, 1.0) : prts.material_parameter;
 	}
 	ft_lstadd_back(world, new_obj);
+}
+
+t_list	*deep_copy_world(t_list *world)
+{
+	t_list		*new_world;
+	t_object	*obj;
+	t_object	*new_obj;
+
+	new_world = NULL;
+	while (world)
+	{
+		obj = make_obj(world);
+		if (obj->shape == SPHERE)
+			new_obj = create_sphere(obj->center, obj->radius);
+		else if (obj->shape == RECTANGLE)
+			new_obj = create_rectangle(obj->plane[0], obj->plane[1], obj->plane[2], obj->plane[3]);
+		else if (obj->shape == PLANE)
+			new_obj = create_plane(obj->plane[0], obj->plane[1], obj->plane[2], obj->plane[3]);
+		else if (obj->shape == INF_CYLINDRE)
+			new_obj = create_inf_cylinder(obj->center, obj->direction, obj->radius);
+		else if (obj->shape == CYLINDRE)
+			new_obj = create_cylinder(obj->center, obj->center2, obj->radius);
+		else if (obj->shape == POINT_LIGHT)
+			new_obj = create_point_light(obj->center, obj->proprieties.color, obj->proprieties.material_parameter);
+		else if (obj->shape == AMBIENT_LIGHT)
+			new_obj = create_ambient(obj->proprieties.color, obj->proprieties.material_parameter);
+
+		new_obj->id = ft_lstsize(world);
+		new_obj->hit_record.t = -1;
+		new_obj->hit_record.hit_point = create_vec3(0, 0, 0);
+		new_obj->hit_record.normal = create_vec3(0, 0, 0);
+		new_obj->hit_record.color = obj->proprieties.color;
+		if (new_obj->shape != POINT_LIGHT && new_obj->shape != AMBIENT_LIGHT)
+		{
+			new_obj->proprieties.color = vec3_safe_mult_float(obj->proprieties.color, 1);
+			new_obj->proprieties.use_texture = obj->proprieties.use_texture;
+			new_obj->proprieties.material = obj->proprieties.material;
+			new_obj->proprieties.material_parameter = (obj->proprieties.material == METAL) ? fmin(obj->proprieties.material_parameter, 1.0) : obj->proprieties.material_parameter;
+		}
+		
+		ft_lstadd_back(&new_world, ft_lstnew((void *)new_obj));
+		world = world->next;
+	}
+	return (new_world);
 }

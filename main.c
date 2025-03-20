@@ -6,11 +6,24 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/19 14:33:08 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/21 00:36:49 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
+
+void	erase_main_screen(t_data *data)
+{
+	int	x;
+	int	y;
+
+	x = -1;
+	y = -1;
+	for (x = 0; x < WIDTH; x++)
+		for (y = HEIGHT - 1; y >= 0; y--)
+			my_mlx_pixel_put(data, x, y, create_nullvec());
+	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
+}
 
 int	handle_key(int keycode, void *param)
 {
@@ -23,53 +36,59 @@ int	handle_key(int keycode, void *param)
 	if (keycode == 119)
 	{
 		translate_object(make_obj(data->world), create_vec3(0, 0, -0.1));
-		// put_pixel_color_debug(data);
-		put_pixel_color(data);
+		put_pixel_color_debug(data);
 	}
 	if (keycode == 115)
 	{
 		translate_object(make_obj(data->world), create_vec3(0, 0, 0.1));
 		put_pixel_color_debug(data);
-		// put_pixel_color(data);
 	}
 	if (keycode == 97)
 	{
 		translate_object(make_obj(data->world), create_vec3(-0.1, 0, 0));
 		put_pixel_color_debug(data);
-		// put_pixel_color(data);
 	}
 	if (keycode == 100)
 	{
 		translate_object(make_obj(data->world), create_vec3(0.1, 0, 0));
 		put_pixel_color_debug(data);
-		// put_pixel_color(data);
 	}
 	if (keycode == 101)
 	{
 		translate_object(make_obj(data->world), create_vec3(0, 0.1, 0));
 		put_pixel_color_debug(data);
-		// put_pixel_color(data);
 	}
 	if (keycode == 113)
 	{
 		translate_object(make_obj(data->world), create_vec3(0, -0.1, 0));
 		put_pixel_color_debug(data);
-		// put_pixel_color(data);
 	}
 	if (keycode == 114)
 	{
+		erase_main_screen(data);
+		// sleep(5);
 		put_pixel_color_thread(data->thread);
-		// put_pixel_color_debug(data);
 	}
+	if (keycode == 116)
+	{
+		erase_main_screen(data);
+		put_pixel_color(data);
+	}
+	if (keycode == 121)
+	{
+		erase_main_screen(data);
+		put_pixel_color_debug(data);
+	}
+	option_window(data, NULL);
 	return (0);
 }
 
 int	mouse_hook(int keycode, int x, int y, void *param)
 {
-	t_data	*data;
-	float	i, j;
-	t_vec3	pix_pos;
-	t_ray	r;
+	t_data		*data;
+	float		i, j;
+	t_vec3		pix_pos;
+	t_ray		r;
 	t_object	*first_hit_obj;
 
 	data = (t_data *)param;
@@ -244,19 +263,21 @@ int	main(int argc, char **argv)
 	for (int i = 0; i < WIDTH; i++)
 		data.camera_rays[i] = malloc(sizeof(t_ray) * HEIGHT);
 
-	
+	data.hit_objects = malloc(sizeof(t_object **) * WIDTH);
+	for (int i = 0; i < WIDTH; i++)
+		data.hit_objects[i] = malloc(sizeof(t_object *) * HEIGHT);
+
 	t_threads	thread;
 	thread.data = &data;
 	pthread_mutex_init(&thread.lock, NULL);
 	data.thread = &thread;
+
 	add_sceen(&data);
-
-	// option_window(&data, NULL);
-
 	printT(data.world);
+
 	put_pixel_color_debug(&data);
 	// put_pixel_color(&data);
-	// put_pixel_color(&data);
+	// put_pixel_color_thread(&thread);
 
 	// if (data.AA_sample == 0)
 	// 	put_pixel_color_debug(&data);
@@ -275,11 +296,3 @@ int	main(int argc, char **argv)
 	mlx_loop(data.mlx);
 	return (0);
 }
-
-
-// int main( int argc, char **argv)
-// {
-// 	(void)argv;
-// 	printf("argc : %d\n", argc);
-// 	return (0);
-// }

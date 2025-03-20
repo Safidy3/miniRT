@@ -23,12 +23,15 @@ void	put_vector3(t_data *data, t_vec3 center, char *str, int px, int *py)
 {
 	int padding = 20;
 	mlx_string_put(data->mlx, data->option_win, px + padding, *py, 0xFFFFFF, str);
-	char *x = ft_itoa(center.x);
-	char *y = ft_itoa(center.y);
-	char *z = ft_itoa(center.z);
+    char x[20];
+    char y[20];
+    char z[20];
 	char *final;
 	char *tmp;
 
+	sprintf(x, "%.5f", center.x);
+	sprintf(y, "%.5f", center.y);
+	sprintf(z, "%.5f", center.z);
 	final = ft_strjoin("(", x);
 	tmp = final;
 	final = ft_strjoin(final, ", ");
@@ -47,7 +50,6 @@ void	put_vector3(t_data *data, t_vec3 center, char *str, int px, int *py)
 	mlx_string_put(data->mlx, data->option_win, ft_strlen(str) * px + padding, *py, 0xFFFFFF, final);
 	free(tmp);
 	free(final);
-	free(x);free(y);free(z);
 	*py += 15;
 }
 

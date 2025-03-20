@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 11:32:43 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/11 11:32:46 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/20 23:17:11 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,6 @@ void	put_pixel_color_debug(t_data *data)
 
 	compute_camera_rays(data);
 
-	data->hit_objects = malloc(sizeof(t_object **) * WIDTH);
-	for (int i = 0; i < WIDTH; i++)
-		data->hit_objects[i] = malloc(sizeof(t_object *) * HEIGHT);
 
 	for (x = 0; x < WIDTH; x++)
 	{
