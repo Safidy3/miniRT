@@ -49,7 +49,7 @@ t_object	*get_safe_hit_obj(const t_ray r, t_list *world)
 	return (NULL);
 }
 
-int	isVoid(float x, float y, t_data data)
+int	isVoid(float x, float y, t_data *data)
 {
 	t_object *c;
 
@@ -57,19 +57,19 @@ int	isVoid(float x, float y, t_data data)
 	(
 		create_ray
 		(
-			data.cam.origin,
+			data->cam.origin,
 			vec3_sub
 			(
 				vec3_add3
 				(
-					data.cam.lower_L, 
-					vec3_mult_float(data.cam.horizintal, (float)x / (float)WIDTH),
-					vec3_mult_float(data.cam.vertical, (float)(HEIGHT - y) / (float)HEIGHT)
+					data->cam.lower_L, 
+					vec3_mult_float(data->cam.horizintal, (float)x / (float)WIDTH),
+					vec3_mult_float(data->cam.vertical, (float)(HEIGHT - y) / (float)HEIGHT)
 				),
-				data.cam.origin
+				data->cam.origin
 			)
 		),
-		data.world
+		data->world
 	);
 	if (c == NULL || (c && c->proprieties.material == LIGHT))
 		return (1);

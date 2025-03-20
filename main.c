@@ -19,6 +19,48 @@ int	handle_key(int keycode, void *param)
 	data = (t_data *)param;
 	if (keycode == 65307)
 		close_window(data);
+	printf("keycode : %d\n", keycode);
+	if (keycode == 119)
+	{
+		translate_object(make_obj(data->world), create_vec3(0, 0, -0.1));
+		// put_pixel_color_debug(data);
+		put_pixel_color(data);
+	}
+	if (keycode == 115)
+	{
+		translate_object(make_obj(data->world), create_vec3(0, 0, 0.1));
+		put_pixel_color_debug(data);
+		// put_pixel_color(data);
+	}
+	if (keycode == 97)
+	{
+		translate_object(make_obj(data->world), create_vec3(-0.1, 0, 0));
+		put_pixel_color_debug(data);
+		// put_pixel_color(data);
+	}
+	if (keycode == 100)
+	{
+		translate_object(make_obj(data->world), create_vec3(0.1, 0, 0));
+		put_pixel_color_debug(data);
+		// put_pixel_color(data);
+	}
+	if (keycode == 101)
+	{
+		translate_object(make_obj(data->world), create_vec3(0, 0.1, 0));
+		put_pixel_color_debug(data);
+		// put_pixel_color(data);
+	}
+	if (keycode == 113)
+	{
+		translate_object(make_obj(data->world), create_vec3(0, -0.1, 0));
+		put_pixel_color_debug(data);
+		// put_pixel_color(data);
+	}
+	if (keycode == 114)
+	{
+		put_pixel_color_thread(data->thread);
+		// put_pixel_color_debug(data);
+	}
 	return (0);
 }
 
@@ -165,6 +207,11 @@ void	add_sceen(t_data *data)
 	add_cornell_box(&data->world);
 }
 
+void translate_object(t_object *obj, t_vec3 translation)
+{
+	obj->center = vec3_add(obj->center, translation);
+}
+
 int	main(int argc, char **argv)
 {
 	t_data	data;
@@ -182,7 +229,7 @@ int	main(int argc, char **argv)
 		data.AA_sample = 1;
 
 	data.mlx = mlx_init();
-	
+
 	data.option_win = mlx_new_window(data.mlx, HEIGHT, WIDTH, "Options");
 	data.option_img = mlx_new_image(data.mlx, HEIGHT, WIDTH);
 	data.option_addr = mlx_get_data_addr(data.option_img, &data.o_bits_per_pixel, &data.o_line_length, &data.o_endian);
@@ -192,6 +239,11 @@ int	main(int argc, char **argv)
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 
 	data.world = NULL;
+
+	data.camera_rays = malloc(sizeof(t_ray *) * WIDTH);
+	for (int i = 0; i < WIDTH; i++)
+		data.camera_rays[i] = malloc(sizeof(t_ray) * HEIGHT);
+
 	
 	t_threads	thread;
 	thread.data = &data;
@@ -199,19 +251,23 @@ int	main(int argc, char **argv)
 	data.thread = &thread;
 	add_sceen(&data);
 
-	option_window(&data, NULL);
+	// option_window(&data, NULL);
 
 	printT(data.world);
-	if (data.AA_sample == 0)
-		put_pixel_color_debug(data);
-	else
-	{
-		if (argc <= 2)
-			put_pixel_color(&data);
-		else
-			put_pixel_color_thread(&thread);
-	}
-	pthread_mutex_destroy(&thread.lock);
+	put_pixel_color_debug(&data);
+	// put_pixel_color(&data);
+	// put_pixel_color(&data);
+
+	// if (data.AA_sample == 0)
+	// 	put_pixel_color_debug(&data);
+	// else
+	// {
+	// 	if (argc <= 2)
+	// 		put_pixel_color(&data);
+	// 	else
+	// 		put_pixel_color_thread(&thread);
+	// }
+	// pthread_mutex_destroy(&thread.lock);
 
 	mlx_mouse_hook(data.win, mouse_hook, &data);
 	mlx_hook(data.win, 2, 1L << 0, handle_key, &data);
@@ -221,3 +277,9 @@ int	main(int argc, char **argv)
 }
 
 
+// int main( int argc, char **argv)
+// {
+// 	(void)argv;
+// 	printf("argc : %d\n", argc);
+// 	return (0);
+// }

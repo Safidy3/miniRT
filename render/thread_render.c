@@ -14,20 +14,22 @@
 
 t_vec3	compute_path_traced_color(t_data *data, int x, int y)
 {
-	t_vec3	pix_pos, pix_col;
-	float	i, j;
+	// t_vec3	pix_pos, pix_col;
+	// float	i, j;
+	t_vec3	pix_col;
 	int		s;
 	t_ray	r;
 
 	pix_col = create_vec3(0, 0, 0);
-	if (isVoid(x, y, *data))
+	if (isVoid(x, y, data))
 		return (create_nullvec());
 	for (s = 0; s < data->AA_sample; s++)
 	{
-		i = (float)(x + drand48()) / (float)WIDTH;
-		j = (float)(HEIGHT - y + drand48()) / (float)HEIGHT;
-		pix_pos = vec3_add3(data->cam.lower_L, vec3_mult_float(data->cam.horizintal, i), vec3_mult_float(data->cam.vertical, j));
-		r = create_ray(data->cam.origin, vec3_sub(pix_pos, data->cam.origin));
+		// i = (float)(x + drand48()) / (float)WIDTH;
+		// j = (float)(HEIGHT - y + drand48()) / (float)HEIGHT;
+		// pix_pos = vec3_add3(data->cam.lower_L, vec3_mult_float(data->cam.horizintal, i), vec3_mult_float(data->cam.vertical, j));
+		// r = create_ray(data->cam.origin, vec3_sub(pix_pos, data->cam.origin));
+		r = data->camera_rays[x][y];
 		pix_col = vec3_add(pix_col, path_traced_color(r, data->world, 0, NULL));
 	}
 	pix_col = vec3_div_float(pix_col, data->AA_sample);
@@ -67,16 +69,20 @@ void	*thread_routing(void *param)
 	t_data	*og_data;
 	t_data	data;
 	t_vec3	pix_col;
-	int		x, y;
-	int		thread_id;
-
+	
 	thread = (t_threads *)param;
 	og_data = thread->data;
-	thread_id = og_data->thread_id;
 	data.AA_sample = og_data->AA_sample;
 	data.world = NULL;
 	add_sceen(&data);
 
+	data.camera_rays = malloc(sizeof(t_ray *) * WIDTH);
+	for (int i = 0; i < WIDTH; i++)
+		data.camera_rays[i] = malloc(sizeof(t_ray) * HEIGHT);
+	compute_camera_rays(&data);
+	
+	int		x, y;
+	int thread_id = og_data->thread_id;
 	int begin = thread_id * thread->pix_unit;
 	int end = (thread_id + 1) * thread->pix_unit;
 	pthread_mutex_lock(&og_data->thread->lock);
@@ -84,12 +90,11 @@ void	*thread_routing(void *param)
 		end = WIDTH;
 	pthread_mutex_unlock(&og_data->thread->lock);
 	printf("%d - %d\n", begin, end);
-
 	for (x = begin; x < end; x++)
 	{
 		for (y = HEIGHT - 1; y >= 0; y--)
 		{
-			if (isVoid(x, y, *og_data))
+			if (isVoid(x, y, og_data))
 				continue;
 			pix_col = compute_path_traced_color(&data, x, y);
 			// pix_col = ray_casted_color(&data, x, y);
@@ -129,7 +134,7 @@ void	put_pixel_color_thread(t_threads *thread)
 		printf("Thread %d started : ", i);
 		pthread_mutex_unlock(&thread->lock);
 		pthread_create(&thread->threads[i], NULL, thread_routing, (void *)thread);
-		usleep(500);
+		usleep(10000);
 	}
 	for (int i = 0; i < thread->thread_num; i++)
 		pthread_join(thread->threads[i], NULL);

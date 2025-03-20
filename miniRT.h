@@ -137,6 +137,9 @@ typedef struct s_data
 	int		o_line_length;
 	int		o_endian;
 
+	t_ray		**camera_rays;
+	t_object	***hit_objects;
+
 	struct s_threads *thread;
 	int		thread_id;
 
@@ -225,6 +228,8 @@ t_object	*create_cylinder(t_vec3 center, t_vec3 center2, float radius);
 t_object	*create_point_light(t_vec3 center, t_vec3 color, float brightness);
 t_object	*create_ambient(t_vec3 color, float brightness);
 
+void	translate_object(t_object *obj, t_vec3 translation);
+void	compute_camera_rays(t_data *data);
 
 void		scene_add_obj(t_list **world, t_object *obj, t_proprieties prts);
 int			hit_obj(t_object *obj, const t_ray r, t_hit_record *hit_rec);
@@ -240,10 +245,10 @@ int		close_window(void *param);
 
 t_object	*get_first_hit_obj(const t_ray r, t_list *world);
 t_object	*get_safe_hit_obj(const t_ray r, t_list *world);
-int			isVoid(float x, float y, t_data data);
+int			isVoid(float x, float y, t_data *data);
 t_object	*get_light(t_list *og_world, int light_type);
 
-void	put_pixel_color_debug(t_data data);
+void	put_pixel_color_debug(t_data *data);
 t_vec3	color_debug(const t_ray r, t_list *world);
 
 void	printT(t_list *t);

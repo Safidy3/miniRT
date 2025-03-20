@@ -48,6 +48,19 @@ void	clear_sceen(t_list **world)
 	}
 }
 
+void	free_2d_array(void **array, int size)
+{
+	int	i;
+
+	i = 0;
+	while (i < size)
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+}
+
 t_object	*make_obj(t_list *obj)
 {
 	if (obj)
