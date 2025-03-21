@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 11:32:29 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/21 00:36:42 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/21 06:18:04 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	thread_render(t_data *data, t_data *og_data, int begin, int end)
 	int			x, y;
 	t_vec3		pix_col;
 
-	printf("%d - %d\n", begin, end);
 	for (x = begin; x < end; x++)
 	{
 		for (y = HEIGHT - 1; y >= 0; y--)
@@ -72,10 +71,17 @@ void	thread_render(t_data *data, t_data *og_data, int begin, int end)
 			pix_col = compute_path_traced_color(data, x, y);
 			my_mlx_pixel_put(og_data, x, y, pix_col);
 		}
-		pthread_mutex_lock(&og_data->thread->lock);
-		mlx_put_image_to_window(og_data->mlx, og_data->win, og_data->img, 0, 0);
-		pthread_mutex_unlock(&og_data->thread->lock);
+		// if (x % 100 == 0)
+		// {
+			pthread_mutex_lock(&og_data->thread->lock);
+			mlx_put_image_to_window(og_data->mlx, og_data->win, og_data->img, 0, 0);
+			mlx_do_sync(og_data->mlx);
+			pthread_mutex_unlock(&og_data->thread->lock);
+		// }
 	}
+	// pthread_mutex_lock(&og_data->thread->lock);
+	// mlx_put_image_to_window(og_data->mlx, og_data->win, og_data->img, 0, 0);
+	// pthread_mutex_unlock(&og_data->thread->lock);
 	clear_sceen(&(data->world));
 }
 
@@ -88,16 +94,8 @@ void	*thread_routing(void *param)
 	thread = (t_threads *)param;
 	og_data = thread->data;
 	data.AA_sample = og_data->AA_sample;
-	// data.world = NULL;
-
-	// pthread_mutex_lock(&thread->lock);
-	// add_sceen(og_data);
-	// pthread_mutex_unlock(&thread->lock);
-	// add_sceen(&data);
-
 	data.cam = dup_camera(og_data->cam);
 	data.world = deep_copy_world(og_data->world);
-
 	data.camera_rays = malloc(sizeof(t_ray *) * WIDTH);
 	for (int i = 0; i < WIDTH; i++)
 		data.camera_rays[i] = malloc(sizeof(t_ray) * HEIGHT);
@@ -111,14 +109,14 @@ void	*thread_routing(void *param)
 		end = WIDTH;
 
 	thread_render(&data, og_data, begin, end);
-
+	printf("Thread %d Finished.\n", thread_id);
 	return (NULL);
 }
 
 void	put_pixel_color_thread(t_threads *thread)
 {
-	char	line[10];
 	t_data	*data;
+	char	line[10];
     FILE	*p;
 
 	p = popen("awk '/^processor/{n+=1}END{print n}' /proc/cpuinfo", "r");
@@ -126,20 +124,20 @@ void	put_pixel_color_thread(t_threads *thread)
     pclose(p);
 
 	data = thread->data;
+	erase_main_screen(data);
+
 	thread->thread_num = ft_atoi(line);
-	printf("thread num = %d\n", thread->thread_num);
 	thread->pix_unit = WIDTH / thread->thread_num;
 	printf("rendering ...\n");
 	for (int i = 0; i < thread->thread_num; i++)
 	{
 		pthread_mutex_lock(&thread->lock);
 		data->thread_id = i;
-		printf("Thread %d started : ", i);
 		pthread_mutex_unlock(&thread->lock);
+		printf("Thread %d started\n", data->thread_id);
 		pthread_create(&thread->threads[i], NULL, thread_routing, (void *)thread);
-		usleep(50000);
+		usleep(30000);
 	}
 	for (int i = 0; i < thread->thread_num; i++)
 		pthread_join(thread->threads[i], NULL);
-	printf("Finished.\n");
 }

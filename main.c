@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/21 00:36:49 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/21 06:21:25 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@ void	erase_main_screen(t_data *data)
 	x = -1;
 	y = -1;
 	for (x = 0; x < WIDTH; x++)
+	{
 		for (y = HEIGHT - 1; y >= 0; y--)
 			my_mlx_pixel_put(data, x, y, create_nullvec());
-	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
+		mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
+	}
 }
 
 int	handle_key(int keycode, void *param)
@@ -65,8 +67,6 @@ int	handle_key(int keycode, void *param)
 	}
 	if (keycode == 114)
 	{
-		erase_main_screen(data);
-		// sleep(5);
 		put_pixel_color_thread(data->thread);
 	}
 	if (keycode == 116)
@@ -278,17 +278,6 @@ int	main(int argc, char **argv)
 	put_pixel_color_debug(&data);
 	// put_pixel_color(&data);
 	// put_pixel_color_thread(&thread);
-
-	// if (data.AA_sample == 0)
-	// 	put_pixel_color_debug(&data);
-	// else
-	// {
-	// 	if (argc <= 2)
-	// 		put_pixel_color(&data);
-	// 	else
-	// 		put_pixel_color_thread(&thread);
-	// }
-	// pthread_mutex_destroy(&thread.lock);
 
 	mlx_mouse_hook(data.win, mouse_hook, &data);
 	mlx_hook(data.win, 2, 1L << 0, handle_key, &data);

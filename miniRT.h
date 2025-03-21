@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/21 00:36:08 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/21 05:38:26 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,20 +151,19 @@ typedef struct s_data
 typedef struct s_threads
 {
 	pthread_t	threads[1000];
+	int     	thread_num;
 	int			thread_id;
 	int			pix_unit;
 	t_data		*data;
 	pthread_mutex_t lock;
-
-	void    *mlx;
-	void    *win;
-	void    *img;
-	char    *addr;
-	int     bits_per_pixel;
-	int     line_length;
-	int     endian;
-	int     thread_num;
 }	t_threads;
+
+typedef struct s_arg_thread
+{
+	t_threads	*thread;
+	t_data		*data;
+	int			thread_id;
+} t_arg_thread;
 
 /******************************************************/
 
@@ -254,6 +253,8 @@ void	put_pixel_color_debug(t_data *data);
 t_vec3	color_debug(const t_ray r, t_list *world);
 
 void	printT(t_list *t);
+
+void	erase_main_screen(t_data *data);
 
 /************  thread  *************/
 
