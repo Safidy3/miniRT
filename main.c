@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/21 06:21:25 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/21 06:47:20 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,38 +37,38 @@ int	handle_key(int keycode, void *param)
 	printf("keycode : %d\n", keycode);
 	if (keycode == 119)
 	{
-		translate_object(make_obj(data->world), create_vec3(0, 0, -0.1));
+		translate_object(data->seleced_object, create_vec3(0, 0, -0.1));
 		put_pixel_color_debug(data);
 	}
 	if (keycode == 115)
 	{
-		translate_object(make_obj(data->world), create_vec3(0, 0, 0.1));
+		translate_object(data->seleced_object, create_vec3(0, 0, 0.1));
 		put_pixel_color_debug(data);
 	}
 	if (keycode == 97)
 	{
-		translate_object(make_obj(data->world), create_vec3(-0.1, 0, 0));
+		translate_object(data->seleced_object, create_vec3(-0.1, 0, 0));
 		put_pixel_color_debug(data);
 	}
 	if (keycode == 100)
 	{
-		translate_object(make_obj(data->world), create_vec3(0.1, 0, 0));
+		translate_object(data->seleced_object, create_vec3(0.1, 0, 0));
 		put_pixel_color_debug(data);
 	}
 	if (keycode == 101)
 	{
-		translate_object(make_obj(data->world), create_vec3(0, 0.1, 0));
+		translate_object(data->seleced_object, create_vec3(0, 0.1, 0));
 		put_pixel_color_debug(data);
 	}
 	if (keycode == 113)
 	{
-		translate_object(make_obj(data->world), create_vec3(0, -0.1, 0));
+		translate_object(data->seleced_object, create_vec3(0, -0.1, 0));
 		put_pixel_color_debug(data);
 	}
+	// if (keycode == 65535)
+	
 	if (keycode == 114)
-	{
 		put_pixel_color_thread(data->thread);
-	}
 	if (keycode == 116)
 	{
 		erase_main_screen(data);
@@ -79,7 +79,7 @@ int	handle_key(int keycode, void *param)
 		erase_main_screen(data);
 		put_pixel_color_debug(data);
 	}
-	option_window(data, NULL);
+	option_window(data, data->seleced_object);
 	return (0);
 }
 
@@ -99,6 +99,7 @@ int	mouse_hook(int keycode, int x, int y, void *param)
 		pix_pos = vec3_add3(data->cam.lower_L, vec3_mult_float(data->cam.horizintal, i), vec3_mult_float(data->cam.vertical, j));
 		r = create_ray(data->cam.origin, vec3_sub(pix_pos, data->cam.origin));
 		first_hit_obj = get_safe_hit_obj(r, data->world);
+		data->seleced_object = first_hit_obj;
 		option_window(data, first_hit_obj);
 	}
 	return (0);
@@ -228,7 +229,8 @@ void	add_sceen(t_data *data)
 
 void translate_object(t_object *obj, t_vec3 translation)
 {
-	obj->center = vec3_add(obj->center, translation);
+	if (obj)
+		obj->center = vec3_add(obj->center, translation);
 }
 
 int	main(int argc, char **argv)
@@ -258,6 +260,7 @@ int	main(int argc, char **argv)
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 
 	data.world = NULL;
+	data.seleced_object = NULL;
 
 	data.camera_rays = malloc(sizeof(t_ray *) * WIDTH);
 	for (int i = 0; i < WIDTH; i++)

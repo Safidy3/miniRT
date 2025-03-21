@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 11:32:29 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/21 06:18:04 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/21 06:47:43 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ void	*thread_routing(void *param)
 	data.AA_sample = og_data->AA_sample;
 	data.cam = dup_camera(og_data->cam);
 	data.world = deep_copy_world(og_data->world);
+	data.seleced_object = og_data->seleced_object;
 	data.camera_rays = malloc(sizeof(t_ray *) * WIDTH);
 	for (int i = 0; i < WIDTH; i++)
 		data.camera_rays[i] = malloc(sizeof(t_ray) * HEIGHT);

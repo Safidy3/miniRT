@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/21 05:38:26 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/21 06:47:33 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,8 @@ typedef struct s_data
 
 	t_ray		**camera_rays;
 	t_object	***hit_objects;
+
+	t_object	*seleced_object;
 
 	struct s_threads *thread;
 	int		thread_id;
