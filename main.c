@@ -65,8 +65,32 @@ int	handle_key(int keycode, void *param)
 		translate_object(data->seleced_object, create_vec3(0, -0.1, 0));
 		put_pixel_color_debug(data);
 	}
-	// if (keycode == 65535)
-	
+	if (keycode == 65535)
+	{
+		t_list	*tmp;
+		t_list	*prev;
+
+		tmp = data->world;
+		prev = NULL;
+		while (tmp)
+		{
+			if (((t_object *)(tmp->content))->id == data->seleced_object->id)
+			{
+				if (!prev)
+					data->world = tmp->next;
+				else
+				{
+					prev->next = tmp->next;
+					ft_lstdelone(tmp, free);
+					break;
+				}
+			}
+			prev = tmp;
+			tmp = tmp->next;
+		}
+		data->seleced_object = NULL;
+		put_pixel_color_debug(data);
+	}
 	if (keycode == 114)
 		put_pixel_color_thread(data->thread);
 	if (keycode == 116)
