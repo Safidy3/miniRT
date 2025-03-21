@@ -57,7 +57,6 @@ void	put_pixel_color_debug(t_data *data)
 	t_vec3	pix_col;
 	int		x, y;
 
-	compute_camera_rays(data);
 
 
 	for (x = 0; x < WIDTH; x++)

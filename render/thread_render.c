@@ -110,6 +110,9 @@ void	*thread_routing(void *param)
 		end = WIDTH;
 
 	thread_render(&data, og_data, begin, end);
+	for (int i = 0; i < WIDTH; i++)
+		free(data.camera_rays[i]);
+	free(data.camera_rays);
 	printf("Thread %d Finished.\n", thread_id);
 	return (NULL);
 }
@@ -141,4 +144,5 @@ void	put_pixel_color_thread(t_threads *thread)
 	}
 	for (int i = 0; i < thread->thread_num; i++)
 		pthread_join(thread->threads[i], NULL);
+	printf("Finished.\n");
 }

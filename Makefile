@@ -54,17 +54,10 @@ re: fclean all
 run: all
 	@./$(NAME)
 
-runAA: all
-	@./$(NAME) 100
-
 debug: all
 	@valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(NAME)
 
-
-thread_debug: all
-	@valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(NAME) 1 1
-
-hel_thread_debug: all
-	@valgrind --tool=helgrind ./$(NAME) 1 1
+datarace_debug: all
+	@valgrind --tool=helgrind ./$(NAME)
 
 .PHONY: all clean fclean re

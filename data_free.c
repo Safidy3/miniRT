@@ -19,6 +19,13 @@ void	free_data(t_data *data)
 	mlx_destroy_image(data->mlx, data->img);
 	mlx_destroy_image(data->mlx, data->option_img);
 	mlx_destroy_display(data->mlx);
+	for (int i = 0; i < WIDTH; i++)
+	{
+		free(data->camera_rays[i]);
+		free(data->hit_objects[i]);
+	}
+	free(data->camera_rays);
+	free(data->hit_objects);
 	free(data->mlx);
 
 	clear_sceen(&(data->world));

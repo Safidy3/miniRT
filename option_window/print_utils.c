@@ -63,9 +63,8 @@ void	put_obj_type(t_object *obj, t_data *data, int px, int *py)
 	tmp = final;
 	final = ft_strjoin(final, shape);
 	mlx_string_put(data->mlx, data->option_win, px, *py, 0xFFFFFF, final);
-	free(tmp);
-	free(final);
 	*py += 15;
+	return (free(id), free(final), free(tmp));
 }
 
 void	put_int(t_data *data, int value, char *str, int px, int *py)

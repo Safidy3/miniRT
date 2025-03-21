@@ -227,6 +227,7 @@ void	add_cornell_box(t_list **world)
 void	add_sceen(t_data *data)
 {
 	data->cam = create_camera(create_vec3(0, 0, 1), create_vec3(0, 0, -1));
+	compute_camera_rays(data);
 
 	// t_proprieties white_lamb = create_proprieties(create_vec3(1, 1, 1), LAMBERTIAN, 0, 0);
 	t_proprieties green_lamb = create_proprieties(create_vec3(0, 1, 0), LAMBERTIAN, 0, 0);
@@ -248,7 +249,7 @@ void	add_sceen(t_data *data)
 	t_object *shpere_light = create_sphere(create_vec3(-1, 0, -0.5), 0.5);
 	scene_add_obj(&data->world, shpere_light, p_white_light);
 
-	add_cornell_box(&data->world);
+	// add_cornell_box(&data->world);
 }
 
 void translate_object(t_object *obj, t_vec3 translation)
