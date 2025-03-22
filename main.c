@@ -32,40 +32,22 @@ int	handle_key(int keycode, void *param)
 	t_data	*data;
 
 	data = (t_data *)param;
+	printf("keycode : %d\n", keycode);
 	if (keycode == 65307)
 		close_window(data);
-	printf("keycode : %d\n", keycode);
-	if (keycode == 119)
-	{
-		translate_object(data->seleced_object, create_vec3(0, 0, -0.1));
-		put_pixel_color_debug(data);
-	}
-	if (keycode == 115)
-	{
-		translate_object(data->seleced_object, create_vec3(0, 0, 0.1));
-		put_pixel_color_debug(data);
-	}
-	if (keycode == 97)
-	{
-		translate_object(data->seleced_object, create_vec3(-0.1, 0, 0));
-		put_pixel_color_debug(data);
-	}
-	if (keycode == 100)
-	{
-		translate_object(data->seleced_object, create_vec3(0.1, 0, 0));
-		put_pixel_color_debug(data);
-	}
-	if (keycode == 101)
-	{
-		translate_object(data->seleced_object, create_vec3(0, 0.1, 0));
-		put_pixel_color_debug(data);
-	}
-	if (keycode == 113)
-	{
-		translate_object(data->seleced_object, create_vec3(0, -0.1, 0));
-		put_pixel_color_debug(data);
-	}
-	if (keycode == 65535)
+	else if (keycode == 119)
+		translate_object(data, create_vec3(0, 0, -0.1));
+	else if (keycode == 115)
+		translate_object(data, create_vec3(0, 0, 0.1));
+	else if (keycode == 97)
+		translate_object(data, create_vec3(-0.1, 0, 0));
+	else if (keycode == 100)
+		translate_object(data, create_vec3(0.1, 0, 0));
+	else if (keycode == 101)
+		translate_object(data, create_vec3(0, 0.1, 0));
+	else if (keycode == 113)
+		translate_object(data, create_vec3(0, -0.1, 0));
+	else if (keycode == 65535)
 	{
 		t_list	*tmp;
 		t_list	*prev;
@@ -88,20 +70,30 @@ int	handle_key(int keycode, void *param)
 			prev = tmp;
 			tmp = tmp->next;
 		}
+		compute_objects_hits(data);
 		data->seleced_object = NULL;
 		put_pixel_color_debug(data);
 	}
-	if (keycode == 114)
+	else if (keycode == 114)
 		put_pixel_color_thread(data->thread);
-	if (keycode == 116)
-	{
-		erase_main_screen(data);
+	else if (keycode == 116)
 		put_pixel_color(data);
-	}
-	if (keycode == 121)
-	{
-		erase_main_screen(data);
+	else if (keycode == 121)
 		put_pixel_color_debug(data);
+	else if (keycode == 99)
+	{
+		t_list	*tmp;
+
+		tmp = data->world;
+		while (tmp)
+		{
+			if (((t_object *)(tmp->content))->shape == CAMERA)
+			{
+				data->seleced_object = (t_object *)(tmp->content);
+				break;
+			}
+			tmp = tmp->next;
+		}
 	}
 	option_window(data, data->seleced_object);
 	return (0);
@@ -215,19 +207,17 @@ void	add_cornell_box(t_list **world)
 	);
 	scene_add_obj(world, right, green_lamb);
 
-	t_object *back = create_plane(
-		create_vec3(-2, 0, 1),
-		create_vec3(2, 0, 1),
-		create_vec3(-2, 2, 1),
-		create_vec3(2, 2, 1)
-	);
-	scene_add_obj(world, back, white_lamb);
+	// t_object *back = create_plane(
+	// 	create_vec3(-2, 0, 1),
+	// 	create_vec3(2, 0, 1),
+	// 	create_vec3(-2, 2, 1),
+	// 	create_vec3(2, 2, 1)
+	// );
+	// scene_add_obj(world, back, white_lamb);
 }
 
 void	add_sceen(t_data *data)
 {
-	data->cam = create_camera(create_vec3(0, 0, 1), create_vec3(0, 0, -1));
-	compute_camera_rays(data);
 
 	// t_proprieties white_lamb = create_proprieties(create_vec3(1, 1, 1), LAMBERTIAN, 0, 0);
 	t_proprieties green_lamb = create_proprieties(create_vec3(0, 1, 0), LAMBERTIAN, 0, 0);
@@ -249,13 +239,32 @@ void	add_sceen(t_data *data)
 	t_object *shpere_light = create_sphere(create_vec3(-1, 0, -0.5), 0.5);
 	scene_add_obj(&data->world, shpere_light, p_white_light);
 
-	// add_cornell_box(&data->world);
+	add_cornell_box(&data->world);
+
+	create_camera(data, create_vec3(0, 0, 1), create_vec3(0, 0, -1), 90);
+	compute_camera_rays(data);
 }
 
-void translate_object(t_object *obj, t_vec3 translation)
+void	translate_object(t_data *data, t_vec3 translation)
 {
-	if (obj)
-		obj->center = vec3_add(obj->center, translation);
+	t_object	*obj;
+
+	obj = data->seleced_object;
+	if (!obj)
+		return;
+	obj->center = vec3_add(obj->center, translation);
+	if (obj->shape == CAMERA)
+	{
+		obj->direction = vec3_add(obj->direction, translation);
+		data->cam.origin = obj->center;
+		data->cam.direction = obj->direction;
+		compute_camera_rays(data);
+	}
+	else
+		compute_objects_hits(data);
+	put_pixel_color_debug(data);
+	// put_pixel_color_thread(data->thread);
+	// put_pixel_color(data);
 }
 
 int	main(int argc, char **argv)
@@ -287,13 +296,13 @@ int	main(int argc, char **argv)
 	data.world = NULL;
 	data.seleced_object = NULL;
 
-	data.camera_rays = malloc(sizeof(t_ray *) * WIDTH);
+	data.camera_rays = (t_ray **)malloc(sizeof(t_ray *) * WIDTH);
 	for (int i = 0; i < WIDTH; i++)
-		data.camera_rays[i] = malloc(sizeof(t_ray) * HEIGHT);
+		data.camera_rays[i] = (t_ray *)malloc(sizeof(t_ray) * HEIGHT);
 
-	data.hit_objects = malloc(sizeof(t_object **) * WIDTH);
+	data.hit_objects =(t_object ***)malloc(sizeof(t_object **) * WIDTH);
 	for (int i = 0; i < WIDTH; i++)
-		data.hit_objects[i] = malloc(sizeof(t_object *) * HEIGHT);
+		data.hit_objects[i] = (t_object **)malloc(sizeof(t_object *) * HEIGHT);
 
 	t_threads	thread;
 	thread.data = &data;
@@ -303,8 +312,8 @@ int	main(int argc, char **argv)
 	add_sceen(&data);
 	printT(data.world);
 
-	put_pixel_color_debug(&data);
 	// put_pixel_color(&data);
+	put_pixel_color_debug(&data);
 	// put_pixel_color_thread(&thread);
 
 	mlx_mouse_hook(data.win, mouse_hook, &data);

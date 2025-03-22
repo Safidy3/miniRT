@@ -2,20 +2,22 @@
 
 char	*obj_type(int shape)
 {
-	if (shape == 0)
+	if (shape == SPHERE)
 		return ("SPHERE");
-	else if (shape == 1)
+	else if (shape == RECTANGLE)
 		return ("RECTANGLE");
-	else if (shape == 2)
+	else if (shape == PLANE)
 		return ("PLANE");
-	else if (shape == 3)
+	else if (shape == INF_CYLINDRE)
 		return ("INF_CYLINDRE");
-	else if (shape == 4)
+	else if (shape == CYLINDRE)
 		return ("CYLINDRE");
-	else if (shape == 5)
+	else if (shape == POINT_LIGHT)
 		return ("POINT_LIGHT");
-	else if (shape == 6)
+	else if (shape == AMBIENT_LIGHT)
 		return ("AMBIENT_LIGHT");
+	else if (shape == CAMERA)
+		return ("CAMERA");
 	return ("UNKNOWN");
 }
 

@@ -12,9 +12,8 @@
 
 #include "../miniRT.h"
 
-t_cam	create_camera(t_vec3 origin, t_vec3 look_at)
+void	create_camera(t_data *data, t_vec3 origin, t_vec3 look_at, float fov)
 {
-	t_cam	cam;
 	t_vec3	u, v, w;
 	float	theta;
 	float	half_height;
@@ -22,35 +21,57 @@ t_cam	create_camera(t_vec3 origin, t_vec3 look_at)
 	t_vec3	up;
 
 	up = create_vec3(0, 1, 0);
-	theta = FOV * M_PI / 180.0;
+	theta = fov * M_PI / 180.0;
 	half_height = tan(theta / 2);
 	half_width = ((float)WIDTH / (float)HEIGHT) * half_height;
+
+	data->cam.fov = fov;
+	data->cam.origin = origin;
+	data->cam.direction = look_at;
 
 	w = vec3_unit(vec3_sub(origin, look_at));
 	u = vec3_unit(vec3_cross(up, w));
 	v = vec3_cross(w, u);
 
-	cam.origin = origin;
-	cam.horizintal = vec3_mult_float(u, 2 * half_width);
-	cam.vertical = vec3_mult_float(v, 2 * half_height);
+	data->cam.horizintal = vec3_mult_float(u, 2 * half_width);
+	data->cam.vertical = vec3_mult_float(v, 2 * half_height);
+	data->cam.lower_L = vec3_sub3(origin, vec3_div_float(data->cam.horizintal, 2), vec3_div_float(data->cam.vertical, 2));
+	data->cam.lower_L = vec3_sub(data->cam.lower_L, w);
 
-	cam.lower_L = vec3_sub3(origin, vec3_div_float(cam.horizintal, 2), vec3_div_float(cam.vertical, 2));
-	cam.lower_L = vec3_sub(cam.lower_L, w);
-
-	return (cam);
+	scene_add_obj(&data->world, create_obj_cam(origin, w, fov), create_proprieties(create_nullvec(), 0, 0, 0));
 }
 
 t_cam	dup_camera(t_cam cam)
 {
 	t_cam	new_cam;
 
-	new_cam.horizintal = cam .horizintal;
-	new_cam.lower_L = cam .lower_L;
-	new_cam.origin = cam .origin;
-	new_cam.vertical = cam .vertical;
+	new_cam.horizintal = cam.horizintal;
+	new_cam.lower_L = cam.lower_L;
+	new_cam.origin = cam.origin;
+	new_cam.vertical = cam.vertical;
 	return (new_cam);
 }
 
+t_object	*create_obj_cam(t_vec3 origin, t_vec3 direction, float fov)
+{
+	t_object	*cam;
+
+	cam = (t_object *)malloc(sizeof(t_object));
+	cam->shape = CAMERA;
+	cam->center = origin;
+	cam->center2 = create_nullvec();
+	cam->radius = fov;
+	cam->direction = direction;
+	cam->plane[0] = create_nullvec();
+	cam->plane[1] = create_nullvec();
+	cam->plane[2] = create_nullvec();
+	cam->plane[3] = create_nullvec();
+	cam->proprieties.color = create_nullvec();
+	cam->proprieties.material = 0;
+	cam->proprieties.material_parameter = 0;
+	cam->proprieties.use_texture = 0;
+	return (cam);
+}
 
 t_object	*create_sphere(t_vec3 center, float radius)
 {
@@ -190,7 +211,7 @@ void	scene_add_obj(t_list **world, t_object *obj, t_proprieties prts)
 	obj->hit_record.hit_point = create_vec3(0, 0, 0);
 	obj->hit_record.normal = create_vec3(0, 0, 0);
 	obj->hit_record.color = prts.color;
-	if (obj->shape != POINT_LIGHT && obj->shape != AMBIENT_LIGHT)
+	if (obj->shape != POINT_LIGHT && obj->shape != AMBIENT_LIGHT && obj->shape != CAMERA)
 	{
 		obj->proprieties.color = vec3_safe_mult_float(prts.color, 1);
 		obj->proprieties.use_texture = prts.use_texture;
@@ -224,6 +245,8 @@ t_list	*deep_copy_world(t_list *world)
 			new_obj = create_point_light(obj->center, obj->proprieties.color, obj->proprieties.material_parameter);
 		else if (obj->shape == AMBIENT_LIGHT)
 			new_obj = create_ambient(obj->proprieties.color, obj->proprieties.material_parameter);
+		else if (obj->shape == CAMERA)
+			new_obj = create_obj_cam(obj->center, obj->direction, obj->radius);
 
 		new_obj->id = ft_lstsize(world);
 		new_obj->hit_record.t = -1;
@@ -237,7 +260,7 @@ t_list	*deep_copy_world(t_list *world)
 			new_obj->proprieties.material = obj->proprieties.material;
 			new_obj->proprieties.material_parameter = (obj->proprieties.material == METAL) ? fmin(obj->proprieties.material_parameter, 1.0) : obj->proprieties.material_parameter;
 		}
-		
+
 		ft_lstadd_back(&new_world, ft_lstnew((void *)new_obj));
 		world = world->next;
 	}

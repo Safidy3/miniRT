@@ -43,7 +43,8 @@ enum	e_shape
 	INF_CYLINDRE,
 	CYLINDRE,
 	POINT_LIGHT,
-	AMBIENT_LIGHT
+	AMBIENT_LIGHT,
+	CAMERA
 };
 
 enum	e_material
@@ -81,6 +82,8 @@ typedef struct s_cam
 	t_vec3	horizintal;
 	t_vec3	vertical;
 	t_vec3	origin;
+	t_vec3	direction;
+	float	fov;
 }			t_cam;
 
 typedef struct s_hit_record
@@ -106,19 +109,19 @@ typedef struct s_object
 	int				shape;
 
 	t_vec3			center;
+	t_vec3			direction;
 	t_vec3			center2;
 	float			radius;
 
-	t_vec3			direction;
-
 	t_vec3			plane[4];
 
-	t_proprieties		proprieties;
+	t_proprieties	proprieties;
 
 	t_hit_record	hit_record;
 }					t_object;
 
 struct s_threads;
+struct s_thread_data;
 
 typedef struct s_data
 {
@@ -143,6 +146,7 @@ typedef struct s_data
 	t_object	*seleced_object;
 
 	struct s_threads *thread;
+	struct s_thread_data	*thread_data;
 	int		thread_id;
 
 	int		AA_sample;
@@ -160,12 +164,12 @@ typedef struct s_threads
 	pthread_mutex_t lock;
 }	t_threads;
 
-typedef struct s_arg_thread
+typedef struct s_thread_data
 {
-	t_threads	*thread;
 	t_data		*data;
+	t_threads	*thread;
 	int			thread_id;
-} t_arg_thread;
+}	t_thread_data;
 
 /******************************************************/
 
@@ -220,8 +224,9 @@ int				light_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *atten
 t_vec3			texture_checker(const t_vec3 point, t_vec3 color1, t_vec3 color2);
 t_proprieties	create_proprieties(t_vec3 color, int material, float material_parameter, int use_texture);
 
-t_cam		create_camera(t_vec3 origin, t_vec3 look_at);
+void		create_camera(t_data *data, t_vec3 origin, t_vec3 look_at, float fov);
 t_cam		dup_camera(t_cam cam);
+t_object	*create_obj_cam(t_vec3 origin, t_vec3 direction, float fov);
 t_object	*create_sphere(t_vec3 center, float radius);
 t_object	*create_plane(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
 t_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
@@ -230,8 +235,11 @@ t_object	*create_cylinder(t_vec3 center, t_vec3 center2, float radius);
 t_object	*create_point_light(t_vec3 center, t_vec3 color, float brightness);
 t_object	*create_ambient(t_vec3 color, float brightness);
 
-void	translate_object(t_object *obj, t_vec3 translation);
+void	translate_object(t_data *data, t_vec3 translation);
 void	compute_camera_rays(t_data *data);
+void	compute_objects_hits(t_data *data);
+void	compute_camera_rays_thread(t_data *data, int begin, int end);
+void	compute_objects_hits_thread(t_data *data, int begin, int end);
 
 t_list		*deep_copy_world(t_list *world);
 void		scene_add_obj(t_list **world, t_object *obj, t_proprieties prts);
@@ -252,7 +260,7 @@ int			isVoid(float x, float y, t_data *data);
 t_object	*get_light(t_list *og_world, int light_type);
 
 void	put_pixel_color_debug(t_data *data);
-t_vec3	color_debug(const t_ray r, t_list *world);
+t_vec3	color_debug(t_data *data, int x, int y);
 
 void	printT(t_list *t);
 

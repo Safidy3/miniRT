@@ -19,7 +19,7 @@ int	is_shadowed(t_data *data, t_vec3 hit_point, t_vec3 light_pos)
 	t_vec3		shadow_dir;
 	t_ray		shadow_ray;
 	t_object	*sec_hit_obj;
-	
+
 	shadow_dir = vec3_normalize(vec3_sub(light_pos, hit_point));
 	shadow_ray = create_ray(hit_point, shadow_dir);
 	sec_hit_obj = get_safe_hit_obj(shadow_ray, data->world);
@@ -37,7 +37,7 @@ t_vec3 ray_casted_color(t_data *data, int x, int y)
 	t_object	*a_light;
     t_vec3		result;
 	float		n;
-    
+
 	first_hit_obj = get_safe_hit_obj(data->camera_rays[x][y], data->world);
     if (!first_hit_obj)
         return create_nullvec();
@@ -56,6 +56,7 @@ void	put_pixel_color(t_data *data)
 	int		x, y;
 
 	compute_camera_rays(data);
+	erase_main_screen(data);
 	printf("rendering ...\n");
 	for (x = 0; x < WIDTH; x++)
 	{
