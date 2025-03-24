@@ -110,8 +110,8 @@ typedef struct s_object
 
 	t_vec3			center;
 	t_vec3			direction;
-	t_vec3			center2;
 	float			radius;
+	float			height;
 
 	t_vec3			plane[4];
 
@@ -227,19 +227,17 @@ t_proprieties	create_proprieties(t_vec3 color, int material, float material_para
 void		create_camera(t_data *data, t_vec3 origin, t_vec3 look_at, float fov);
 t_cam		dup_camera(t_cam cam);
 t_object	*create_obj_cam(t_vec3 origin, t_vec3 direction, float fov);
-t_object	*create_sphere(t_vec3 center, float radius);
-t_object	*create_plane(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
+t_object	*create_sphere(t_vec3 center, float diameter);
+t_object	*create_plane(t_vec3 center, t_vec3 direction);
 t_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
 t_object	*create_inf_cylinder(t_vec3 center, t_vec3 direction, float radius);
-t_object	*create_cylinder(t_vec3 center, t_vec3 center2, float radius);
+t_object	*create_cylinder(t_vec3 center, t_vec3 direction, float diameter, float height);
 t_object	*create_point_light(t_vec3 center, t_vec3 color, float brightness);
 t_object	*create_ambient(t_vec3 color, float brightness);
 
 void	translate_object(t_data *data, t_vec3 translation);
 void	compute_camera_rays(t_data *data);
 void	compute_objects_hits(t_data *data);
-void	compute_camera_rays_thread(t_data *data, int begin, int end);
-void	compute_objects_hits_thread(t_data *data, int begin, int end);
 
 t_list		*deep_copy_world(t_list *world);
 void		scene_add_obj(t_list **world, t_object *obj, t_proprieties prts);

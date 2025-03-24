@@ -59,7 +59,6 @@ t_object	*create_obj_cam(t_vec3 origin, t_vec3 direction, float fov)
 	cam = (t_object *)malloc(sizeof(t_object));
 	cam->shape = CAMERA;
 	cam->center = origin;
-	cam->center2 = create_nullvec();
 	cam->radius = fov;
 	cam->direction = direction;
 	cam->plane[0] = create_nullvec();
@@ -73,15 +72,14 @@ t_object	*create_obj_cam(t_vec3 origin, t_vec3 direction, float fov)
 	return (cam);
 }
 
-t_object	*create_sphere(t_vec3 center, float radius)
+t_object	*create_sphere(t_vec3 center, float diameter)
 {
 	t_object	*shpere;
 
 	shpere = (t_object *)malloc(sizeof(t_object));;
 	shpere->shape = SPHERE;
 	shpere->center = center;
-	shpere->center2 = create_nullvec();
-	shpere->radius = radius;
+	shpere->radius = diameter / 2;
 	shpere->plane[0] = create_nullvec();
 	shpere->plane[1] = create_nullvec();
 	shpere->plane[2] = create_nullvec();
@@ -90,20 +88,19 @@ t_object	*create_sphere(t_vec3 center, float radius)
 	return (shpere);
 }
 
-t_object	*create_plane(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
+t_object	*create_plane(t_vec3 center, t_vec3 direction)
 {
 	t_object	*res;
 
 	res = (t_object *)malloc(sizeof(t_object));
 	res->shape = PLANE;
-	res->center = create_nullvec();
-	res->center2 = create_nullvec();
-	res->direction = create_nullvec();
+	res->center = center;
+	res->direction = direction;
 	res->radius = 0;
-	res->plane[0] = x0;
-	res->plane[1] = x1;
-	res->plane[2] = y0;
-	res->plane[3] = y1;
+	res->plane[0] = create_nullvec();
+	res->plane[1] = create_nullvec();
+	res->plane[2] = create_nullvec();
+	res->plane[3] = create_nullvec();
 	return (res);
 }
 
@@ -111,21 +108,27 @@ t_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
 {
 	t_object	*res;
 
-	res = create_plane(x0, x1, y0, y1);
-	res->center2 = create_nullvec();
+	res = (t_object *)malloc(sizeof(t_object));
+	res->shape = PLANE;
+	res->center = create_nullvec();
+	res->direction = create_nullvec();
+	res->radius = 0;
+	res->plane[0] = x0;
+	res->plane[1] = x1;
+	res->plane[2] = y0;
+	res->plane[3] = y1;
 	res->shape = RECTANGLE;
 	return (res);
 }
 
-t_object	*create_inf_cylinder(t_vec3 center, t_vec3 direction, float radius)
+t_object	*create_inf_cylinder(t_vec3 center, t_vec3 direction, float diameter)
 {
 	t_object	*cylinder;
 
 	cylinder = (t_object *)malloc(sizeof(t_object));
 	cylinder->shape = INF_CYLINDRE;
 	cylinder->center = center;
-	cylinder->center2 = create_nullvec();
-	cylinder->radius = radius;
+	cylinder->radius = diameter / 2;
 	cylinder->direction = direction;
 	cylinder->plane[0] = create_nullvec();
 	cylinder->plane[1] = create_nullvec();
@@ -134,18 +137,16 @@ t_object	*create_inf_cylinder(t_vec3 center, t_vec3 direction, float radius)
 	return (cylinder);
 }
 
-t_object	*create_cylinder(t_vec3 center, t_vec3 center2, float radius)
+t_object	*create_cylinder(t_vec3 center, t_vec3 direction, float diameter, float height)
 {
 	t_object	*cylinder;
-	t_vec3		tmp;
 
-	tmp = vec3_sub(center2, center);
 	cylinder = (t_object *)malloc(sizeof(t_object));
 	cylinder->shape = CYLINDRE;
 	cylinder->center = center;
-	cylinder->center2 = center2;
-	cylinder->radius = radius;
-	cylinder->direction = vec3_div_float(tmp, vec3_len(tmp));
+	cylinder->radius = diameter / 2;
+	cylinder->height = height;
+	cylinder->direction = direction;
 	cylinder->plane[0] = create_nullvec();
 	cylinder->plane[1] = create_nullvec();
 	cylinder->plane[2] = create_nullvec();
@@ -161,7 +162,6 @@ t_object	*create_point_light(t_vec3 center, t_vec3 color, float brightness)
 	pl = (t_object *)malloc(sizeof(t_object));
 	pl->shape = POINT_LIGHT;
 	pl->center = center;
-	pl->center2 = create_nullvec();
 	pl->radius = 0;
 	pl->direction = create_nullvec();
 	pl->plane[0] = create_nullvec();
@@ -184,7 +184,6 @@ t_object	*create_ambient(t_vec3 color, float brightness)
 	pl = (t_object *)malloc(sizeof(t_object));
 	pl->shape = AMBIENT_LIGHT;
 	pl->center = create_nullvec();
-	pl->center2 = create_nullvec();
 	pl->radius = 0;
 	pl->direction = create_nullvec();
 	pl->plane[0] = create_nullvec();
@@ -232,15 +231,15 @@ t_list	*deep_copy_world(t_list *world)
 	{
 		obj = make_obj(world);
 		if (obj->shape == SPHERE)
-			new_obj = create_sphere(obj->center, obj->radius);
+			new_obj = create_sphere(obj->center, obj->radius * 2);
 		else if (obj->shape == RECTANGLE)
 			new_obj = create_rectangle(obj->plane[0], obj->plane[1], obj->plane[2], obj->plane[3]);
 		else if (obj->shape == PLANE)
-			new_obj = create_plane(obj->plane[0], obj->plane[1], obj->plane[2], obj->plane[3]);
+			new_obj = create_plane(obj->center, obj->direction);
 		else if (obj->shape == INF_CYLINDRE)
-			new_obj = create_inf_cylinder(obj->center, obj->direction, obj->radius);
+			new_obj = create_inf_cylinder(obj->center, obj->direction, obj->radius * 2);
 		else if (obj->shape == CYLINDRE)
-			new_obj = create_cylinder(obj->center, obj->center2, obj->radius);
+			new_obj = create_cylinder(obj->center, obj->direction, obj->radius * 2, obj->height);
 		else if (obj->shape == POINT_LIGHT)
 			new_obj = create_point_light(obj->center, obj->proprieties.color, obj->proprieties.material_parameter);
 		else if (obj->shape == AMBIENT_LIGHT)
