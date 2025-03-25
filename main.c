@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/25 15:02:45 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/25 15:05:40 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,6 +250,8 @@ void	rotate_x(t_data *data, float theta)
 	t_object	*obj;
 
 	obj = data->seleced_object;
+	if (!obj)
+		return;
     obj->direction.y = obj->direction.y * cos(theta) - obj->direction.z * sin(theta);
     obj->direction.z = obj->direction.y * sin(theta) + obj->direction.z * cos(theta);
 	if (obj->shape == CAMERA)
@@ -267,6 +269,8 @@ void	rotate_y(t_data *data, float theta)
 	t_object	*obj;
 
 	obj = data->seleced_object;
+	if (!obj)
+		return;
     obj->direction.x = obj->direction.x * cos(theta) + obj->direction.z * sin(theta);
     obj->direction.z = -obj->direction.x * sin(theta) + obj->direction.z * cos(theta);
 	if (obj->shape == CAMERA)
@@ -284,6 +288,8 @@ void	rotate_z(t_data *data, float theta)
 	t_object	*obj;
 
 	obj = data->seleced_object;
+	if (!obj)
+		return;
     obj->direction.x = obj->direction.x * cos(theta) - obj->direction.y * sin(theta);
     obj->direction.y = obj->direction.x * sin(theta) + obj->direction.y * cos(theta);
 	if (obj->shape == CAMERA)
