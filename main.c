@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/25 15:05:40 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/25 17:04:09 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ int	mouse_hook(int keycode, int x, int y, void *param)
 		j = (float)(HEIGHT - y) / (float)HEIGHT;
 		pix_pos = vec3_add3(data->cam.lower_L, vec3_mult_float(data->cam.horizintal, i), vec3_mult_float(data->cam.vertical, j));
 		r = create_ray(data->cam.origin, vec3_sub(pix_pos, data->cam.origin));
-		first_hit_obj = get_safe_hit_obj(r, data->world);
+		first_hit_obj = get_first_hit_obj(r, data->world);
 		data->seleced_object = first_hit_obj;
 		option_window(data, first_hit_obj);
 	}
@@ -218,7 +218,6 @@ void	add_cornell_box(t_list **world)
 
 void	add_sceen(t_data *data)
 {
-
 	t_proprieties green_lamb = create_proprieties(create_vec3(0, 1, 0), LAMBERTIAN, 0, 0);
 	// t_proprieties white_lamb = create_proprieties(create_vec3(1, 1, 1), LAMBERTIAN, 0, 0);
 	t_proprieties Blue_lamb = create_proprieties(create_vec3(0, 0, 1), LAMBERTIAN, 0, 0);
@@ -240,6 +239,77 @@ void	add_sceen(t_data *data)
 	scene_add_obj(&data->world, shpere_light, p_white_light);
 
 	add_cornell_box(&data->world);
+
+	create_camera(data, create_vec3(0, 0, 1), create_vec3(0, 0, -1), 90);
+	compute_camera_rays(data);
+}
+
+void	bonus_sceen7(t_data *data)
+{
+
+	float	side = 5;
+	float	ud = 4;
+	float	height = 6;
+	float	radius = 3;
+	float	dept1 = -3.5;
+	float	dept2 = -7;
+
+	// t_proprieties purple = create_proprieties(create_vec3(0.490196078, 0, 1), LAMBERTIAN, 0, 0);
+	t_proprieties green_lamb = create_proprieties(create_vec3(0, 1, 0), LAMBERTIAN, 0, 0);
+	t_proprieties white_lamb = create_proprieties(create_vec3(0.329411765, 0.329411765, 0.329411765), LAMBERTIAN, 0, 0);
+	t_proprieties white_metal = create_proprieties(create_vec3(1, 1, 1), METAL, 0.5, 0);
+	t_proprieties Blue_lamb = create_proprieties(create_vec3(0, 0, 1), METAL, 0, 0);
+
+	t_object *shpere = create_sphere(create_vec3(0, -2, -4), 2.0);
+	scene_add_obj(&data->world, shpere, Blue_lamb);
+
+	t_object *shpere1 = create_sphere(create_vec3(-side, ud, dept1), radius);
+	scene_add_obj(&data->world, shpere1, white_metal);
+	t_object *shpere2 = create_sphere(create_vec3(side, ud, dept1), radius);
+	scene_add_obj(&data->world, shpere2, white_metal);
+	t_object *shpere3 = create_sphere(create_vec3(-side, ud, dept2), radius);
+	scene_add_obj(&data->world, shpere3, white_metal);
+	t_object *shpere4 = create_sphere(create_vec3(side, ud, dept2), radius);
+	scene_add_obj(&data->world, shpere4, white_metal);
+
+	t_object *shpere5 = create_sphere(create_vec3(-side, -ud, dept1), radius);
+	scene_add_obj(&data->world, shpere5, white_metal);
+	t_object *shpere6 = create_sphere(create_vec3(side, -ud, dept1), radius);
+	scene_add_obj(&data->world, shpere6, white_metal);
+	t_object *shpere7 = create_sphere(create_vec3(-side, -ud, dept2), radius);
+	scene_add_obj(&data->world, shpere7, white_metal);
+	t_object *shpere8 = create_sphere(create_vec3(side, -ud, dept2), radius);
+	scene_add_obj(&data->world, shpere8, white_metal);
+
+	t_object *cylinder1 = create_cylinder(create_vec3(-side, 0, dept1), create_vec3(0, 1, 0), radius / 2, height);
+	scene_add_obj(&data->world, cylinder1, white_metal);
+	t_object *cylinder2 = create_cylinder(create_vec3(side, 0, dept1), create_vec3(0, 1, 0), radius / 2, height);
+	scene_add_obj(&data->world, cylinder2, white_metal);
+	t_object *cylinder3 = create_cylinder(create_vec3(-side, 0, dept2), create_vec3(0, 1, 0), radius / 2, height);
+	scene_add_obj(&data->world, cylinder3, white_metal);
+	t_object *cylinder4 = create_cylinder(create_vec3(side, 0, dept2), create_vec3(0, 1, 0), radius / 2, height);
+	scene_add_obj(&data->world, cylinder4, white_metal);
+
+	t_object *up = create_plane(create_vec3(0, 3.5, 0), create_vec3(0, -1, 0));
+	t_object *down = create_plane(create_vec3(0, -3.5, 0), create_vec3(0, 1, 0));
+	t_object *forward = create_plane(create_vec3(0, 0, -10), create_vec3(0, 0, -1));
+	t_object *back = create_plane(create_vec3(0, 0, 5), create_vec3(0, 0, -1));
+	scene_add_obj(&data->world, back, white_lamb);
+	scene_add_obj(&data->world, forward, green_lamb);
+	scene_add_obj(&data->world, up, white_lamb);
+	scene_add_obj(&data->world, down, white_lamb);
+
+	t_proprieties p_pint_light = create_proprieties(create_vec3(1, 0, 1), LIGHT, 0, 0);
+	t_proprieties p_blue_light = create_proprieties(create_vec3(0, 0.784313725, 1), LIGHT, 0, 0);
+	t_object *shpere_light = create_sphere(create_vec3(-side, 0, 3), 3);
+	t_object *shpere_light2 = create_sphere(create_vec3(side, 0, 3), 3);
+	scene_add_obj(&data->world, shpere_light, p_pint_light);
+	scene_add_obj(&data->world, shpere_light2, p_blue_light);
+
+	t_object *point_light = create_point_light(create_vec3(0, 0, 0), create_vec3(1, 1, 1), 1);
+	scene_add_obj(&data->world, point_light, white_lamb);
+	t_object *ambent_light = create_ambient(create_vec3(1, 1, 1), 0.2);
+	scene_add_obj(&data->world, ambent_light, white_lamb);
 
 	create_camera(data, create_vec3(0, 0, 1), create_vec3(0, 0, -1), 90);
 	compute_camera_rays(data);
@@ -336,7 +406,7 @@ int	main(int argc, char **argv)
 		data.AA_sample = ft_atoi(argv[1]);
 	}
 	else
-		data.AA_sample = 1;
+		data.AA_sample = 100;
 
 	data.mlx = mlx_init();
 

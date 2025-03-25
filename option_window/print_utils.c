@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 13:26:06 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/25 13:26:07 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/25 15:40:48 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,6 @@ void option_window(t_data *data, t_object *object)
 			printf("radius : %f\n", object->radius);
 			put_vector3(data, object->proprieties.color, "Color : ", x, &y);
 		}
-		
 		y += 15;
 	}
 }
