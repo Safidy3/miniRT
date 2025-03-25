@@ -141,10 +141,11 @@ void option_window(t_data *data, t_object *object)
 		put_vector3(data, object->direction, "Direction : ", x, &y);
 		if (object->shape == CAMERA)
 			put_float(data, object->radius, "FOV : ", x, &y);
+		else if (object->shape == CYLINDRE)
+			put_float(data, object->height, "Height : ", x, &y);
 		else
 		{
 			put_float(data, object->radius, "Radius : ", x, &y);
-			printf("radius : %f\n", object->radius);
 			put_vector3(data, object->proprieties.color, "Color : ", x, &y);
 		}
 		y += 15;

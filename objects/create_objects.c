@@ -21,7 +21,7 @@ void	create_camera(t_data *data, t_vec3 origin, t_vec3 look_at, float fov)
 	scene_add_obj(&data->world, create_obj_cam(origin, w, fov), create_proprieties(create_nullvec(), 0, 0, 0));
 }
 
-void	update_camera(t_data *data, t_vec3 origin, t_vec3 look_at, float fov)
+void	update_camera(t_data *data, t_vec3 origin, t_vec3 direction, float fov)
 {
 	t_vec3	u, v, w;
 	float	theta;
@@ -36,9 +36,9 @@ void	update_camera(t_data *data, t_vec3 origin, t_vec3 look_at, float fov)
 
 	data->cam.fov = fov;
 	data->cam.origin = origin;
-	data->cam.direction = look_at;
+	data->cam.direction = direction;
 
-	w = vec3_unit(vec3_sub(origin, look_at));
+	w = vec3_unit(vec3_inverse(data->cam.direction));
 	u = vec3_unit(vec3_cross(up, w));
 	v = vec3_cross(w, u);
 
