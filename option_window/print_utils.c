@@ -69,15 +69,14 @@ void	put_obj_type(t_object *obj, t_data *data, int px, int *py)
 	return (free(id), free(final), free(tmp));
 }
 
-void	put_int(t_data *data, int value, char *str, int px, int *py)
+void	put_float(t_data *data, float value, char *str, int px, int *py)
 {
-	char *v;
+	char v[20];
 	int padding = 20;
 
-	v = ft_itoa(value);
+	sprintf(v, "%.5f", value);
 	mlx_string_put(data->mlx, data->option_win, px + padding, *py, 0xFFFFFF, str);
 	mlx_string_put(data->mlx, data->option_win, ft_strlen(str) * px + padding, *py, 0xFFFFFF, v);
-	free(v);
 	*py += 15;
 }
 
@@ -118,7 +117,7 @@ void option_window(t_data *data, t_object *object)
 			obj = (t_object *)tmp->content;
 			put_obj_type(obj, data, x, &y);
 			put_vector3(data, obj->center, "Center : ", x, &y);
-			put_int(data, obj->radius, "Radius : ", x, &y);
+			put_float(data, obj->radius, "Radius : ", x, &y);
 			y += 15;
 			tmp = tmp->next;
 		}
@@ -127,7 +126,16 @@ void option_window(t_data *data, t_object *object)
 	{
 		put_obj_type(object, data, x, &y);
 		put_vector3(data, object->center, "Center : ", x, &y);
-		put_int(data, object->radius, "Radius : ", x, &y);
+		put_vector3(data, object->direction, "Direction : ", x, &y);
+		if (object->shape == CAMERA)
+			put_float(data, object->radius, "FOV : ", x, &y);
+		else
+		{
+			put_float(data, object->radius, "Radius : ", x, &y);
+			printf("radius : %f\n", object->radius);
+			put_vector3(data, object->proprieties.color, "Color : ", x, &y);
+		}
+		
 		y += 15;
 	}
 }

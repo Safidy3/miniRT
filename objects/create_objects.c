@@ -14,6 +14,15 @@
 
 void	create_camera(t_data *data, t_vec3 origin, t_vec3 look_at, float fov)
 {
+	t_vec3	w;
+
+	w = vec3_unit(vec3_sub(origin, look_at));
+	update_camera(data, origin, look_at, fov);
+	scene_add_obj(&data->world, create_obj_cam(origin, w, fov), create_proprieties(create_nullvec(), 0, 0, 0));
+}
+
+void	update_camera(t_data *data, t_vec3 origin, t_vec3 look_at, float fov)
+{
 	t_vec3	u, v, w;
 	float	theta;
 	float	half_height;
@@ -37,8 +46,6 @@ void	create_camera(t_data *data, t_vec3 origin, t_vec3 look_at, float fov)
 	data->cam.vertical = vec3_mult_float(v, 2 * half_height);
 	data->cam.lower_L = vec3_sub3(origin, vec3_div_float(data->cam.horizintal, 2), vec3_div_float(data->cam.vertical, 2));
 	data->cam.lower_L = vec3_sub(data->cam.lower_L, w);
-
-	scene_add_obj(&data->world, create_obj_cam(origin, w, fov), create_proprieties(create_nullvec(), 0, 0, 0));
 }
 
 t_cam	dup_camera(t_cam cam)

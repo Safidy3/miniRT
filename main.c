@@ -48,11 +48,17 @@ int	handle_key(int keycode, void *param)
 	else if (keycode == 113)
 		translate_object(data, create_vec3(0, -0.1, 0));
 	else if (keycode == 105)
-		rotate_x(data, 0.1);
+		rotate_x(data, 1);
 	else if (keycode == 111)
-		rotate_y(data, 0.1);
+		rotate_y(data, 1);
 	else if (keycode == 112)
-		rotate_z(data, 0.1);
+		rotate_z(data, 1);
+	else if (keycode == 107)
+		rotate_x(data, -0.1);
+	else if (keycode == 108)
+		rotate_y(data, -0.1);
+	else if (keycode == 59)
+		rotate_z(data, -0.1);
 	else if (keycode == 65535)
 	{
 		t_list	*tmp;
@@ -203,11 +209,11 @@ void	add_cornell_box(t_list **world)
 	);
 	scene_add_obj(world, right, green_lamb);
 
-	t_object *back = create_plane(
-		create_vec3(0, 0, 2),
-		create_vec3(0, 0, -1)
-	);
-	scene_add_obj(world, back, white_lamb);
+	// t_object *back = create_plane(
+	// 	create_vec3(0, 0, 2),
+	// 	create_vec3(0, 0, -1)
+	// );
+	// scene_add_obj(world, back, white_lamb);
 }
 
 void	add_sceen(t_data *data)
@@ -235,7 +241,7 @@ void	add_sceen(t_data *data)
 
 	add_cornell_box(&data->world);
 
-	create_camera(data, create_vec3(0, 0, 1), create_vec3(0, 0, -1), 90);
+	create_camera(data, create_vec3(0, 0, 2), create_vec3(0, 0, -1), 90);
 	compute_camera_rays(data);
 }
 
@@ -248,8 +254,7 @@ void	rotate_x(t_data *data, float theta)
     obj->direction.z = obj->direction.y * sin(theta) + obj->direction.z * cos(theta);
 	if (obj->shape == CAMERA)
 	{
-		data->cam.direction.y = obj->direction.y;
-		data->cam.direction.z = obj->direction.z;
+		update_camera(data, obj->center, obj->direction, obj->radius);
 		compute_camera_rays(data);
 	}
 	else
@@ -303,7 +308,7 @@ void	translate_object(t_data *data, t_vec3 translation)
 	obj->center = vec3_add(obj->center, translation);
 	if (obj->shape == CAMERA)
 	{
-		data->cam.origin = obj->center;
+		update_camera(data, obj->center, vec3_normalize(vec3_add(obj->direction, translation)), obj->radius);
 		compute_camera_rays(data);
 	}
 	else

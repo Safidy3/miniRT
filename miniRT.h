@@ -207,7 +207,7 @@ int		isNullVec3(t_vec3 v);
 
 void	put_vector3(t_data *data, t_vec3 center, char *str, int px, int *py);
 void	put_obj_type(t_object *obj, t_data *data, int px, int *py);
-void	put_int(t_data *data, int value, char *str, int px, int *py);
+void	put_float(t_data *data, float value, char *str, int px, int *py);
 void	option_window(t_data *data, t_object *object);
 void	erase_screen(t_data *data);
 
@@ -225,6 +225,7 @@ t_vec3			texture_checker(const t_vec3 point, t_vec3 color1, t_vec3 color2);
 t_proprieties	create_proprieties(t_vec3 color, int material, float material_parameter, int use_texture);
 
 void		create_camera(t_data *data, t_vec3 origin, t_vec3 look_at, float fov);
+void		update_camera(t_data *data, t_vec3 origin, t_vec3 look_at, float fov);
 t_cam		dup_camera(t_cam cam);
 t_object	*create_obj_cam(t_vec3 origin, t_vec3 direction, float fov);
 t_object	*create_sphere(t_vec3 center, float diameter);
