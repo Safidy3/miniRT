@@ -47,6 +47,12 @@ int	handle_key(int keycode, void *param)
 		translate_object(data, create_vec3(0, 0.1, 0));
 	else if (keycode == 113)
 		translate_object(data, create_vec3(0, -0.1, 0));
+	else if (keycode == 105)
+		rotate_x(data, 0.1);
+	else if (keycode == 111)
+		rotate_y(data, 0.1);
+	else if (keycode == 112)
+		rotate_z(data, 0.1);
 	else if (keycode == 65535)
 	{
 		t_list	*tmp;
@@ -207,7 +213,7 @@ void	add_cornell_box(t_list **world)
 void	add_sceen(t_data *data)
 {
 
-	// t_proprieties green_lamb = create_proprieties(create_vec3(0, 1, 0), LAMBERTIAN, 0, 0);
+	t_proprieties green_lamb = create_proprieties(create_vec3(0, 1, 0), LAMBERTIAN, 0, 0);
 	// t_proprieties white_lamb = create_proprieties(create_vec3(1, 1, 1), LAMBERTIAN, 0, 0);
 	t_proprieties Blue_lamb = create_proprieties(create_vec3(0, 0, 1), LAMBERTIAN, 0, 0);
 	t_proprieties purple = create_proprieties(create_vec3(0.490196078, 0, 1), LAMBERTIAN, 0, 0);
@@ -218,10 +224,10 @@ void	add_sceen(t_data *data)
 	t_object *cylinder = create_cylinder(create_vec3(-0, 1, -1), create_vec3(0, 1, 0), 0.6, 1.5);
 	scene_add_obj(&data->world, cylinder, purple);
 
-	// t_object *point_light = create_point_light(create_vec3(-1, 0, -0.5), create_vec3(1, 1, 1), 1);
-	// scene_add_obj(&data->world, point_light, green_lamb);
-	// t_object *ambent_light = create_ambient(create_vec3(1, 1, 1), 0.2);
-	// scene_add_obj(&data->world, ambent_light, green_lamb);
+	t_object *point_light = create_point_light(create_vec3(-1, 0, -0.5), create_vec3(1, 1, 1), 1);
+	scene_add_obj(&data->world, point_light, green_lamb);
+	t_object *ambent_light = create_ambient(create_vec3(1, 1, 1), 0.2);
+	scene_add_obj(&data->world, ambent_light, green_lamb);
 
 	t_proprieties p_white_light = create_proprieties(create_vec3(1, 1, 1), LIGHT, 0, 0);
 	t_object *shpere_light = create_sphere(create_vec3(-1, 0, -0.5), 1);
@@ -231,6 +237,60 @@ void	add_sceen(t_data *data)
 
 	create_camera(data, create_vec3(0, 0, 1), create_vec3(0, 0, -1), 90);
 	compute_camera_rays(data);
+}
+
+void	rotate_x(t_data *data, float theta)
+{
+	t_object	*obj;
+
+	obj = data->seleced_object;
+    obj->direction.y = obj->direction.y * cos(theta) - obj->direction.z * sin(theta);
+    obj->direction.z = obj->direction.y * sin(theta) + obj->direction.z * cos(theta);
+	if (obj->shape == CAMERA)
+	{
+		data->cam.direction.y = obj->direction.y;
+		data->cam.direction.z = obj->direction.z;
+		compute_camera_rays(data);
+	}
+	else
+		compute_objects_hits_debug(data);
+	put_pixel_color_debug(data);
+}
+
+void	rotate_y(t_data *data, float theta)
+{
+	t_object	*obj;
+
+	obj = data->seleced_object;
+    obj->direction.x = obj->direction.x * cos(theta) + obj->direction.z * sin(theta);
+    obj->direction.z = -obj->direction.x * sin(theta) + obj->direction.z * cos(theta);
+	if (obj->shape == CAMERA)
+	{
+		data->cam.direction.x = obj->direction.x;
+		data->cam.direction.z = obj->direction.z;
+		compute_camera_rays(data);
+	}
+	else
+		compute_objects_hits_debug(data);
+	put_pixel_color_debug(data);
+}
+
+void	rotate_z(t_data *data, float theta)
+{
+	t_object	*obj;
+
+	obj = data->seleced_object;
+    obj->direction.x = obj->direction.x * cos(theta) - obj->direction.y * sin(theta);
+    obj->direction.y = obj->direction.x * sin(theta) + obj->direction.y * cos(theta);
+	if (obj->shape == CAMERA)
+	{
+		data->cam.direction.x = obj->direction.x;
+		data->cam.direction.y = obj->direction.y;
+		compute_camera_rays(data);
+	}
+	else
+		compute_objects_hits_debug(data);
+	put_pixel_color_debug(data);
 }
 
 void	translate_object(t_data *data, t_vec3 translation)
@@ -243,13 +303,11 @@ void	translate_object(t_data *data, t_vec3 translation)
 	obj->center = vec3_add(obj->center, translation);
 	if (obj->shape == CAMERA)
 	{
-		obj->direction = vec3_add(obj->direction, translation);
 		data->cam.origin = obj->center;
-		data->cam.direction = obj->direction;
 		compute_camera_rays(data);
 	}
 	else
-		compute_objects_hits(data);
+		compute_objects_hits_debug(data);
 	put_pixel_color_debug(data);
 	// put_pixel_color_thread(data->thread);
 	// put_pixel_color(data);

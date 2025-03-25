@@ -87,7 +87,6 @@ void	put_pixel_color_debug(t_data *data)
 	int		x, y;
 
 	erase_main_screen(data);
-	compute_objects_hits_debug(data);
 	for (x = 1; x < WIDTH - 2; x++)
 	{
 		for (y = 1; y < HEIGHT - 2; y++)
