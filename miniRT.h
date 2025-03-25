@@ -238,6 +238,7 @@ t_object	*create_ambient(t_vec3 color, float brightness);
 void	translate_object(t_data *data, t_vec3 translation);
 void	compute_camera_rays(t_data *data);
 void	compute_objects_hits(t_data *data);
+void	compute_objects_hits_debug(t_data *data);
 
 t_list		*deep_copy_world(t_list *world);
 void		scene_add_obj(t_list **world, t_object *obj, t_proprieties prts);

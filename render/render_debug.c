@@ -51,6 +51,15 @@ void	compute_objects_hits(t_data *data)
 			data->hit_objects[x][y] = get_safe_hit_obj(data->camera_rays[x][y], data->world);
 }
 
+void	compute_objects_hits_debug(t_data *data)
+{
+	int		x, y;
+
+	for (x = 0; x < WIDTH; x++)
+		for (y = 0; y < HEIGHT; y++)
+			data->hit_objects[x][y] = get_first_hit_obj(data->camera_rays[x][y], data->world);
+}
+
 void	compute_camera_rays(t_data *data)
 {
 	t_vec3	pix_pos;
@@ -78,6 +87,7 @@ void	put_pixel_color_debug(t_data *data)
 	int		x, y;
 
 	erase_main_screen(data);
+	compute_objects_hits_debug(data);
 	for (x = 1; x < WIDTH - 2; x++)
 	{
 		for (y = 1; y < HEIGHT - 2; y++)
