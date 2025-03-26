@@ -52,9 +52,9 @@ int	handle_key(int keycode, void *param)
 	else if (keycode == 112)
 		rotate_z(data, -0.1);
 	else if (keycode == 111)
-		rotate_x(data, -0.1);
-	else if (keycode == 108)
 		rotate_x(data, 0.1);
+	else if (keycode == 108)
+		rotate_x(data, -0.1);
 	else if (keycode == 107)
 		rotate_y(data, 0.1);
 	else if (keycode == 59)
@@ -324,9 +324,10 @@ void	rotate_x(t_data *data, float theta)
 		return;
     obj->direction.y = obj->direction.y * cos(theta) - obj->direction.z * sin(theta);
     obj->direction.z = obj->direction.y * sin(theta) + obj->direction.z * cos(theta);
+    obj->direction = vec3_unit(obj->direction);
 	if (obj->shape == CAMERA)
 	{
-		update_camera(data, data->cam.origin, obj->direction, data->cam.fov);
+		update_camera(data, data->cam.origin, vec3_inverse(obj->direction), data->cam.fov);
 		compute_camera_rays(data);
 	}
 	else
@@ -343,9 +344,10 @@ void	rotate_y(t_data *data, float theta)
 		return;
     obj->direction.x = obj->direction.x * cos(theta) + obj->direction.z * sin(theta);
     obj->direction.z = -obj->direction.x * sin(theta) + obj->direction.z * cos(theta);
+    obj->direction = vec3_unit(obj->direction);
 	if (obj->shape == CAMERA)
 	{
-		update_camera(data, data->cam.origin, obj->direction, data->cam.fov);
+		update_camera(data, data->cam.origin, vec3_inverse(obj->direction), data->cam.fov);
 		compute_camera_rays(data);
 	}
 	else
@@ -362,9 +364,10 @@ void	rotate_z(t_data *data, float theta)
 		return;
     obj->direction.x = obj->direction.x * cos(theta) - obj->direction.y * sin(theta);
     obj->direction.y = obj->direction.x * sin(theta) + obj->direction.y * cos(theta);
+    obj->direction = vec3_unit(obj->direction);
 	if (obj->shape == CAMERA)
 	{
-		update_camera(data, data->cam.origin, obj->direction, data->cam.fov);
+		update_camera(data, data->cam.origin, vec3_inverse(obj->direction), data->cam.fov);
 		compute_camera_rays(data);
 	}
 	else

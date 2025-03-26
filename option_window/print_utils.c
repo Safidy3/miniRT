@@ -139,10 +139,10 @@ void option_window(t_data *data, t_object *object)
 		put_obj_type(object, data, x, &y);
 		put_vector3(data, object->center, "Center : ", x, &y);
 		put_vector3(data, object->direction, "Direction : ", x, &y);
+		if (object->shape == CYLINDRE)
+			put_float(data, object->height, "Height : ", x, &y);
 		if (object->shape == CAMERA)
 			put_float(data, object->radius, "FOV : ", x, &y);
-		else if (object->shape == CYLINDRE)
-			put_float(data, object->height, "Height : ", x, &y);
 		else
 		{
 			put_float(data, object->radius, "Radius : ", x, &y);
