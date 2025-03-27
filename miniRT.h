@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/21 06:47:33 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/27 12:58:19 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ enum	e_shape
 	PLANE,
 	INF_CYLINDRE,
 	CYLINDRE,
+	LIGHT_SOURCE,
 	POINT_LIGHT,
 	AMBIENT_LIGHT,
 	CAMERA
@@ -185,6 +186,7 @@ t_vec3	create_vec3(float x,float y, float z);
 t_vec3	create_nullvec();
 float	vec3_len(t_vec3 v);
 float	vec3_squared_len(t_vec3 v);
+t_vec3	color_add(t_vec3 a, t_vec3 b);
 t_vec3	vec3_add(t_vec3 a, t_vec3 b);
 t_vec3	vec3_add3(t_vec3 a, t_vec3 b, t_vec3 c);
 t_vec3	vec3_add_float(t_vec3 a, float f);

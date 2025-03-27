@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 11:32:29 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/21 06:47:43 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/27 13:19:54 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,10 @@ t_vec3	path_traced_color(const t_ray r, t_list *world, int depth, t_object	*src_
 	t_ray			scattered;
 	t_vec3			attenuation;
 	t_proprieties	prts;
+	t_vec3			ambient;
+	t_vec3			res = create_nullvec();
 
+	ambient = get_light(world, AMBIENT_LIGHT)->proprieties.color;
 	if (depth == 0)
 		first_hit_obj = get_safe_hit_obj(r, world);
 	else
@@ -46,15 +49,20 @@ t_vec3	path_traced_color(const t_ray r, t_list *world, int depth, t_object	*src_
 	{
 		prts = first_hit_obj->proprieties;
 		if (prts.material == METAL && metal_scatter_ray(r, first_hit_obj->hit_record, &attenuation, &scattered, *first_hit_obj))
-			return (vec3_mult(path_traced_color(scattered, world, depth+1, first_hit_obj), attenuation));
+			res = vec3_mult(path_traced_color(scattered, world, depth+1, first_hit_obj), attenuation);
 		else if (prts.material == LAMBERTIAN && lamberian_scatter_ray(r, first_hit_obj->hit_record, &attenuation, &scattered, *first_hit_obj))
-			return (vec3_mult(path_traced_color(scattered, world, depth+1, first_hit_obj), attenuation));
+			res = vec3_mult(path_traced_color(scattered, world, depth+1, first_hit_obj), attenuation);
 		else if (prts.material == DIELECTRIC && dielectric_scatter_ray(r, first_hit_obj->hit_record, &attenuation, &scattered, *first_hit_obj))
-			return (vec3_mult(path_traced_color(scattered, world, depth+1, first_hit_obj), attenuation));
+			res = vec3_mult(path_traced_color(scattered, world, depth+1, first_hit_obj), attenuation);
+		// else if (prts.material == LIGHT_SOURCE && depth == 0)
+		// 	res = src_obj->proprieties.color;
 		else if (prts.material == LIGHT && depth != 0)
-			return (vec3_mult(src_obj->proprieties.color, prts.color));
+			res = vec3_mult(src_obj->proprieties.color, prts.color);
+		if (!isNullVec3(ambient))
+			res = color_add(res, ambient);
+		return (res);
 	}
-	return (create_nullvec());
+	return (res);
 }
 
 void	thread_render(t_data *data, t_data *og_data, int begin, int end)

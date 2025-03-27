@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/25 17:04:09 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/27 13:07:47 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,7 +231,7 @@ void	add_sceen(t_data *data)
 
 	t_object *point_light = create_point_light(create_vec3(-1, 0, -0.5), create_vec3(1, 1, 1), 1);
 	scene_add_obj(&data->world, point_light, green_lamb);
-	t_object *ambent_light = create_ambient(create_vec3(1, 1, 1), 0.2);
+	t_object *ambent_light = create_ambient(create_vec3(1, 1, 1), 0.0);
 	scene_add_obj(&data->world, ambent_light, green_lamb);
 
 	t_proprieties p_white_light = create_proprieties(create_vec3(1, 1, 1), LIGHT, 0, 0);
@@ -409,7 +409,7 @@ int	main(int argc, char **argv)
 		data.AA_sample = ft_atoi(argv[1]);
 	}
 	else
-		data.AA_sample = 100;
+		data.AA_sample = 1;
 
 	data.mlx = mlx_init();
 
