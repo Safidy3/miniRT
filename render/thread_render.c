@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 11:32:29 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/27 13:19:54 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/28 22:41:21 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_vec3	path_traced_color(const t_ray r, t_list *world, int depth, t_object	*src_
 		// 	res = src_obj->proprieties.color;
 		else if (prts.material == LIGHT && depth != 0)
 			res = vec3_mult(src_obj->proprieties.color, prts.color);
-		if (!isNullVec3(ambient))
+		if (!is_null_vec(ambient))
 			res = color_add(res, ambient);
 		return (res);
 	}
