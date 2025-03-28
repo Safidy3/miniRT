@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/27 12:58:19 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/28 23:17:13 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,15 @@ typedef struct s_object
 	t_hit_record	hit_record;
 }					t_object;
 
+typedef struct s_edge_object
+{
+	t_object	*obj;
+	t_object	*obj2;
+	t_object	*obj3;
+	t_object	*obj4;
+	t_object	*obj5;
+}				t_edge_object;
+
 struct s_threads;
 struct s_thread_data;
 
@@ -181,6 +190,9 @@ t_vec3	path_traced_color(const t_ray r, t_list *world, int depth, t_object	*src_
 t_vec3	compute_path_traced_color(t_data *data, int x, int y);
 t_vec3	ray_casted_color(t_data *data, int x, int y);
 
+int	handle_key(int keycode, void *param);
+int	mouse_hook(int keycode, int x, int y, void *param);
+
 void	print_vec3(t_vec3 v, char *name);
 t_vec3	create_vec3(float x,float y, float z);
 t_vec3	create_nullvec();
@@ -204,7 +216,7 @@ t_vec3	vec3_unit(t_vec3 v);
 float	vec3_dot(t_vec3 a, t_vec3 b);
 t_vec3	vec3_cross(t_vec3 a, t_vec3 b);
 t_vec3	vec3_inverse(t_vec3 v);
-int		isNullVec3(t_vec3 v);
+int		is_null_vec(t_vec3 v);
 
 
 void	put_vector3(t_data *data, t_vec3 center, char *str, int px, int *py);
@@ -250,8 +262,6 @@ t_list		*deep_copy_world(t_list *world);
 void		scene_add_obj(t_list **world, t_object *obj, t_proprieties prts);
 int			hit_obj(t_object *obj, const t_ray r, t_hit_record *hit_rec);
 
-void		sortlist(t_list **t);
-void		list_swapp(t_list *a, t_list *b);
 void		delete_obj(void *obj);
 void		clear_sceen(t_list **world);
 t_object	*make_obj(t_list *obj);
@@ -261,7 +271,7 @@ int		close_window(void *param);
 
 t_object	*get_first_hit_obj(const t_ray r, t_list *world);
 t_object	*get_safe_hit_obj(const t_ray r, t_list *world);
-int			isVoid(float x, float y, t_data *data);
+int			is_void(float x, float y, t_data *data);
 t_object	*get_light(t_list *og_world, int light_type);
 
 void	put_pixel_color_debug(t_data *data);
@@ -278,4 +288,7 @@ void	*thread_routing(void *param);
 void	put_pixel_color_thread(t_threads *thread);
 void	add_cornell_box(t_list **world);
 
+void	add_cornell_box(t_list **world);
+void	add_sceen(t_data *data);
+void	bonus_sceen7(t_data *data);
 #endif

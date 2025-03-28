@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 11:32:29 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/28 22:41:21 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/28 23:59:49 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_vec3	compute_path_traced_color(t_data *data, int x, int y)
 	t_ray	r;
 
 	pix_col = create_vec3(0, 0, 0);
-	if (isVoid(x, y, data))
+	if (is_void(x, y, data))
 		return (create_nullvec());
 	for (s = 0; s < data->AA_sample; s++)
 	{
@@ -75,7 +75,7 @@ void	thread_render(t_data *data, t_data *og_data, int begin, int end)
 	{
 		for (y = 1; y < HEIGHT; y++)
 		{
-			if (isVoid(x, y, og_data))
+			if (is_void(x, y, og_data))
 				continue;
 			pix_col = compute_path_traced_color(data, x, y);
 			// pix_col = color_debug(data, x + 1, y);
@@ -96,33 +96,40 @@ void	thread_render(t_data *data, t_data *og_data, int begin, int end)
 	clear_sceen(&(data->world));
 }
 
+void	init_thread_data(t_data *data, t_data *og_data)
+{
+	int	i;
+
+	i = -1;
+	data->world = NULL;
+	data->seleced_object = NULL;
+	data->camera_rays = (t_ray **)malloc(sizeof(t_ray *) * WIDTH);
+	data->AA_sample = og_data->AA_sample;
+	data->cam = dup_camera(og_data->cam);
+	data->world = deep_copy_world(og_data->world);
+	data->seleced_object = og_data->seleced_object;
+	while (++i < WIDTH)
+		data->camera_rays[i] = (t_ray *)malloc(sizeof(t_ray) * HEIGHT);
+	data->hit_objects = (t_object ***)malloc(sizeof(t_object **) * WIDTH);
+	i = -1;
+	while (++i < WIDTH)
+		data->hit_objects[i] = (t_object **)malloc(sizeof(t_object *) * HEIGHT);
+}
+
 void	*thread_routing(void *param)
 {
-	t_thread_data	*thread_data;
 	t_threads		*thread;
 	t_data			*og_data;
 	t_data			data;
 
-	thread_data = (t_thread_data *)param;
-	thread = thread_data->thread;
+	thread = ((t_thread_data *)param)->thread;
 	og_data = thread->data;
-	data.AA_sample = og_data->AA_sample;
-	data.cam = dup_camera(og_data->cam);
-	data.world = deep_copy_world(og_data->world);
-	data.seleced_object = og_data->seleced_object;
 
-	data.camera_rays = malloc(sizeof(t_ray *) * WIDTH);
-	for (int i = 0; i < WIDTH; i++)
-		data.camera_rays[i] = malloc(sizeof(t_ray) * HEIGHT);
-	data.hit_objects =(t_object ***)malloc(sizeof(t_object **) * WIDTH);
-	for (int i = 0; i < WIDTH; i++)
-		data.hit_objects[i] = (t_object **)malloc(sizeof(t_object *) * HEIGHT);
-
-	int thread_id = thread_data->thread_id;
+	int thread_id = ((t_thread_data *)param)->thread_id;
 	int begin = thread_id * thread->pix_unit;
 	int end = (thread_id + 1) * thread->pix_unit;
 	if (thread_id == thread->thread_num - 1)
-	end = WIDTH;
+		end = WIDTH;
 
 	compute_camera_rays(&data);
 	thread_render(&data, og_data, begin, end);

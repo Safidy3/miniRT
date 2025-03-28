@@ -1,3 +1,5 @@
+TRANSFORM_SRCS = ./object_transform/transform.c
+
 OPTION_WINDOW_SRCS = ./option_window/print_utils.c
 
 VECTORS_SRCS = ./vector_maths/ray_utils.c ./vector_maths/vect_add.c ./vector_maths/vect_function.c ./vector_maths/vect_mult_div.c\
@@ -10,8 +12,8 @@ MATERIALS_SRCS = ./materials/materials.c
 RENDER_SRCS = ./render/render_image.c ./render/render_utils.c ./render/render_debug.c\
 			  ./render/thread_render.c
 
-SRCS = main.c data_free.c \
-		$(VECTORS_SRCS) $(OBJECTS_SRCS) $(MATERIALS_SRCS) $(RENDER_SRCS) $(OPTION_WINDOW_SRCS)
+SRCS = main.c data_free.c key_hooks.c exemple_sceen.c print_debug.c\
+		$(VECTORS_SRCS) $(OBJECTS_SRCS) $(MATERIALS_SRCS) $(RENDER_SRCS) $(OPTION_WINDOW_SRCS) $(TRANSFORM_SRCS)
 
 FLAGS = -Wall -Werror -Wextra -I/usr/include
 # FLAGS = -I/usr/include
