@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/28 23:17:13 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/29 05:55:00 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,10 +231,10 @@ t_ray	create_ray(t_vec3 origin, t_vec3 dir);
 t_vec3	ray_point_at(t_ray ray, float t);
 
 
-int				metal_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_object obj);
-int				lamberian_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_object obj);
-int				dielectric_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_object obj);
-int				light_scatter_ray(const t_ray r_in, const t_hit_record rec, t_vec3 *attenuation, t_ray *scattered, t_object obj);
+int				metal_scatter_ray(const t_ray r_in, t_vec3 *attenuation, t_ray *scattered, t_object *obj);
+int				lamberian_scatter_ray(const t_ray r_in, t_vec3 *attenuation, t_ray *scattered, t_object *obj);
+int				dielectric_scatter_ray(const t_ray r_in, t_vec3 *attenuation, t_ray *scattered, t_object *obj);
+int				light_scatter_ray(const t_ray r_in, t_vec3 *attenuation, t_ray *scattered, t_object *obj);
 t_vec3			texture_checker(const t_vec3 point, t_vec3 color1, t_vec3 color2);
 t_proprieties	create_proprieties(t_vec3 color, int material, float material_parameter, int use_texture);
 

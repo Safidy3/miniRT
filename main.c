@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/28 23:43:37 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/29 00:31:48 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	main(int argc, char **argv)
 		data.AA_sample = ft_atoi(argv[1]);
 	}
 	else
-		data.AA_sample = 1;
+		data.AA_sample = 2;
 	init_data(&data);
 	thread.data = &data;
 	pthread_mutex_init(&thread.lock, NULL);
@@ -57,8 +57,8 @@ int	main(int argc, char **argv)
 	add_sceen(&data);
 	printT(data.world);
 	// put_pixel_color(&data);
-	put_pixel_color_debug(&data);
-	// put_pixel_color_thread(&thread);
+	// put_pixel_color_debug(&data);
+	put_pixel_color_thread(&thread);
 	mlx_mouse_hook(data.win, mouse_hook, &data);
 	mlx_hook(data.win, 2, 1L << 0, handle_key, &data);
 	mlx_hook(data.win, 17, 1L << 17, close_window, &data);
