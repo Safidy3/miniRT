@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/29 05:55:00 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/29 08:18:58 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,18 @@ typedef struct s_thread_data
 	int			thread_id;
 }	t_thread_data;
 
+typedef struct s_put_vec3
+{
+	char	str[20];
+	char	x[20];
+	char	y[20];
+	char	z[20];
+	char	f[20];
+	int		padding;
+	int		px;
+	int		py;
+}	t_put_vec3;
+
 /******************************************************/
 
 int		handle_key(int keycode, void *param);
@@ -219,9 +231,9 @@ t_vec3	vec3_inverse(t_vec3 v);
 int		is_null_vec(t_vec3 v);
 
 
-void	put_vector3(t_data *data, t_vec3 center, char *str, int px, int *py);
-void	put_obj_type(t_object *obj, t_data *data, int px, int *py);
-void	put_float(t_data *data, float value, char *str, int px, int *py);
+void	put_vector3(t_data *data, t_vec3 center, char *str, t_put_vec3 *p);
+void	put_obj_type(t_object *obj, t_data *data, t_put_vec3 *p);
+void	put_float(t_data *data, float value, char *str, t_put_vec3 *p);
 void	option_window(t_data *data, t_object *object);
 void	erase_screen(t_data *data);
 

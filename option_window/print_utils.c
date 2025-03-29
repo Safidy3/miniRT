@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 13:26:06 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/25 15:40:48 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/29 08:20:36 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,71 +33,71 @@ char	*obj_type(int shape)
 	return ("UNKNOWN");
 }
 
-void	put_vector3(t_data *data, t_vec3 center, char *str, int px, int *py)
+char	*join_and_free(char *s1, char *s2)
 {
-	int padding = 20;
-	mlx_string_put(data->mlx, data->option_win, px + padding, *py, 0xFFFFFF, str);
-    char x[20];
-    char y[20];
-    char z[20];
-	char *final;
-	char *tmp;
+	char	*res;
+	char	*tmp;
 
-	sprintf(x, "%.5f", center.x);
-	sprintf(y, "%.5f", center.y);
-	sprintf(z, "%.5f", center.z);
-	final = ft_strjoin("(", x);
-	tmp = final;
-	final = ft_strjoin(final, ", ");
-	free(tmp);
-	tmp = final;
-	final = ft_strjoin(final, y);
-	free(tmp);
-	tmp = final;
-	final = ft_strjoin(final, ", ");
-	free(tmp);
-	tmp = final;
-	final = ft_strjoin(final, z);
-	free(tmp);
-	tmp = final;
-	final = ft_strjoin(final, ")");
-	mlx_string_put(data->mlx, data->option_win, ft_strlen(str) * px + padding, *py, 0xFFFFFF, final);
-	free(tmp);
-	free(final);
-	*py += 15;
+	tmp = s1;
+	res = ft_strjoin(s1, s2);
+	return (free(tmp), res);
 }
 
-void	put_obj_type(t_object *obj, t_data *data, int px, int *py)
+void	put_vector3(t_data *data, t_vec3 center, char *str, t_put_vec3 *p)
 {
-	char *tmp;
-	char *id = ft_itoa(obj->id);
-	char *shape = obj_type(obj->shape);
+	char	*final;
 
-	char *final = ft_strjoin(id, " : ");
+	mlx_string_put(data->mlx, data->option_win,
+		p->px + p->padding, p->py, 0xFFFFFF, str);
+	sprintf(p->x, "%.5f", center.x);
+	sprintf(p->y, "%.5f", center.y);
+	sprintf(p->z, "%.5f", center.z);
+	final = ft_strjoin("(", p->x);
+	final = join_and_free(final, ", ");
+	final = join_and_free(final, p->y);
+	final = join_and_free(final, ", ");
+	final = join_and_free(final, p->z);
+	final = join_and_free(final, ")");
+	mlx_string_put(data->mlx, data->option_win,
+		ft_strlen(str) * p->px + p->padding, p->py, 0xFFFFFF, final);
+	free(final);
+	p->py += 15;
+}
+
+void	put_obj_type(t_object *obj, t_data *data, t_put_vec3 *p)
+{
+	char	*tmp;
+	char	*id;
+	char	*shape;
+	char	*final;
+
+	id = ft_itoa(obj->id);
+	shape = obj_type(obj->shape);
+	final = ft_strjoin(id, " : ");
 	tmp = final;
 	final = ft_strjoin(final, shape);
-	mlx_string_put(data->mlx, data->option_win, px, *py, 0xFFFFFF, final);
-	*py += 15;
+	mlx_string_put(data->mlx, data->option_win, p->px, p->py, 0xFFFFFF, final);
+	p->py += 15;
 	return (free(id), free(final), free(tmp));
 }
 
-void	put_float(t_data *data, float value, char *str, int px, int *py)
+void	put_float(t_data *data, float value, char *str, t_put_vec3 *p)
 {
-	char v[20];
-	int padding = 20;
-
-	sprintf(v, "%.5f", value);
-	mlx_string_put(data->mlx, data->option_win, px + padding, *py, 0xFFFFFF, str);
-	mlx_string_put(data->mlx, data->option_win, ft_strlen(str) * px + padding, *py, 0xFFFFFF, v);
-	*py += 15;
+	sprintf(p->f, "%.5f", value);
+	mlx_string_put(data->mlx, data->option_win,
+		p->px + p->padding, p->py, 0xFFFFFF, str);
+	mlx_string_put(data->mlx, data->option_win,
+		ft_strlen(str) * p->px + p->padding, p->py, 0xFFFFFF, p->f);
+	p->py += 15;
 }
 
 void	black_pixel_put(t_data *data, int x, int y)
 {
 	char	*dst;
 
-	dst = data->option_addr + (y * data->o_line_length + x * (data->o_bits_per_pixel / 8));
-	*(unsigned int*)dst = 0xFFFFFF;
+	dst = data->option_addr
+		+ (y * data->o_line_length + x * (data->o_bits_per_pixel / 8));
+	*(unsigned int *) dst = 0xFFFFFF;
 }
 
 void	erase_screen(t_data *data)
@@ -110,44 +110,31 @@ void	erase_screen(t_data *data)
 	while (--y > 0)
 		while (--x > 0)
 			black_pixel_put(data, x, y);
-	mlx_put_image_to_window(data->mlx, data->option_win, data->option_img, 0, 0);
+	mlx_put_image_to_window(data->mlx, data->option_win,
+		data->option_img, 0, 0);
 }
 
-void option_window(t_data *data, t_object *object)
+void	option_window(t_data *data, t_object *object)
 {
-    int x = 7;
-	int y = 10;
-	t_list	*tmp;
-	t_object *obj;
+	t_put_vec3	p;
 
+	p.px = 7;
+	p.py = 10;
+	p.padding = 20;
 	erase_screen(data);
 	if (object == NULL)
-	{
-		tmp = data->world;
-		while (tmp)
-		{
-			obj = (t_object *)tmp->content;
-			put_obj_type(obj, data, x, &y);
-			put_vector3(data, obj->center, "Center : ", x, &y);
-			put_float(data, obj->radius, "Radius : ", x, &y);
-			y += 15;
-			tmp = tmp->next;
-		}
-	}
+		return ;
+	put_obj_type(object, data, &p);
+	put_vector3(data, object->center, "Center : ", &p);
+	put_vector3(data, object->direction, "Direction : ", &p);
+	if (object->shape == CYLINDRE)
+		put_float(data, object->height, "Height : ", &p);
+	if (object->shape == CAMERA)
+		put_float(data, object->radius, "FOV : ", &p);
 	else
 	{
-		put_obj_type(object, data, x, &y);
-		put_vector3(data, object->center, "Center : ", x, &y);
-		put_vector3(data, object->direction, "Direction : ", x, &y);
-		if (object->shape == CYLINDRE)
-			put_float(data, object->height, "Height : ", x, &y);
-		if (object->shape == CAMERA)
-			put_float(data, object->radius, "FOV : ", x, &y);
-		else
-		{
-			put_float(data, object->radius, "Radius : ", x, &y);
-			put_vector3(data, object->proprieties.color, "Color : ", x, &y);
-		}
-		y += 15;
+		put_float(data, object->radius, "Radius : ", &p);
+		put_vector3(data, object->proprieties.color, "Color : ", &p);
 	}
+	p.py += 15;
 }
