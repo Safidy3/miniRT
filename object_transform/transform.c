@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 21:44:03 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/28 21:44:36 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/29 11:03:10 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,16 @@ void	rotate_x(t_data *data, float theta)
 
 	obj = data->seleced_object;
 	if (!obj)
-		return;
-    obj->direction.y = obj->direction.y * cos(theta) - obj->direction.z * sin(theta);
-    obj->direction.z = obj->direction.y * sin(theta) + obj->direction.z * cos(theta);
-    obj->direction = vec3_unit(obj->direction);
+		return ;
+	obj->direction.y = obj->direction.y * cos(theta)
+		- obj->direction.z * sin(theta);
+	obj->direction.z = obj->direction.y * sin(theta)
+		+ obj->direction.z * cos(theta);
+	obj->direction = vec3_unit(obj->direction);
 	if (obj->shape == CAMERA)
 	{
-		update_camera(data, data->cam.origin, vec3_inverse(obj->direction), data->cam.fov);
+		update_camera(data, data->cam.origin,
+			vec3_inverse(obj->direction), data->cam.fov);
 		compute_camera_rays(data);
 	}
 	else
@@ -38,13 +41,16 @@ void	rotate_y(t_data *data, float theta)
 
 	obj = data->seleced_object;
 	if (!obj)
-		return;
-    obj->direction.x = obj->direction.x * cos(theta) + obj->direction.z * sin(theta);
-    obj->direction.z = -obj->direction.x * sin(theta) + obj->direction.z * cos(theta);
-    obj->direction = vec3_unit(obj->direction);
+		return ;
+	obj->direction.x = obj->direction.x * cos(theta)
+		+ obj->direction.z * sin(theta);
+	obj->direction.z = -obj->direction.x * sin(theta)
+		+ obj->direction.z * cos(theta);
+	obj->direction = vec3_unit(obj->direction);
 	if (obj->shape == CAMERA)
 	{
-		update_camera(data, data->cam.origin, vec3_inverse(obj->direction), data->cam.fov);
+		update_camera(data, data->cam.origin,
+			vec3_inverse(obj->direction), data->cam.fov);
 		compute_camera_rays(data);
 	}
 	else
@@ -58,13 +64,16 @@ void	rotate_z(t_data *data, float theta)
 
 	obj = data->seleced_object;
 	if (!obj)
-		return;
-    obj->direction.x = obj->direction.x * cos(theta) - obj->direction.y * sin(theta);
-    obj->direction.y = obj->direction.x * sin(theta) + obj->direction.y * cos(theta);
-    obj->direction = vec3_unit(obj->direction);
+		return ;
+	obj->direction.x = obj->direction.x * cos(theta)
+		- obj->direction.y * sin(theta);
+	obj->direction.y = obj->direction.x * sin(theta)
+		+ obj->direction.y * cos(theta);
+	obj->direction = vec3_unit(obj->direction);
 	if (obj->shape == CAMERA)
 	{
-		update_camera(data, data->cam.origin, vec3_inverse(obj->direction), data->cam.fov);
+		update_camera(data, data->cam.origin,
+			vec3_inverse(obj->direction), data->cam.fov);
 		compute_camera_rays(data);
 	}
 	else
@@ -78,7 +87,7 @@ void	translate_object(t_data *data, t_vec3 translation)
 
 	obj = data->seleced_object;
 	if (!obj)
-		return;
+		return ;
 	obj->center = vec3_add(obj->center, translation);
 	if (obj->shape == CAMERA)
 	{
