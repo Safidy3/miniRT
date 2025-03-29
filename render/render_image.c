@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 09:15:23 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/28 23:33:10 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/29 08:55:30 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ t_vec3	ray_casted_color(t_data *data, int x, int y)
 				2));
 	if (is_shadowed(data, first_hit_obj->hit_record.hit_point, p_light->center))
 		return (vec3_mult_float(result,
-				a_light->proprieties.material_parameter));
-	n = fmax(a_light->proprieties.material_parameter,
+				a_light->proprieties.parameter));
+	n = fmax(a_light->proprieties.parameter,
 			vec3_dot(first_hit_obj->hit_record.normal,
 				vec3_normalize(vec3_sub(
 						p_light->center,

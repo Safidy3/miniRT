@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/29 08:18:58 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/29 09:38:52 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,9 @@ typedef struct s_cam
 	t_vec3	vertical;
 	t_vec3	origin;
 	t_vec3	direction;
+	t_vec3	u;
+	t_vec3	v;
+	t_vec3	w;
 	float	fov;
 }			t_cam;
 
@@ -98,7 +101,7 @@ typedef struct s_hit_record
 typedef struct s_obj_proprieties
 {
 	t_vec3	color;
-	float	material_parameter;
+	float	parameter;
 	int		material;
 	int		use_texture;
 }			t_proprieties;
@@ -248,7 +251,7 @@ int				lamberian_scatter_ray(const t_ray r_in, t_vec3 *attenuation, t_ray *scatt
 int				dielectric_scatter_ray(const t_ray r_in, t_vec3 *attenuation, t_ray *scattered, t_object *obj);
 int				light_scatter_ray(const t_ray r_in, t_vec3 *attenuation, t_ray *scattered, t_object *obj);
 t_vec3			texture_checker(const t_vec3 point, t_vec3 color1, t_vec3 color2);
-t_proprieties	create_proprieties(t_vec3 color, int material, float material_parameter, int use_texture);
+t_proprieties	create_proprieties(t_vec3 color, int material, float parameter, int use_texture);
 
 void		create_camera(t_data *data, t_vec3 origin, t_vec3 look_at, float fov);
 void		update_camera(t_data *data, t_vec3 origin, t_vec3 look_at, float fov);
@@ -259,8 +262,8 @@ t_object	*create_plane(t_vec3 center, t_vec3 direction);
 t_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
 t_object	*create_inf_cylinder(t_vec3 center, t_vec3 direction, float radius);
 t_object	*create_cylinder(t_vec3 center, t_vec3 direction, float diameter, float height);
-t_object	*create_point_light(t_vec3 center, t_vec3 color, float brightness);
-t_object	*create_ambient(t_vec3 color, float brightness);
+t_object	*create_pl(t_vec3 center, t_vec3 color, float brightness);
+t_object	*create_al(t_vec3 color, float brightness);
 
 void	translate_object(t_data *data, t_vec3 translation);
 void	rotate_x(t_data *data, float theta);

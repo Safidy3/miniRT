@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 16:24:23 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/29 05:54:22 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/29 08:55:30 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,18 +69,18 @@ int dielectric_scatter_ray(const t_ray r_in, t_vec3 *attenuation, t_ray *scatter
 	if (vec3_dot(r_in.direction, obj->hit_record.normal) > 0) 
 	{
 		outward_normal = vec3_mult_float(obj->hit_record.normal, -1);
-		ni_over_nt = obj->proprieties.material_parameter;
-		cosine = obj->proprieties.material_parameter * vec3_dot(r_in.direction, obj->hit_record.normal) / vec3_len(r_in.direction);
+		ni_over_nt = obj->proprieties.parameter;
+		cosine = obj->proprieties.parameter * vec3_dot(r_in.direction, obj->hit_record.normal) / vec3_len(r_in.direction);
 	}
 	else
 	{
 		outward_normal = obj->hit_record.normal;
-		ni_over_nt = 1.0 / obj->proprieties.material_parameter;
+		ni_over_nt = 1.0 / obj->proprieties.parameter;
 		cosine = -vec3_dot(r_in.direction, obj->hit_record.normal) / vec3_len(r_in.direction);
 	}
 
 	if (refract(r_in.direction, outward_normal, ni_over_nt, &refracted))
-		reflect_prob = schlick_approx(cosine, obj->proprieties.material_parameter);
+		reflect_prob = schlick_approx(cosine, obj->proprieties.parameter);
 	else
 	{
 		*scattered = create_ray(obj->hit_record.hit_point, reflected);
@@ -115,7 +115,7 @@ int	metal_scatter_ray(const t_ray r_in, t_vec3 *attenuation, t_ray *scattered, t
 	t_vec3	ray_dir;
 
 	reflected = ray_reflected(vec3_unit(r_in.direction), obj->hit_record.normal);
-	ray_dir = vec3_add(reflected, vec3_mult_float(vec3_random_in_unit_object(), obj->proprieties.material_parameter));
+	ray_dir = vec3_add(reflected, vec3_mult_float(vec3_random_in_unit_object(), obj->proprieties.parameter));
 	*scattered = create_ray(obj->hit_record.hit_point, ray_dir);
 	if (obj->proprieties.use_texture)
 		*attenuation = texture_checker(obj->hit_record.hit_point, obj->proprieties.color, create_vec3(0.12, 0.12, 0.12));
@@ -137,12 +137,12 @@ int	light_scatter_ray(const t_ray r_in, t_vec3 *attenuation, t_ray *scattered, t
 	return (1);
 }
 
-t_proprieties	create_proprieties(t_vec3 color, int material, float material_parameter, int use_texture)
+t_proprieties	create_proprieties(t_vec3 color, int material, float parameter, int use_texture)
 {
 	t_proprieties	prts;
 
 	prts.color = color;
-	prts.material_parameter = material_parameter;
+	prts.parameter = parameter;
 	prts.material = material;
 	prts.use_texture = use_texture;
 	return (prts);
