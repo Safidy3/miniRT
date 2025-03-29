@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/29 09:38:52 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/29 09:55:50 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,17 @@ typedef struct s_put_vec3
 	int		padding;
 	int		px;
 	int		py;
-}	t_put_vec3;
+}			t_put_vec3;
+
+typedef struct s_hit_equation
+{
+	float	a;
+	float	b;
+	float	c;
+	float	delta;
+	float 	t;
+	float 	t2;
+}			t_hit_equation;
 
 /******************************************************/
 
