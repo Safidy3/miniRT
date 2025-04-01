@@ -1,6 +1,6 @@
 TRANSFORM_SRCS = ./object_transform/transform.c ./object_transform/key_hooks.c
 
-OPTION_WINDOW_SRCS = ./option_window/print_utils.c
+OPTION_WINDOW_SRCS = ./option_window/print_utils.c ./option_window/option_window.c
 
 VECTORS_SRCS = ./vector_maths/ray_utils.c ./vector_maths/vect_add.c ./vector_maths/vect_function.c ./vector_maths/vect_mult_div.c\
 				./vector_maths/vect_sub.c ./vector_maths/vect_utils.c
@@ -10,7 +10,7 @@ OBJECTS_SRCS = ./objects/create_objects.c ./objects/hit_objects.c
 MATERIALS_SRCS = ./materials/materials.c ./materials/material_utils.c
 
 RENDER_SRCS = ./render/render_image.c ./render/render_utils.c ./render/render_debug.c\
-			  ./render/thread_render.c ./render/render_utils2.c
+			  ./render/thread_render.c ./render/render_utils2.c ./render/thread_render_utils.c
 
 SRCS = main.c data_free.c  exemple_sceen.c print_debug.c\
 		$(VECTORS_SRCS) $(OBJECTS_SRCS) $(MATERIALS_SRCS) $(RENDER_SRCS) $(OPTION_WINDOW_SRCS) $(TRANSFORM_SRCS)

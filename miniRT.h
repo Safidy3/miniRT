@@ -221,8 +221,6 @@ typedef struct s_dielectric
 int		handle_key(int keycode, void *param);
 void	my_mlx_pixel_put(t_data *data, int x, int y, t_vec3 r_col);
 void	put_pixel_color(t_data *data);
-t_vec3	path_traced_color(const t_ray r, t_list *world, int depth, t_object	*src_obj);
-t_vec3	compute_path_traced_color(t_data *data, int x, int y);
 t_vec3	ray_casted_color(t_data *data, int x, int y);
 
 int	handle_key(int keycode, void *param);
@@ -253,11 +251,6 @@ t_vec3	vec3_cross(t_vec3 a, t_vec3 b);
 t_vec3	vec3_inverse(t_vec3 v);
 int		is_null_vec(t_vec3 v);
 
-
-void	put_vector3(t_data *data, t_vec3 center, char *str, t_put_vec3 *p);
-void	put_obj_type(t_object *obj, t_data *data, t_put_vec3 *p);
-void	put_float(t_data *data, float value, char *str, t_put_vec3 *p);
-void	option_window(t_data *data, t_object *object);
 void	erase_screen(t_data *data);
 
 t_vec3	vec3_random_in_unit_object();
@@ -322,9 +315,27 @@ void	erase_main_screen(t_data *data);
 /************  thread  *************/
 
 void	add_sceen(t_data *data);
+void	intit_thread_data(t_data *data, t_data *og_data);
+void	get_cpu_thread_num(t_threads *thread, char *thread_num);
+void	get_scattered_attenuation(t_vec3 *attenuation, t_ray *scattered,
+		t_object *first_hit, t_ray r);
 void	*thread_routing(void *param);
 void	put_pixel_color_thread(t_threads *thread);
-void	add_cornell_box(t_list **world);
+t_vec3	path_traced_color(const t_ray r, t_list *world, int depth, t_object	*src_obj);
+t_vec3	compute_path_traced_color(t_data *data, int x, int y);
+
+char	*obj_type(int shape);
+char	*join_and_free(char *s1, char *s2);
+void	put_vector3(t_data *data, t_vec3 center, char *str, t_put_vec3 *p);
+void	put_obj_type(t_object *obj, t_data *data, t_put_vec3 *p);
+void	put_float(t_data *data, float value, char *str, t_put_vec3 *p);
+void	option_window(t_data *data, t_object *object);
+
+
+
+
+
+
 
 void	add_cornell_box(t_list **world);
 void	add_sceen(t_data *data);
