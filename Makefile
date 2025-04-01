@@ -1,4 +1,4 @@
-TRANSFORM_SRCS = ./object_transform/transform.c ./object_transform/key_hooks.c
+TRANSFORM_SRCS = ./object_transform/transform.c ./object_transform/key_hooks.c ./object_transform/hooks_utils.c
 
 OPTION_WINDOW_SRCS = ./option_window/print_utils.c ./option_window/option_window.c
 

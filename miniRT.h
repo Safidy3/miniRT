@@ -290,6 +290,8 @@ void	translate_object(t_data *data, t_vec3 translation);
 void	rotate_x(t_data *data, float theta);
 void	rotate_y(t_data *data, float theta);
 void	rotate_z(t_data *data, float theta);
+void	object_translation(int keycode, t_data *data);
+void	object_rotation(int keycode, t_data *data);
 void	compute_camera_rays(t_data *data);
 void	compute_objects_hits(t_data *data);
 void	compute_objects_hits_debug(t_data *data);
