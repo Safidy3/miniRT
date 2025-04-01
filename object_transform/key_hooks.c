@@ -31,10 +31,7 @@ int	mouse_hook(int keycode, int x, int y, void *param)
 
 	data = (t_data *)param;
 	if (keycode == 1)
-	{
 		data->seleced_object = data->hit_objects[x][y];
-		option_window(data, data->seleced_object);
-	}
 	return (0);
 }
 
@@ -98,14 +95,11 @@ int	handle_key(int keycode, void *param)
 		object_rotation(keycode, data);
 	else if (keycode == 65535)
 		delete_world_object(data);
-	else if (keycode == 114)
-		put_pixel_color_thread(data->thread);
 	else if (keycode == 116)
 		put_pixel_color(data);
 	else if (keycode == 121)
 		put_pixel_color_debug(data);
 	else if (keycode == 99)
 		select_camera(data);
-	option_window(data, data->seleced_object);
 	return (0);
 }

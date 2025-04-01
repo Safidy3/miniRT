@@ -12,9 +12,6 @@ void	printT(t_list *t)
 			case SPHERE:
 				printf("SPHERE : %d\n", (int)((t_object *)(t->content))->id);
 				break;
-			case RECTANGLE:
-				printf("RECTANGLE : %d\n", (int)((t_object *)(t->content))->id);
-				break;
 			case PLANE:
 				printf("PLANE : %d\n", (int)((t_object *)(t->content))->id);
 				break;

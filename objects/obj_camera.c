@@ -36,20 +36,6 @@ void	update_camera(t_data *data, t_vec3 origin, t_vec3 direction, float fov)
 	compute_camera_rays(data);
 }
 
-t_cam	dup_camera(t_cam cam)
-{
-	t_cam	new_cam;
-
-	new_cam.w = cam.w;
-	new_cam.u = cam.u;
-	new_cam.v = cam.v;
-	new_cam.horizintal = cam.horizintal;
-	new_cam.lower_l = cam.lower_l;
-	new_cam.origin = cam.origin;
-	new_cam.vertical = cam.vertical;
-	return (new_cam);
-}
-
 t_object	*create_obj_cam(t_vec3 origin, t_vec3 direction, float fov)
 {
 	t_object	*cam;

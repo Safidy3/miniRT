@@ -41,6 +41,6 @@ void	object_rotation(int keycode, t_data *data)
 	}
 	else
 		compute_objects_hits_debug(data);
-	// put_pixel_color_debug(data);
-	put_pixel_color(data);
+	put_pixel_color_debug(data);
+	// put_pixel_color(data);
 }

@@ -18,9 +18,7 @@ void	free_data(t_data *data)
 
 	i = -1;
 	mlx_destroy_window(data->mlx, data->win);
-	mlx_destroy_window(data->mlx, data->option_win);
 	mlx_destroy_image(data->mlx, data->img);
-	mlx_destroy_image(data->mlx, data->option_img);
 	mlx_destroy_display(data->mlx);
 	while (++i < WIDTH)
 	{

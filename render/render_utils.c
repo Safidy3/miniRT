@@ -30,33 +30,11 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, t_vec3 r_col)
 	}
 }
 
-t_object	*get_safe_hit_obj(const t_ray r, t_list *world)
-{
-	t_object	*first_hit_obj;
-	t_ray		continued_ray;
-
-	first_hit_obj = get_first_hit_obj(r, world);
-	if (first_hit_obj && first_hit_obj->proprieties.material != LIGHT)
-		return (first_hit_obj);
-	else if (first_hit_obj && first_hit_obj->proprieties.material == LIGHT)
-	{
-		while (first_hit_obj && first_hit_obj->proprieties.material == LIGHT)
-		{
-			continued_ray = create_ray(first_hit_obj->hit_record.hit_point,
-					r.direction);
-			first_hit_obj = get_first_hit_obj(continued_ray, world);
-		}
-		if (first_hit_obj)
-			return (first_hit_obj);
-	}
-	return (NULL);
-}
-
 int	is_void(float x, float y, t_data *data)
 {
 	t_object	*c;
 
-	c = get_safe_hit_obj(
+	c = get_first_hit_obj(
 			create_ray(
 				data->cam.origin,
 				vec3_sub(
@@ -68,7 +46,7 @@ int	is_void(float x, float y, t_data *data)
 							(float)(HEIGHT - y) / (float)HEIGHT)),
 					data->cam.origin)),
 			data->world);
-	if (c == NULL || (c && c->proprieties.material == LIGHT))
+	if (c == NULL)
 		return (1);
 	return (0);
 }

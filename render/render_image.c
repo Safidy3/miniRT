@@ -22,7 +22,7 @@ int	is_shadowed(t_data *data, t_vec3 hit_point, t_vec3 light_pos)
 
 	shadow_dir = vec3_normalize(vec3_sub(light_pos, hit_point));
 	shadow_ray = create_ray(hit_point, shadow_dir);
-	sec_hit_obj = get_safe_hit_obj(shadow_ray, data->world);
+	sec_hit_obj = get_first_hit_obj(shadow_ray, data->world);
 	if (!sec_hit_obj)
 		return (0);
 	dist_first_sec = vec3_len(vec3_sub(sec_hit_obj->hit_record.hit_point,
@@ -39,7 +39,7 @@ t_vec3	ray_casted_color(t_data *data, int x, int y)
 	t_vec3		result;
 	float		n;
 
-	first_hit_obj = get_safe_hit_obj(data->camera_rays[x][y], data->world);
+	first_hit_obj = get_first_hit_obj(data->camera_rays[x][y], data->world);
 	if (!first_hit_obj)
 		return (create_nullvec());
 	p_light = get_light(data->world, POINT_LIGHT);

@@ -18,10 +18,6 @@ void	init_data(t_data *data)
 
 	i = -1;
 	data->mlx = mlx_init();
-	data->option_win = mlx_new_window(data->mlx, HEIGHT, WIDTH, "Options");
-	data->option_img = mlx_new_image(data->mlx, HEIGHT, WIDTH);
-	data->option_addr = mlx_get_data_addr(data->option_img,
-			&data->o_bits_per_pixel, &data->o_line_length, &data->o_endian);
 	data->win = mlx_new_window(data->mlx, WIDTH, HEIGHT, "miniRT");
 	data->img = mlx_new_image(data->mlx, WIDTH, HEIGHT);
 	data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel,
@@ -37,28 +33,15 @@ void	init_data(t_data *data)
 		data->hit_objects[i] = (t_object **)malloc(sizeof(t_object *) * HEIGHT);
 }
 
-int	main(int argc, char **argv)
+int	main()
 {
 	t_data		data;
-	t_threads	thread;
 
-	if (argc > 1)
-	{
-		if (!ft_is_number(argv[1]))
-			return (ft_putstr_fd("Usage: ./miniRT OR ./miniRT [aa_sample]\n", 1), 1);
-		data.aa_sample = ft_atoi(argv[1]);
-	}
-	else
-		data.aa_sample = 2;
 	init_data(&data);
-	thread.data = &data;
-	pthread_mutex_init(&thread.lock, NULL);
-	data.thread = &thread;
 	add_sceen(&data);
 	printT(data.world);
-	put_pixel_color(&data);
-	// put_pixel_color_debug(&data);
-	// put_pixel_color_thread(&thread);
+	// put_pixel_color(&data);
+	put_pixel_color_debug(&data);
 	mlx_mouse_hook(data.win, mouse_hook, &data);
 	mlx_hook(data.win, 2, 1L << 0, handle_key, &data);
 	mlx_hook(data.win, 17, 1L << 17, close_window, &data);

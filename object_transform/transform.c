@@ -67,6 +67,5 @@ void	translate_object(t_data *data, t_vec3 translation)
 	else
 		compute_objects_hits_debug(data);
 	// put_pixel_color_debug(data);
-	// put_pixel_color_thread(data->thread);
 	put_pixel_color(data);
 }

@@ -12,6 +12,18 @@
 
 #include "../miniRT.h"
 
+t_proprieties	create_proprieties(t_vec3 color,
+	int material, float parameter, int use_texture)
+{
+	t_proprieties	prts;
+
+	prts.color = color;
+	prts.parameter = parameter;
+	prts.material = material;
+	prts.use_texture = use_texture;
+	return (prts);
+}
+
 void	scene_add_obj(t_list **world, t_object *obj, t_proprieties prts)
 {
 	t_list	*new_obj;
@@ -30,10 +42,7 @@ void	scene_add_obj(t_list **world, t_object *obj, t_proprieties prts)
 		obj->proprieties.color = vec3_safe_mult_float(prts.color, 1);
 		obj->proprieties.use_texture = prts.use_texture;
 		obj->proprieties.material = prts.material;
-		if (prts.material == METAL)
-			obj->proprieties.parameter = fmin(prts.parameter, 1.0);
-		else
-			obj->proprieties.parameter = prts.parameter;
+		obj->proprieties.parameter = prts.parameter;
 	}
 	ft_lstadd_back(world, new_obj);
 }

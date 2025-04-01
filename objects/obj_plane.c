@@ -16,23 +16,6 @@ t_object	*create_plane(t_vec3 center, t_vec3 direction)
 	return (res);
 }
 
-t_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
-{
-	t_object	*res;
-
-	res = (t_object *)malloc(sizeof(t_object));
-	res->shape = PLANE;
-	res->center = create_nullvec();
-	res->direction = create_nullvec();
-	res->radius = 0;
-	res->plane[0] = x0;
-	res->plane[1] = x1;
-	res->plane[2] = y0;
-	res->plane[3] = y1;
-	res->shape = RECTANGLE;
-	return (res);
-}
-
 int	hit_plane(t_object *obj, const t_ray r, t_hit_record *hit_rec)
 {
 	float	t;

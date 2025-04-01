@@ -10,7 +10,7 @@ void	compute_objects_hits(t_data *data)
 	{
 		y = -1;
 		while (++y < HEIGHT)
-			data->hit_objects[x][y] = get_safe_hit_obj(
+			data->hit_objects[x][y] = get_first_hit_obj(
 					data->camera_rays[x][y], data->world);
 	}
 }
@@ -62,7 +62,7 @@ void	compute_camera_rays(t_data *data)
 					data->cam.origin,
 					vec3_sub(pix_pos, data->cam.origin));
 			data->camera_rays[x][y] = r;
-			data->hit_objects[x][y] = get_safe_hit_obj(r, data->world);
+			data->hit_objects[x][y] = get_first_hit_obj(r, data->world);
 		}
 	}
 }
