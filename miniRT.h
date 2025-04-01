@@ -281,6 +281,11 @@ t_object	*create_cylinder(t_vec3 center, t_vec3 direction, float diameter, float
 t_object	*create_pl(t_vec3 center, t_vec3 color, float brightness);
 t_object	*create_al(t_vec3 color, float brightness);
 
+int	hit_sphere(t_object *obj, const t_ray r, t_hit_record *hit_rec);
+int	hit_plane(t_object *obj, const t_ray r, t_hit_record *hit_rec);
+int	hit_cylindre(t_object *obj, const t_ray r, t_hit_record *hit_rec);
+int	hit_inf_cylindre(t_object *obj, const t_ray r, t_hit_record *hit_rec);
+
 void	translate_object(t_data *data, t_vec3 translation);
 void	rotate_x(t_data *data, float theta);
 void	rotate_y(t_data *data, float theta);

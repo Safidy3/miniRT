@@ -5,7 +5,8 @@ OPTION_WINDOW_SRCS = ./option_window/print_utils.c ./option_window/option_window
 VECTORS_SRCS = ./vector_maths/ray_utils.c ./vector_maths/vect_add.c ./vector_maths/vect_function.c ./vector_maths/vect_mult_div.c\
 				./vector_maths/vect_sub.c ./vector_maths/vect_utils.c
 
-OBJECTS_SRCS = ./objects/create_objects.c ./objects/hit_objects.c
+OBJECTS_SRCS = ./objects/create_objects.c ./objects/obj_light.c ./objects/thread_copy_world.c\
+				./objects/obj_camera.c ./objects/obj_cylinder.c ./objects/obj_plane.c ./objects/obj_sphere.c
 
 MATERIALS_SRCS = ./materials/materials.c ./materials/material_utils.c
 
