@@ -163,7 +163,7 @@ typedef struct s_data
 
 typedef struct s_threads
 {
-	pthread_t		threads[1000];
+	pthread_t		threads[200];
 	int				thread_num;
 	int				thread_id;
 	int				pix_unit;
