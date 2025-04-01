@@ -20,8 +20,6 @@ char	*obj_type(int shape)
 		return ("RECTANGLE");
 	else if (shape == PLANE)
 		return ("PLANE");
-	else if (shape == INF_CYLINDRE)
-		return ("INF_CYLINDRE");
 	else if (shape == CYLINDRE)
 		return ("CYLINDRE");
 	else if (shape == POINT_LIGHT)

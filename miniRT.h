@@ -40,7 +40,6 @@ enum	e_shape
 	SPHERE,
 	RECTANGLE,
 	PLANE,
-	INF_CYLINDRE,
 	CYLINDRE,
 	LIGHT_SOURCE,
 	POINT_LIGHT,
@@ -274,8 +273,6 @@ t_object		*create_obj_cam(t_vec3 origin, t_vec3 direction, float fov);
 t_object		*create_sphere(t_vec3 center, float diameter);
 t_object		*create_plane(t_vec3 center, t_vec3 direction);
 t_object		*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
-t_object		*create_inf_cylinder(t_vec3 center,
-					t_vec3 direction, float radius);
 t_object		*create_cylinder(t_vec3 center, t_vec3 direction,
 					float diameter, float height);
 t_object		*create_pl(t_vec3 center, t_vec3 color, float brightness);
@@ -295,8 +292,6 @@ int				is_void(float x, float y, t_data *data);
 int				hit_sphere(t_object *obj, const t_ray r, t_hit_record *hit_rec);
 int				hit_plane(t_object *obj, const t_ray r, t_hit_record *hit_rec);
 int				hit_cylinder(t_object *obj, const t_ray r,
-					t_hit_record *hit_rec);
-int				hit_inf_cylindre(t_object *obj, const t_ray r,
 					t_hit_record *hit_rec);
 
 void			translate_object(t_data *data, t_vec3 translation);

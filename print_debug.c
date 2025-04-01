@@ -9,25 +9,22 @@ void	printT(t_list *t)
 		int iter_val = 	(int)((t_object *)(t->content))->shape;
 		switch (iter_val)
 		{
-			case 0:
+			case SPHERE:
 				printf("SPHERE : %d\n", (int)((t_object *)(t->content))->id);
 				break;
-			case 1:
+			case RECTANGLE:
 				printf("RECTANGLE : %d\n", (int)((t_object *)(t->content))->id);
 				break;
-			case 2:
+			case PLANE:
 				printf("PLANE : %d\n", (int)((t_object *)(t->content))->id);
 				break;
-			case 3:
-				printf("INF_CYLINDRE : %d\n", (int)((t_object *)(t->content))->id);
-				break;
-			case 4:
+			case CYLINDRE:
 				printf("CYLINDRE : %d\n", (int)((t_object *)(t->content))->id);
 				break;
-			case 5:
+			case POINT_LIGHT:
 				printf("POINT_LIGHT : %d\n", (int)((t_object *)(t->content))->id);
 				break;
-			case 6:
+			case AMBIENT_LIGHT:
 				printf("AMBIENT_LIGHT : %d\n", (int)((t_object *)(t->content))->id);
 				break;
 			default:

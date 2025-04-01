@@ -9,9 +9,6 @@ t_object	*copy_obj(t_object *obj)
 		new_obj = create_sphere(obj->center, obj->radius * 2);
 	else if (obj->shape == PLANE)
 		new_obj = create_plane(obj->center, obj->direction);
-	else if (obj->shape == INF_CYLINDRE)
-		new_obj = create_inf_cylinder(obj->center,
-				obj->direction, obj->radius * 2);
 	else if (obj->shape == CYLINDRE)
 		new_obj = create_cylinder(obj->center,
 				obj->direction, obj->radius * 2, obj->height);
