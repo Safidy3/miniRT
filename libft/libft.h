@@ -21,7 +21,7 @@
 int					ft_isalpha(char c);
 int					ft_isdigit(int num);
 int					ft_isalnum(int num);
-int					ft_isNumber(char *str);
+int					ft_is_number(char *str);
 int					ft_isascii(int num);
 int					ft_isprint(int num);
 size_t				ft_strlen(const char *str);

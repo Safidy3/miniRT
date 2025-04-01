@@ -44,7 +44,7 @@ int	main(int argc, char **argv)
 
 	if (argc > 1)
 	{
-		if (!ft_isNumber(argv[1]))
+		if (!ft_is_number(argv[1]))
 			return (ft_putstr_fd("Usage: ./miniRT OR ./miniRT [aa_sample]\n", 1), 1);
 		data.aa_sample = ft_atoi(argv[1]);
 	}

@@ -56,7 +56,7 @@ void	thread_render(t_data *data, t_data *og_data, t_thread_data *thread_data)
 	printf("Thread %d started.\n", thread_data->thread_id);
 	while (++x < end)
 	{
-		y = 0;
+		y = -1;
 		while (++y < HEIGHT)
 		{
 			if (is_void(x, y, og_data))

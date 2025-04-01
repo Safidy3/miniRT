@@ -40,7 +40,8 @@ void	compute_cyl_hit_param(t_object *cylinder,
 		eq->t = eq->t2;
 }
 
-int	determine_hit_rec(t_object *cylinder, const t_ray r, t_hit_record *rec, float t)
+int	determine_hit_rec(t_object *cylinder, const t_ray r,
+		t_hit_record *rec, float t)
 {
 	t_vec3	top;
 	t_vec3	bottom;

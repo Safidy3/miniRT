@@ -19,7 +19,7 @@ int	ft_isalnum(int num)
 	return (0);
 }
 
-int	ft_isNumber(char *str)
+int	ft_is_number(char *str)
 {
 	int	i;
 
