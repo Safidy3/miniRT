@@ -90,10 +90,7 @@ void	translate_object(t_data *data, t_vec3 translation)
 		return ;
 	obj->center = vec3_add(obj->center, translation);
 	if (obj->shape == CAMERA)
-	{
 		update_camera(data, obj->center, data->cam.direction, data->cam.fov);
-		compute_camera_rays(data);
-	}
 	else
 		compute_objects_hits_debug(data);
 	put_pixel_color_debug(data);

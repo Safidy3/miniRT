@@ -50,11 +50,13 @@ void	compute_objects_hits(t_data *data)
 	int		y;
 
 	x = -1;
-	y = -1;
 	while (++x < WIDTH)
+	{
+		y = -1;
 		while (++y < HEIGHT)
 			data->hit_objects[x][y] = get_safe_hit_obj(
 					data->camera_rays[x][y], data->world);
+	}
 }
 
 void	compute_objects_hits_debug(t_data *data)
@@ -63,11 +65,13 @@ void	compute_objects_hits_debug(t_data *data)
 	int		y;
 
 	x = -1;
-	y = -1;
 	while (++x < WIDTH)
+	{
+		y = -1;
 		while (++y < HEIGHT)
 			data->hit_objects[x][y] = get_first_hit_obj(
 					data->camera_rays[x][y], data->world);
+	}
 }
 
 t_vec3	get_pixel_pos(int x, int y, t_data *data)

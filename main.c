@@ -57,8 +57,8 @@ int	main(int argc, char **argv)
 	add_sceen(&data);
 	printT(data.world);
 	// put_pixel_color(&data);
-	// put_pixel_color_debug(&data);
-	put_pixel_color_thread(&thread);
+	put_pixel_color_debug(&data);
+	// put_pixel_color_thread(&thread);
 	mlx_mouse_hook(data.win, mouse_hook, &data);
 	mlx_hook(data.win, 2, 1L << 0, handle_key, &data);
 	mlx_hook(data.win, 17, 1L << 17, close_window, &data);
