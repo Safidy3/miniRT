@@ -69,7 +69,6 @@ void	put_pixel_color(t_data *data)
 	y = -1;
 	compute_camera_rays(data);
 	erase_main_screen(data);
-	printf("rendering ...\n");
 	while (++x < WIDTH)
 	{
 		y = -1;
@@ -82,5 +81,4 @@ void	put_pixel_color(t_data *data)
 		}
 	}
 	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
-	printf("Finished.\n");
 }
