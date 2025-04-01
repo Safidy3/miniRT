@@ -294,7 +294,7 @@ int				is_void(float x, float y, t_data *data);
 
 int				hit_sphere(t_object *obj, const t_ray r, t_hit_record *hit_rec);
 int				hit_plane(t_object *obj, const t_ray r, t_hit_record *hit_rec);
-int				hit_cylindre(t_object *obj, const t_ray r,
+int				hit_cylinder(t_object *obj, const t_ray r,
 					t_hit_record *hit_rec);
 int				hit_inf_cylindre(t_object *obj, const t_ray r,
 					t_hit_record *hit_rec);

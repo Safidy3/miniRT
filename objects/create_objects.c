@@ -47,6 +47,6 @@ int	hit_obj(t_object *obj, const t_ray r, t_hit_record *hit_rec)
 	else if (obj->shape == INF_CYLINDRE)
 		return (hit_inf_cylindre(obj, r, hit_rec));
 	else if (obj->shape == CYLINDRE)
-		return (hit_cylindre(obj, r, hit_rec));
+		return (hit_cylinder(obj, r, hit_rec));
 	return (0);
 }

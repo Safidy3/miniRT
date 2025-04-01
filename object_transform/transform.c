@@ -24,15 +24,6 @@ void	rotate_x(t_data *data, float theta)
 	obj->direction.z = obj->direction.y * sin(theta)
 		+ obj->direction.z * cos(theta);
 	obj->direction = vec3_unit(obj->direction);
-	if (obj->shape == CAMERA)
-	{
-		update_camera(data, data->cam.origin,
-			vec3_inverse(obj->direction), data->cam.fov);
-		compute_camera_rays(data);
-	}
-	else
-		compute_objects_hits_debug(data);
-	put_pixel_color_debug(data);
 }
 
 void	rotate_y(t_data *data, float theta)
@@ -47,15 +38,6 @@ void	rotate_y(t_data *data, float theta)
 	obj->direction.z = -obj->direction.x * sin(theta)
 		+ obj->direction.z * cos(theta);
 	obj->direction = vec3_unit(obj->direction);
-	if (obj->shape == CAMERA)
-	{
-		update_camera(data, data->cam.origin,
-			vec3_inverse(obj->direction), data->cam.fov);
-		compute_camera_rays(data);
-	}
-	else
-		compute_objects_hits_debug(data);
-	put_pixel_color_debug(data);
 }
 
 void	rotate_z(t_data *data, float theta)
@@ -70,15 +52,6 @@ void	rotate_z(t_data *data, float theta)
 	obj->direction.y = obj->direction.x * sin(theta)
 		+ obj->direction.y * cos(theta);
 	obj->direction = vec3_unit(obj->direction);
-	if (obj->shape == CAMERA)
-	{
-		update_camera(data, data->cam.origin,
-			vec3_inverse(obj->direction), data->cam.fov);
-		compute_camera_rays(data);
-	}
-	else
-		compute_objects_hits_debug(data);
-	put_pixel_color_debug(data);
 }
 
 void	translate_object(t_data *data, t_vec3 translation)
@@ -93,7 +66,7 @@ void	translate_object(t_data *data, t_vec3 translation)
 		update_camera(data, obj->center, data->cam.direction, data->cam.fov);
 	else
 		compute_objects_hits_debug(data);
-	put_pixel_color_debug(data);
+	// put_pixel_color_debug(data);
 	// put_pixel_color_thread(data->thread);
-	// put_pixel_color(data);
+	put_pixel_color(data);
 }
