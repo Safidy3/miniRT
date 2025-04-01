@@ -52,7 +52,7 @@ void	black_pixel_put(t_data *data, int x, int y)
 	*(unsigned int *) dst = 0xFFFFFF;
 }
 
-void	erase_screen(t_data *data)
+void	erase_opt_screen(t_data *data)
 {
 	int	x;
 	int	y;

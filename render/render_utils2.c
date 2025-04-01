@@ -38,7 +38,7 @@ t_vec3	get_pixel_pos(int x, int y, t_data *data)
 
 	i = (float)x / (float)WIDTH;
 	j = (float)(HEIGHT - y) / (float)HEIGHT;
-	pix_pos = vec3_add3(data->cam.lower_L,
+	pix_pos = vec3_add3(data->cam.lower_l,
 			vec3_mult_float(data->cam.horizintal, i),
 			vec3_mult_float(data->cam.vertical, j));
 	return (pix_pos);

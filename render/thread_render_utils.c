@@ -4,7 +4,7 @@ void	intit_thread_data(t_data *data, t_data *og_data)
 {
 	int	i;
 
-	data->AA_sample = og_data->AA_sample;
+	data->aa_sample = og_data->aa_sample;
 	data->cam = dup_camera(og_data->cam);
 	data->world = deep_copy_world(og_data->world);
 	data->seleced_object = og_data->seleced_object;
@@ -53,12 +53,12 @@ t_vec3	compute_path_traced_color(t_data *data, int x, int y)
 	s = -1;
 	if (is_void(x, y, data))
 		return (create_nullvec());
-	while (++s < data->AA_sample)
+	while (++s < data->aa_sample)
 	{
 		r = data->camera_rays[x][y];
 		pix_col = vec3_add(pix_col, path_traced_color(r, data->world, 0, NULL));
 	}
-	pix_col = vec3_div_float(pix_col, data->AA_sample);
+	pix_col = vec3_div_float(pix_col, data->aa_sample);
 	pix_col = create_vec3(sqrt(pix_col.x), sqrt(pix_col.y), sqrt(pix_col.z));
 	return (pix_col);
 }

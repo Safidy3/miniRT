@@ -55,7 +55,7 @@ void	option_window(t_data *data, t_object *object)
 	p.px = 7;
 	p.py = 10;
 	p.padding = 20;
-	erase_screen(data);
+	erase_opt_screen(data);
 	if (object == NULL)
 		return ;
 	put_obj_type(object, data, &p);

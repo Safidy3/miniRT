@@ -45,11 +45,11 @@ int	main(int argc, char **argv)
 	if (argc > 1)
 	{
 		if (!ft_isNumber(argv[1]))
-			return (ft_putstr_fd("Usage: ./miniRT OR ./miniRT [AA_sample]\n", 1), 1);
-		data.AA_sample = ft_atoi(argv[1]);
+			return (ft_putstr_fd("Usage: ./miniRT OR ./miniRT [aa_sample]\n", 1), 1);
+		data.aa_sample = ft_atoi(argv[1]);
 	}
 	else
-		data.AA_sample = 2;
+		data.aa_sample = 2;
 	init_data(&data);
 	thread.data = &data;
 	pthread_mutex_init(&thread.lock, NULL);

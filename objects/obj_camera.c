@@ -29,10 +29,10 @@ void	update_camera(t_data *data, t_vec3 origin, t_vec3 direction, float fov)
 	data->cam.v = vec3_cross(data->cam.w, data->cam.u);
 	data->cam.horizintal = vec3_mult_float(data->cam.u, 2 * half_width);
 	data->cam.vertical = vec3_mult_float(data->cam.v, 2 * half_height);
-	data->cam.lower_L = vec3_sub3(origin,
+	data->cam.lower_l = vec3_sub3(origin,
 			vec3_div_float(data->cam.horizintal, 2),
 			vec3_div_float(data->cam.vertical, 2));
-	data->cam.lower_L = vec3_sub(data->cam.lower_L, data->cam.w);
+	data->cam.lower_l = vec3_sub(data->cam.lower_l, data->cam.w);
 	compute_camera_rays(data);
 }
 
@@ -44,7 +44,7 @@ t_cam	dup_camera(t_cam cam)
 	new_cam.u = cam.u;
 	new_cam.v = cam.v;
 	new_cam.horizintal = cam.horizintal;
-	new_cam.lower_L = cam.lower_L;
+	new_cam.lower_l = cam.lower_l;
 	new_cam.origin = cam.origin;
 	new_cam.vertical = cam.vertical;
 	return (new_cam);

@@ -61,7 +61,7 @@ int	is_void(float x, float y, t_data *data)
 				data->cam.origin,
 				vec3_sub(
 					vec3_add3(
-						data->cam.lower_L,
+						data->cam.lower_l,
 						vec3_mult_float(data->cam.horizintal,
 							(float)x / (float)WIDTH),
 						vec3_mult_float(data->cam.vertical,

@@ -24,4 +24,4 @@
 To compile and run the project:
 
 ```sh
-make && ./miniRT [AA_sample (optional)]
+make && ./miniRT [aa_sample (optional)]
