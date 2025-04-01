@@ -206,6 +206,16 @@ typedef struct s_hit_equation
 	float 	t2;
 }			t_hit_equation;
 
+typedef struct s_dielectric
+{
+	t_vec3	refracted;
+	t_vec3	reflected;
+	t_vec3	outward_normal;
+	float	reflect_prob;
+	float	ni_over_nt;
+	float	cosine;
+}			t_dielectric;
+
 /******************************************************/
 
 int		handle_key(int keycode, void *param);
@@ -262,6 +272,9 @@ int				dielectric_scatter_ray(const t_ray r_in, t_vec3 *attenuation, t_ray *scat
 int				light_scatter_ray(const t_ray r_in, t_vec3 *attenuation, t_ray *scattered, t_object *obj);
 t_vec3			texture_checker(const t_vec3 point, t_vec3 color1, t_vec3 color2);
 t_proprieties	create_proprieties(t_vec3 color, int material, float parameter, int use_texture);
+t_vec3			ray_reflected(const t_vec3 v, const t_vec3 n);
+int				refract(const t_vec3 v, const t_vec3 n, float ni_over_nt, t_vec3 *refracted);
+float			schlick_approx(float cosine, float ref_idx);
 
 void		create_camera(t_data *data, t_vec3 origin, t_vec3 look_at, float fov);
 void		update_camera(t_data *data, t_vec3 origin, t_vec3 look_at, float fov);
