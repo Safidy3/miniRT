@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrakoton <jrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 15:54:13 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/03/31 22:17:38 by jrakoton         ###   ########.fr       */
+/*   Updated: 2025/04/03 01:57:14 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ size_t				ft_strlcat(char *dst, const char *src, size_t size);
 size_t				ft_strlcpy(char *dst, const char *src, size_t size);
 size_t				ft_strlen(const char *s);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
+int					ft_strcmp(const char *s1, const char *s2);
+int					ft_strcmp3(const char *s1, const char *s2, const char *s3);
 char				*ft_strrchr(const char *s, int c);
 int					ft_tolower(int c);
 int					ft_toupper(int c);
@@ -59,6 +61,7 @@ void				ft_putendl_fd(char *s, int fd);
 char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char				**ft_split(char const *s, char c);
 char				**ft_split_space(const char *input);
+int					ft_arr_len(void **a);
 int					ft_isspace(int c);
 
 /* custom ft_lst for ray tracing purpose */

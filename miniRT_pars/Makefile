@@ -6,7 +6,7 @@ UTILS_PATH = ./srcs/utils
 PARSE_PATH = ./srcs/parse
 PPARSE_PATH = ./srcs/parse/primitives
 
-SRCS = ./miniRT.c $(ERROR_PATH)/scene.c  \
+SRCS = ./miniRT.c ./data_create.c $(ERROR_PATH)/scene.c  \
 $(GNL_PATH)/get_next_line.c $(GNL_PATH)/get_next_line_utils.c \
 $(UTILS_PATH)/scene.c $(UTILS_PATH)/init.c $(UTILS_PATH)/protected.c \
 $(UTILS_PATH)/elt_value_format.c $(UTILS_PATH)/data_manip.c $(UTILS_PATH)/free.c \

@@ -1,15 +1,13 @@
 #include "libft.h"
 
-int	ft_isspace(int c)
+int	ft_arr_len(void **a)
 {
-	if (c == ' '
-		|| c == '\f'
-		|| c == '\n'
-		|| c == '\r'
-		|| c == '\t'
-		|| c == '\v')
-		return (1);
-	return (0);
+	int	i;
+
+	i = 0;
+	while (a && a[i])
+		i++;
+	return (i);
 }
 
 int	get_word_count(const char *input)

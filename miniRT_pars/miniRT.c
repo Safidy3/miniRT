@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrakoton <jrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 15:14:18 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/02 00:02:59 by jrakoton         ###   ########.fr       */
+/*   Updated: 2025/04/02 23:48:29 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,17 @@ int	main(int argc, char **argv)
 	}
 	p_scene(argv[1], &scene);
 
-	// t_list	*tmp;
+	t_list	*tmp;
+	tmp = scene.cylinder_lst;
+	while (tmp)
+	{
+		print_cylinder((t_cylinder *)(tmp->content));
+		tmp = tmp->next;
+	}
 	// tmp = scene.sphere_lst;
 	// while (tmp)
 	// {
 	// 	print_sphere((t_sphere *)(tmp->content));
-	// 	tmp = tmp->next;
-	// }
-	// tmp = scene.cylinder_lst;
-	// while (tmp)
-	// {
-	// 	print_cylinder((t_cylinder *)(tmp->content));
 	// 	tmp = tmp->next;
 	// }
 	// tmp = scene.plane_lst;

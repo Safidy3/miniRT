@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrakoton <jrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 10:22:13 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/02 00:33:48 by jrakoton         ###   ########.fr       */
+/*   Updated: 2025/04/03 00:38:30 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ int	get_scene_len(int fd)
 	scene_len = 0;
 	while (scene)
 	{
-		scene_len++;
+		if (ft_strcmp(scene, "\n"))
+			scene_len++;
 		free(scene);
 		scene = get_next_line(fd);
 	}
@@ -38,9 +39,10 @@ void	get_scene(int fd, t_scene *scene)
 	l_scene = get_next_line(fd);
 	while (l_scene)
 	{
-		scene->scene_arr[i] = ft_strdup(l_scene);
-		free(l_scene);
-		i++;
+		if (!ft_strcmp(l_scene, "\n"))
+			free(l_scene);
+		else
+			scene->scene_arr[i++] = l_scene;
 		l_scene = get_next_line(fd);
 	}
 	scene->scene_arr[i] = NULL;
@@ -68,6 +70,21 @@ void	free_pars_error(t_scene *scene, char **splitted_elt, char *str)
 	}
 	if (splitted_elt)
 		free_2d_arr(splitted_elt);
+	clear_p_scene(scene);
+	exit(1);
+}
+
+void	free_vec3_error(t_scene *scene, char **splitted_elt, char **splitted_obj, char *str)
+{
+	if (str)
+	{
+		printf("Error\n");
+		printf("%s\n", str);
+	}
+	if (splitted_elt)
+		free_2d_arr(splitted_elt);
+	if (splitted_obj)
+		free_2d_arr(splitted_obj);
 	clear_p_scene(scene);
 	exit(1);
 }

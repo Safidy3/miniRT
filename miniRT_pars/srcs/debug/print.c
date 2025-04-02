@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:20:21 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/02 20:20:22 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/02 23:52:25 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ void	print_2d_arr(char **arr)
 	i = 0;
 	while (arr[i])
 	{
-		if (arr[i][0] != '\n')
-			printf("=%s \n", arr[i]);
+		printf("%s \n", arr[i]);
 		i++;
 	}
+	// printf("\n");
 }
 
 void	print_sphere(t_sphere *sphere)
@@ -39,8 +39,7 @@ void	print_sphere(t_sphere *sphere)
 void	print_cylinder(t_cylinder *cylinder)
 {
 	printf("\n");
-	printf("id	: %c \n", ((t_cylinder *)(cylinder))->id[0]);
-	printf("id str	: %s \n", ((t_cylinder *)(cylinder))->id);
+	printf("shape	: %i \n", ((t_cylinder *)(cylinder))->shape);
 	printf("Center	: %f %f %f\n", ((t_cylinder *)(cylinder))->center_coord.x, ((t_cylinder *)(cylinder))->center_coord.y, ((t_cylinder *)(cylinder))->center_coord.z);
 	printf("Normal	: %f %f %f\n", ((t_cylinder *)(cylinder))->normal_vector.x, ((t_cylinder *)(cylinder))->normal_vector.y, ((t_cylinder *)(cylinder))->normal_vector.z);
 	printf("height	: %f \n", ((t_cylinder *)(cylinder))->height);

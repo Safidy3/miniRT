@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 15:42:20 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/02 20:32:42 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 01:15:25 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ struct						s_sphere
 struct						s_cylinder
 {
 	char					id[3];
+	int						shape;
 	t_3dcoord				center_coord;
 	t_3dcoord				normal_vector;
 	float					diameter;
@@ -118,6 +119,14 @@ struct						s_scene
 	t_list					*cylinder_lst;
 	t_list					*plane_lst;
 };
+
+t_3dcoord					create_3d(float x, float y, float z);
+t_3dcoord					create_3dnull(void);
+t_rgb						create_rgb(float x, float y, float z);
+t_rgb						create_rgbnull(void);
+t_3dcoord					make_coord(int index, char **splitted_obj, int is_normal_vect, t_scene *scene);
+float						ft_atofl(int index, char **arr_obj, t_scene *scene);
+t_rgb						make_rgb(int index, char **splitted_obj, t_scene *scene);
 
 /* TODO: remove this for last push */
 void						print_2d_arr(char **arr);
@@ -179,5 +188,6 @@ void						check_arg_nbr(char **splitted_elt, int arg_number,
 void						check_dup_capital(char **scene);
 
 void						free_pars_error(t_scene *scene, char **splitted_elt, char *str);
+void						free_vec3_error(t_scene *scene, char **splitted_elt, char **splitted_obj, char *str);
 
 #endif

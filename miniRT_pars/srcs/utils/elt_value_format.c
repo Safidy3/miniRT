@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   elt_value_format.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrakoton <jrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 10:26:42 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/02 00:38:36 by jrakoton         ###   ########.fr       */
+/*   Updated: 2025/04/02 21:27:43 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
