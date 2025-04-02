@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   plane_parser.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrakoton <jrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:54:14 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/01 02:52:51 by jrakoton         ###   ########.fr       */
+/*   Updated: 2025/04/02 20:20:22 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	plane_parser(char *scene_elt, t_scene *scene)
 	check_arg_nbr(splitted_elt, 4, scene);
 	init_plane(&plane);
 	splitted_coord = ft_split(splitted_elt[1], ',');
-	if (!get_3dcoord(&(plane.pt_coord), splitted_coord, 0))
+	if (!get_3dcoord(&(plane.center_coord), splitted_coord, 0))
 	{
 		free_2d_arr(splitted_elt);
 		free_2d_arr(scene->scene_arr);

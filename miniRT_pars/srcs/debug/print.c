@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrakoton <jrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:20:21 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/01 01:41:57 by jrakoton         ###   ########.fr       */
+/*   Updated: 2025/04/02 20:20:22 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	print_plane(t_plane *plane)
 	printf("\n");
 	printf("id	: %c \n", ((t_plane *)(plane))->id[0]);
 	printf("id str	: %s \n", ((t_plane *)(plane))->id);
-	printf("Center	: %f %f %f\n", ((t_plane *)(plane))->pt_coord.x, ((t_plane *)(plane))->pt_coord.y, ((t_plane *)(plane))->pt_coord.z);
+	printf("Center	: %f %f %f\n", ((t_plane *)(plane))->center_coord.x, ((t_plane *)(plane))->center_coord.y, ((t_plane *)(plane))->center_coord.z);
 	printf("Normal	: %f %f %f\n", ((t_plane *)(plane))->normal_vector.x, ((t_plane *)(plane))->normal_vector.y, ((t_plane *)(plane))->normal_vector.z);
 	printf("Color 	: %f %f %f\n", ((t_plane *)(plane))->color.red, ((t_plane *)(plane))->color.green, ((t_plane *)(plane))->color.blue);
 	printf("\n");

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera_parser.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrakoton <jrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:53:23 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/02 00:39:44 by jrakoton         ###   ########.fr       */
+/*   Updated: 2025/04/02 20:25:15 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ void	camera_parser(t_camera *camera, char *scene_elt, t_scene *scene)
 	camera->fov = ft_atof(splitted_elt[3]);
 	if (!is_in_range(camera->fov, 'f'))
 		free_pars_error(scene, splitted_elt, "Field of view should be in range of [0.0f, 180.0f]");
-	camera->coord.x = ft_atof(splitted_coord[0]);
-	camera->coord.y = ft_atof(splitted_coord[1]);
-	camera->coord.z = ft_atof(splitted_coord[2]);
+	camera->center_coord.x = ft_atof(splitted_coord[0]);
+	camera->center_coord.y = ft_atof(splitted_coord[1]);
+	camera->center_coord.z = ft_atof(splitted_coord[2]);
 	free_2d_arr(splitted_coord);
 	splitted_coord = ft_split(splitted_elt[2], ',');
 	if (!is_valid_float(splitted_coord[0]) || !is_valid_float(splitted_coord[1])

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrakoton <jrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 15:42:20 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/02 00:32:31 by jrakoton         ###   ########.fr       */
+/*   Updated: 2025/04/02 20:32:42 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,16 @@
 # include "./srcs/libs/libft/libft.h"
 # include <fcntl.h>
 # include <stdio.h>
+
+enum	e_shape
+{
+	SPHERE,
+	PLANE,
+	CYLINDRE,
+	POINT_LIGHT,
+	AMBIENT_LIGHT,
+	CAMERA
+};
 
 typedef struct s_scene		t_scene;
 
@@ -50,14 +60,14 @@ struct						s_rgb
 struct						s_ambient
 {
 	char					id;
-	float					ratio;
+	float					brightness;
 	t_rgb					color;
 };
 
 struct						s_camera
 {
 	char					id;
-	t_3dcoord				coord;
+	t_3dcoord				center_coord;
 	t_3dcoord				vector_dir;
 	float					fov;
 };
@@ -65,15 +75,15 @@ struct						s_camera
 struct						s_light
 {
 	char					id;
-	t_3dcoord				coord;
-	float					brightness_ratio;
+	t_3dcoord				center_coord;
+	float					brightness;
 	t_rgb					color;
 };
 
 struct						s_plane
 {
 	char					id[3];
-	t_3dcoord				pt_coord;
+	t_3dcoord				center_coord;
 	t_3dcoord				normal_vector;
 	t_rgb					color;
 };

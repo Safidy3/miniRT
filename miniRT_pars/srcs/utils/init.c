@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrakoton <jrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 10:55:02 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/02 00:33:40 by jrakoton         ###   ########.fr       */
+/*   Updated: 2025/04/02 20:27:54 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	init_ambient(t_ambient *ambient)
 {
 	ambient->id = '\0';
-	ambient->ratio = 0.0f;
+	ambient->brightness = 0.0f;
 	ambient->color.red = 0.0f;
 	ambient->color.green = 0.0f;
 	ambient->color.blue = 0.0f;
@@ -24,9 +24,9 @@ void	init_ambient(t_ambient *ambient)
 void	init_camera(t_camera *camera)
 {
 	camera->id = '\0';
-	camera->coord.x = 0.0f;
-	camera->coord.y = 0.0f;
-	camera->coord.z = 0.0f;
+	camera->center_coord.x = 0.0f;
+	camera->center_coord.y = 0.0f;
+	camera->center_coord.z = 0.0f;
 	camera->vector_dir.x = 0.0f;
 	camera->vector_dir.y = 0.0f;
 	camera->vector_dir.z = 0.0f;
@@ -38,9 +38,9 @@ void	init_plane(t_plane *plane)
 	plane->id[0] = 'p';
 	plane->id[1] = 'l';
 	plane->id[2] = '\0';
-	plane->pt_coord.x = 0.0f;
-	plane->pt_coord.y = 0.0f;
-	plane->pt_coord.z = 0.0f;
+	plane->center_coord.x = 0.0f;
+	plane->center_coord.y = 0.0f;
+	plane->center_coord.z = 0.0f;
 	plane->normal_vector.x = 0.0f;
 	plane->normal_vector.y = 0.0f;
 	plane->normal_vector.z = 0.0f;
@@ -66,10 +66,10 @@ void	init_sphere(t_sphere *sphere)
 void	init_light(t_light *light)
 {
 	light->id = '\0';
-	light->coord.x = 0.0f;
-	light->coord.y = 0.0f;
-	light->coord.z = 0.0f;
-	light->brightness_ratio = 0.0f;
+	light->center_coord.x = 0.0f;
+	light->center_coord.y = 0.0f;
+	light->center_coord.z = 0.0f;
+	light->brightness = 0.0f;
 	light->color.red = 0.0f;
 	light->color.green = 0.0f;
 	light->color.blue = 0.0f;
