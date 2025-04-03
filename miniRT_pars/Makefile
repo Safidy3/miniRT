@@ -5,12 +5,11 @@ GNL_PATH = ./srcs/libs/get_next_line
 UTILS_PATH = ./srcs/utils
 PARSE_PATH = ./srcs/parse
 
-SRCS = ./miniRT.c ./data_create.c $(ERROR_PATH)/scene.c  \
+SRCS = ./miniRT.c ./data_create.c $(ERROR_PATH)/scene.c  debug_print.c \
 $(GNL_PATH)/get_next_line.c $(GNL_PATH)/get_next_line_utils.c \
 $(UTILS_PATH)/scene.c $(UTILS_PATH)/init.c $(UTILS_PATH)/protected.c \
 $(UTILS_PATH)/elt_value_format.c $(UTILS_PATH)/data_manip.c $(UTILS_PATH)/free.c \
 $(PARSE_PATH)/parse.c $(PARSE_PATH)/light_parser.c $(PARSE_PATH)/object_parser.c \
-./srcs/debug/print.c \
 
 OBJS = $(SRCS:%.c=%.o)
 
