@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 10:22:13 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 00:38:30 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 03:21:52 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,7 @@ void	validate_scene(t_scene *scene)
 {
 	if (!(*(scene->scene_arr)) || !(scene->scene_arr))
 	{
-		printf("Error\n");
-		printf("Cannot support empty scene.\n");
+		printf("Error : Cannot support empty scene.\n");
 		free(scene->scene_arr);
 		exit(1);
 	}
@@ -64,10 +63,7 @@ void	validate_scene(t_scene *scene)
 void	free_pars_error(t_scene *scene, char **splitted_elt, char *str)
 {
 	if (str)
-	{
-		printf("Error\n");
-		printf("%s\n", str);
-	}
+		printf("Error : %s\n", str);
 	if (splitted_elt)
 		free_2d_arr(splitted_elt);
 	clear_p_scene(scene);
@@ -77,10 +73,7 @@ void	free_pars_error(t_scene *scene, char **splitted_elt, char *str)
 void	free_vec3_error(t_scene *scene, char **splitted_elt, char **splitted_obj, char *str)
 {
 	if (str)
-	{
-		printf("Error\n");
-		printf("%s\n", str);
-	}
+		printf("Error : %s\n", str);
 	if (splitted_elt)
 		free_2d_arr(splitted_elt);
 	if (splitted_obj)

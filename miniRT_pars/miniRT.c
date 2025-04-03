@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 15:14:18 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/02 23:48:29 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 03:17:58 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,12 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		printf("Error\n");
-		printf("Invalid number of argument.");
+		printf("Error\nInvalid number of argument.");
 		return (1);
 	}
 	if (validate_scene_name(argv[1]))
 	{
-		printf("Error\n");
-		printf("Invalid filename \n");
+		printf("Error\nInvalid filename \n");
 		return (1);
 	}
 	p_scene(argv[1], &scene);
@@ -34,21 +32,9 @@ int	main(int argc, char **argv)
 	tmp = scene.cylinder_lst;
 	while (tmp)
 	{
-		print_cylinder((t_cylinder *)(tmp->content));
+		print_cylinder((t_obj *)(tmp->content));
 		tmp = tmp->next;
 	}
-	// tmp = scene.sphere_lst;
-	// while (tmp)
-	// {
-	// 	print_sphere((t_sphere *)(tmp->content));
-	// 	tmp = tmp->next;
-	// }
-	// tmp = scene.plane_lst;
-	// while (tmp)
-	// {
-	// 	print_plane((t_plane *)(tmp->content));
-	// 	tmp = tmp->next;
-	// }
 	clear_p_scene(&scene);
 	return (0);
 }

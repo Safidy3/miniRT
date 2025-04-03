@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 10:26:42 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/02 21:27:43 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 03:19:44 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,44 +37,6 @@ int	is_in_range(float nbr, char c)
 		return (nbr >= 0.0f && nbr <= 1.0f);
 }
 
-int	get_3dcoord(t_3dcoord *coord, char **arr_coord, int is_normal_vect)
-{
-	if (!is_valid_float(arr_coord[0]) || !is_valid_float(arr_coord[1])
-		|| !is_valid_float(arr_coord[2]))
-	{
-		printf("Error\n");
-		printf("Invalid float format value. \n");
-		free_2d_arr(arr_coord);
-		return (0);
-	}
-	coord->x = ft_atof(arr_coord[0]);
-	coord->y = ft_atof(arr_coord[1]);
-	coord->z = ft_atof(arr_coord[2]);
-	free_2d_arr(arr_coord);
-	if (is_normal_vect && (!is_in_range(coord->x, 'v') || !is_in_range(coord->y,
-				'v') || !is_in_range(coord->z, 'v')))
-	{
-		printf("Error\n");
-		printf("Normal vector should be in range of [-1,1].\n");
-		return (0);
-	}
-	return (1);
-}
-
-void	get_rgb_color(t_rgb *color, char **arr_coord, t_scene *scene)
-{
-	if (!is_valid_float(arr_coord[0]) || !is_valid_float(arr_coord[1])
-		|| !is_valid_float(arr_coord[2]))
-		free_pars_error(scene, arr_coord, "Element value format error \n");
-	color->red = ft_atof(arr_coord[0]);
-	color->green = ft_atof(arr_coord[1]);
-	color->blue = ft_atof(arr_coord[2]);
-	free_2d_arr(arr_coord);
-	if (!is_in_range(color->red, 'c') || !is_in_range(color->green, 'c')
-		|| !is_in_range(color->blue, 'c'))
-		free_pars_error(scene, NULL, "RGB color should be in range of [0, 255]");
-}
-
 void	check_arg_nbr(char **splitted_elt, int arg_number, t_scene *scene)
 {
 	if ((splitted_elt[arg_number] && splitted_elt[arg_number][0] != '\n')
@@ -99,8 +61,7 @@ void	check_dup_capital(char **scene)
 			capitals.z += 1.0f;
 		if (capitals.x > 1 || capitals.y > 1 || capitals.z > 1)
 		{
-			printf("Error\n");
-			printf("Element with capital letter id should be only declared once. \n");
+			printf("Error : Element with capital letter id should be only declared once. \n");
 			free_2d_arr(scene);
 			exit(1);
 		}

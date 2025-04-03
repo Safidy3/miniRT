@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:33:13 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 02:15:43 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 03:16:59 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,90 +39,12 @@ int	obj_arg_error(t_scene *scene, char **splitted_obj, char *str)
 	return (1);
 }
 
-t_cylinder	make_cylindre(t_scene *scene, char **splitted_obj)
-{
-	t_cylinder	tmp;
-
-	tmp.shape = CYLINDRE;
-	tmp.center_coord = make_coord(1, splitted_obj, 0, scene);
-	tmp.normal_vector = make_coord(2, splitted_obj, 1, scene);
-	tmp.color = make_rgb(5, splitted_obj, scene);
-	tmp.diameter = ft_atofl(3, splitted_obj, scene);
-	tmp.height = ft_atofl(4, splitted_obj, scene);
-	return (tmp);
-}
-
-t_cylinder	make_sphere(t_scene *scene, char **splitted_obj)
-{
-	t_cylinder	tmp;
-
-	tmp.shape = SPHERE;
-	tmp.center_coord = make_coord(1, splitted_obj, 0, scene);
-	tmp.diameter = ft_atofl(2, splitted_obj, scene);
-	tmp.color = make_rgb(3, splitted_obj, scene);
-	tmp.normal_vector = create_3dnull();
-	tmp.height = 0;
-	return (tmp);
-}
-
-t_cylinder	make_plan(t_scene *scene, char **splitted_obj)
-{
-	t_cylinder	tmp;
-
-	tmp.shape = PLANE;
-	tmp.center_coord = make_coord(1, splitted_obj, 0, scene);
-	tmp.normal_vector = make_coord(2, splitted_obj, 1, scene);
-	tmp.color = make_rgb(3, splitted_obj, scene);
-	tmp.diameter = 0.0;
-	tmp.height = 0;
-	return (tmp);
-}
-
-t_cylinder	make_camera(t_scene *scene, char **splitted_obj)
-{
-	t_cylinder	tmp;
-
-	tmp.shape = CAMERA;
-	tmp.center_coord = make_coord(1, splitted_obj, 0, scene);
-	tmp.normal_vector = make_coord(2, splitted_obj, 1, scene);
-	tmp.diameter = ft_atofl(3, splitted_obj, scene);
-	tmp.color = create_rgbnull();
-	tmp.height = 0;
-	return (tmp);
-}
-
-t_cylinder	make_light(t_scene *scene, char **splitted_obj)
-{
-	t_cylinder	tmp;
-
-	tmp.shape = POINT_LIGHT;
-	tmp.center_coord = make_coord(1, splitted_obj, 0, scene);
-	tmp.diameter = ft_atofl(2, splitted_obj, scene);
-	tmp.color = create_rgb(255.0, 255.0, 255.0);
-	tmp.normal_vector = create_3dnull();
-	tmp.height = 0;
-	return (tmp);
-}
-
-t_cylinder	make_amient(t_scene *scene, char **splitted_obj)
-{
-	t_cylinder	tmp;
-
-	tmp.shape = AMBIENT_LIGHT;
-	tmp.diameter = ft_atofl(1, splitted_obj, scene);
-	tmp.color = make_rgb(2, splitted_obj, scene);
-	tmp.center_coord = create_3dnull();
-	tmp.normal_vector = create_3dnull();
-	tmp.height = 0;
-	return (tmp);
-}
-
 void	parse(t_scene *scene)
 {
-	char		**scene_arr;
-	char		**splitted_obj;
-	t_cylinder	*obj;
-	t_cylinder	tmp;
+	char	**scene_arr;
+	char	**splitted_obj;
+	t_obj	*obj;
+	t_obj	tmp;
 
 	scene_arr = scene->scene_arr;
 	print_2d_arr(scene->scene_arr);
@@ -143,7 +65,7 @@ void	parse(t_scene *scene)
 			tmp = make_plan(scene, splitted_obj);
 		else
 			free_vec3_error(scene, splitted_obj, NULL, "You can only enter [C, L, A, sp, pl, cy] as element of the scene.\n");
-		obj = (t_cylinder *)malloc(sizeof(t_cylinder));
+		obj = (t_obj *)malloc(sizeof(t_obj));
 		obj->shape = tmp.shape;
 		obj->center_coord = tmp.center_coord;
 		obj->normal_vector = tmp.normal_vector;

@@ -6,35 +6,34 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:53:04 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/02 20:27:54 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 03:16:22 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../miniRT.h"
 
-// TODO: double check leaks, especially after exit.
-void	light_parser(t_light *light, char *scene_elt, int is_bonus,
-		t_scene *scene)
+t_obj	make_light(t_scene *scene, char **splitted_obj)
 {
-	char	**splitted_elt;
-	char	**splitted_coord;
+	t_obj	tmp;
 
-	splitted_elt = ft_split_space(scene_elt);
-	check_arg_nbr(splitted_elt, 4, scene);
-	light->id = scene_elt[0];
-	splitted_coord = ft_split(splitted_elt[1], ',');
-	if (!is_valid_float(splitted_elt[2]))
-		free_pars_error(scene, splitted_elt, "Element value format error \n");
-	light->brightness = ft_atof(splitted_elt[2]);
-	if (!get_3dcoord(&(light->center_coord), splitted_coord, 0)
-		|| !is_in_range(light->brightness, 'r'))
-		free_pars_error(scene, splitted_elt, "Element value format error \n");
-	if (is_bonus)
-	{
-		splitted_coord = ft_split(splitted_elt[3], ',');
-		free_2d_arr(splitted_elt);
-		get_rgb_color(&(light->color), splitted_coord, scene);
-	}
-	else
-		free_pars_error(scene, splitted_elt, NULL);
+	tmp.shape = POINT_LIGHT;
+	tmp.center_coord = make_coord(1, splitted_obj, 0, scene);
+	tmp.diameter = ft_atofl(2, splitted_obj, scene);
+	tmp.color = create_rgb(255.0, 255.0, 255.0);
+	tmp.normal_vector = create_3dnull();
+	tmp.height = 0;
+	return (tmp);
+}
+
+t_obj	make_amient(t_scene *scene, char **splitted_obj)
+{
+	t_obj	tmp;
+
+	tmp.shape = AMBIENT_LIGHT;
+	tmp.diameter = ft_atofl(1, splitted_obj, scene);
+	tmp.color = make_rgb(2, splitted_obj, scene);
+	tmp.center_coord = create_3dnull();
+	tmp.normal_vector = create_3dnull();
+	tmp.height = 0;
+	return (tmp);
 }
