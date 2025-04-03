@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 06:35:47 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/03 06:59:31 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 09:44:20 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,113 +38,96 @@ enum	e_shape
 	CAMERA
 };
 
-typedef struct s_scene		t_scene;
-
-typedef struct s_ambient	t_ambient;
-typedef struct s_camera		t_camera;
-typedef struct s_light		t_light;
-
-typedef struct s_plane		t_plane;
-typedef struct s_sphere		t_sphere;
-typedef struct s_obj		t_obj;
-
-typedef struct s_3dcoord	t_3dcoord;
-typedef struct s_rgb		t_rgb;
-
-struct						s_3dcoord
+typedef struct	s_vec3
 {
-	float					x;
-	float					y;
-	float					z;
-};
+	float		x;
+	float		y;
+	float		z;
+}				t_vec3;
 
-struct						s_rgb
+typedef struct	s_rgb
 {
-	float					r;
-	float					g;
-	float					b;
-};
+	float		r;
+	float		g;
+	float		b;
+}				t_rgb;
 
-struct						s_obj
+typedef struct	s_obj
 {
-	int						shape;
-	t_3dcoord				center_coord;
-	t_3dcoord				normal_vector;
-	float					diameter;
-	float					height;
-	t_rgb					color;
-};
+	int			shape;
+	t_vec3		center_coord;
+	t_vec3		normal_vector;
+	float		diameter;
+	float		height;
+	t_vec3		color;
+}				t_obj;
 
-struct						s_scene
+typedef struct	s_scene
 {
-	int						scene_len;
-	char					**scene_arr;
-	t_list					*obj_lst;
-};
+	int			scene_len;
+	char		**scene_arr;
+	t_list		*obj_lst;
+}				t_scene;
 
-t_3dcoord					create_3d(float x, float y, float z);
-t_3dcoord					create_3dnull(void);
-t_rgb						create_rgb(float x, float y, float z);
-t_rgb						create_rgbnull(void);
-t_3dcoord					make_coord(int index, char **splitted_obj,
-								int is_normal_vect, t_scene *scene);
-float						ft_atofl(int index, char **arr_obj, t_scene *scene);
-t_rgb						make_rgb(int index, char **splitted_obj,
-								t_scene *scene);
+t_vec3			create_3d(float x, float y, float z);
+t_vec3			create_3dnull(void);
+t_vec3			create_rgb(float x, float y, float z);
+t_vec3			make_coord(int index, char **splitted_obj,
+					int is_normal_vect, t_scene *scene);
+float			ft_atofl(int index, char **arr_obj, t_scene *scene);
+t_vec3			make_rgb(int index, char **splitted_obj, t_scene *scene);
 
-t_obj						make_cylindre(t_scene *scene, char **splitted_obj);
-t_obj						make_sphere(t_scene *scene, char **splitted_obj);
-t_obj						make_plan(t_scene *scene, char **splitted_obj);
-t_obj						make_camera(t_scene *scene, char **splitted_obj);
-t_obj						make_light(t_scene *scene, char **splitted_obj);
-t_obj						make_amient(t_scene *scene, char **splitted_obj);
+t_obj			make_cylindre(t_scene *scene, char **splitted_obj);
+t_obj			make_sphere(t_scene *scene, char **splitted_obj);
+t_obj			make_plan(t_scene *scene, char **splitted_obj);
+t_obj			make_camera(t_scene *scene, char **splitted_obj);
+t_obj			make_light(t_scene *scene, char **splitted_obj);
+t_obj			make_amient(t_scene *scene, char **splitted_obj);
 
 /* TODO: remove this for last push */
-void						print_2d_arr(char **arr);
-void						print_cylinder(t_obj *cylinder);
-void						print_obj_list(t_scene *scene);
+void			print_2d_arr(char **arr);
+void			print_cylinder(t_obj *cylinder);
+void			print_obj_list(t_scene *scene);
 
 /* ./srcs/utils/scene.c */
-int							get_scene_len(int fd);
-void						get_scene(int fd, t_scene *scene);
-void						validate_scene(t_scene *scene);
+int				get_scene_len(int fd);
+void			get_scene(int fd, t_scene *scene);
+void			validate_scene(t_scene *scene);
 
 /* ./srcs/utils/utils.c */
-void						p_scene(char *filename, t_scene *scene);
+void			p_scene(char *filename, t_scene *scene);
 
 /* ./srcs/utils/protected.c */
-void						get_fd(char *filename, int *fd, int is_first_fd,
-								t_scene *scene);
+void			get_fd(char *filename, int *fd, int is_first_fd,
+					t_scene *scene);
 
 /* ./srcs/parse */
-void						parse(t_scene *scene);
+void			parse(t_scene *scene);
 
 /* ./srcs/utils/data_manip.c */
-int							is_valid_float(char *str);
+int				is_valid_float(char *str);
 
 /* ./srcs/utils/free.c */
-void						free_2d_arr(char **arr);
-void						clear_plane(void *g_plane_lst);
-void						clear_sphere(void *g_sphere_lst);
-void						clear_cylinder(void *g_cylinder_lst);
-void						clear_p_scene(t_scene *scene);
+void			free_2d_arr(char **arr);
+void			clear_plane(void *g_plane_lst);
+void			clear_sphere(void *g_sphere_lst);
+void			clear_cylinder(void *g_cylinder_lst);
+void			clear_p_scene(t_scene *scene);
 
-int							is_char_type_id(char c);
-int							is_str_type_id(char *str);
-int							is_in_range(float nbr, char c);
-int							validate_scene_name(char *scene);
-int							is_valid_id(char **scene);
+int				is_char_type_id(char c);
+int				is_str_type_id(char *str);
+int				is_in_range(float nbr, char c);
+int				validate_scene_name(char *scene);
+int				is_valid_id(char **scene);
 
 /* ./srcs/elt_value_format */
-void						check_arg_nbr(char **splitted_elt, int arg_number,
-								t_scene *scene);
-void						check_dup_capital(char **scene);
+void			check_arg_nbr(char **splitted_elt, int arg_number, t_scene *scene);
+void			check_dup_capital(char **scene);
 
-void						free_pars_error(t_scene *scene, char **splitted_elt,
-								char *str);
-void						free_vec3_error(t_scene *scene, char **splitted_elt,
-								char **splitted_obj, char *str);
+void			free_pars_error(t_scene *scene, char **splitted_elt, char *str);
+void			free_vec3_error(t_scene *scene, char **splitted_elt,
+					char **splitted_obj, char *str);
 
-void						get_pars(t_scene *scene, int argc, char **argv);
+void			get_pars(t_scene *scene, int argc, char **argv);
 
 #endif

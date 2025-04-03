@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/03 06:33:51 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 09:41:51 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,62 @@ void	init_data(t_data *data)
 		data->hit_objects[i] = (t_object **)malloc(sizeof(t_object *) * HEIGHT);
 }
 
+// void	init_sceen(t_data *data, int argc, char **argv)
+// {
+// 	t_scene			pars;
+// 	t_list			*tmp;
+// 	t_obj			*obj;
+// 	t_proprieties	prt;
+
+// 	get_pars(&pars, argc, argv);
+// 	tmp = pars.obj_lst;
+// 	while (tmp)
+// 	{
+// 		obj = (t_obj *)(tmp->content);
+// 		prt = create_proprieties(obj->color, LAMBERTIAN, 0, 0);
+// 		if (obj->shape == POINT_LIGHT)
+// 		{
+			
+// 		}
+// 		else if (obj->shape == AMBIENT_LIGHT)
+// 		{
+			
+// 		}
+// 		else if (obj->shape == CAMERA)
+// 		{
+			
+// 		}
+// 		else if (obj->shape == CYLINDRE)
+// 		{
+			
+// 		}
+// 		else if (obj->shape == PLANE)
+// 		{
+			
+// 		}
+// 		else if (obj->shape == SPHERE)
+// 		{
+			
+// 		}
+// 		print_cylinder(obj);
+// 		tmp = tmp->next;
+// 	}
+
+	
+	
+// 	clear_p_scene(&pars);
+// }
+
 int	main(int argc, char **argv)
 {
 	t_data		data;
-	t_scene		pars;
+	(void)argc;
+	(void)argv;
 	
-	get_pars(&pars, argc, argv);
-	clear_p_scene(&pars);
 	init_data(&data);
+
+	// init_sceen(&data, argc, argv);
+
 	add_sceen(&data);
 	printT(data.world);
 	// put_pixel_color(&data);

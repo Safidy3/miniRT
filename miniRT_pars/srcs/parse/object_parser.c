@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 03:14:08 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/03 04:53:52 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 09:43:02 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_obj	make_camera(t_scene *scene, char **splitted_obj)
 	tmp.center_coord = make_coord(1, splitted_obj, 0, scene);
 	tmp.normal_vector = make_coord(2, splitted_obj, 1, scene);
 	tmp.diameter = ft_atofl(3, splitted_obj, scene);
-	tmp.color = create_rgbnull();
+	tmp.color = create_3dnull();
 	tmp.height = 0;
 	return (tmp);
 }

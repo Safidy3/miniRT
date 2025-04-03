@@ -11,10 +11,6 @@ t_object	*create_cylinder(t_vec3 center, t_vec3 direction,
 	cylinder->radius = diameter / 2;
 	cylinder->height = height;
 	cylinder->direction = direction;
-	cylinder->plane[0] = create_nullvec();
-	cylinder->plane[1] = create_nullvec();
-	cylinder->plane[2] = create_nullvec();
-	cylinder->plane[3] = create_nullvec();
 	return (cylinder);
 }
 

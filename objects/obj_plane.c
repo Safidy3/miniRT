@@ -9,10 +9,6 @@ t_object	*create_plane(t_vec3 center, t_vec3 direction)
 	res->center = center;
 	res->direction = direction;
 	res->radius = 0;
-	res->plane[0] = create_nullvec();
-	res->plane[1] = create_nullvec();
-	res->plane[2] = create_nullvec();
-	res->plane[3] = create_nullvec();
 	return (res);
 }
 

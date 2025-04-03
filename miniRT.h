@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/03 06:56:13 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 09:27:48 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,12 @@ enum	e_material
 	LAMBERTIAN,
 };
 
-typedef struct s_vec3
-{
-	float	x;
-	float	y;
-	float	z;
-}			t_vec3;
+// typedef struct s_vec3
+// {
+// 	float	x;
+// 	float	y;
+// 	float	z;
+// }			t_vec3;
 
 // typedef struct s_rgb
 // {
@@ -107,9 +107,9 @@ typedef struct s_object
 	int				shape;
 	t_vec3			center;
 	t_vec3			direction;
+	t_vec3			color;
 	float			radius;
 	float			height;
-	t_vec3			plane[4];
 	t_proprieties	proprieties;
 	t_hit_record	hit_record;
 }					t_object;

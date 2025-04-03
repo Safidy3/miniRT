@@ -45,10 +45,6 @@ t_object	*create_obj_cam(t_vec3 origin, t_vec3 direction, float fov)
 	cam->center = origin;
 	cam->radius = fov;
 	cam->direction = direction;
-	cam->plane[0] = create_nullvec();
-	cam->plane[1] = create_nullvec();
-	cam->plane[2] = create_nullvec();
-	cam->plane[3] = create_nullvec();
 	cam->proprieties.color = create_nullvec();
 	cam->proprieties.material = 0;
 	cam->proprieties.parameter = 0;

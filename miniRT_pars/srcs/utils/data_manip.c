@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:23:25 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 06:24:00 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 09:41:32 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,10 +93,10 @@ float	ft_atofl(int index, char **arr_obj, t_scene *scene)
 	return (res_int);
 }
 
-t_3dcoord	make_coord(int index, char **splitted_obj,
+t_vec3	make_coord(int index, char **splitted_obj,
 		int is_normal_vect, t_scene *scene)
 {
-	t_3dcoord	coord;
+	t_vec3	coord;
 	char		**arr_coord;
 
 	arr_coord = ft_split(splitted_obj[index], ',');
@@ -114,9 +114,9 @@ t_3dcoord	make_coord(int index, char **splitted_obj,
 	return (coord);
 }
 
-t_rgb	make_rgb(int index, char **splitted_obj, t_scene *scene)
+t_vec3	make_rgb(int index, char **splitted_obj, t_scene *scene)
 {
-	t_rgb	color;
+	t_vec3	color;
 	char	**arr_coord;
 	char	*str_coord;
 
@@ -125,12 +125,12 @@ t_rgb	make_rgb(int index, char **splitted_obj, t_scene *scene)
 	if (!is_valid_float(arr_coord[0]) || !is_valid_float(arr_coord[1])
 		|| !is_valid_float(arr_coord[2]))
 		free_vec3_error(scene, arr_coord, splitted_obj, E_FLOAT);
-	color.r = ft_atof(arr_coord[0]);
-	color.g = ft_atof(arr_coord[1]);
-	color.b = ft_atof(arr_coord[2]);
+	color.x = ft_atof(arr_coord[0]);
+	color.y = ft_atof(arr_coord[1]);
+	color.z = ft_atof(arr_coord[2]);
 	free_2d_arr(arr_coord);
-	if (!is_in_range(color.r, 'c') || !is_in_range(color.g, 'c')
-		|| !is_in_range(color.b, 'c'))
+	if (!is_in_range(color.x, 'c') || !is_in_range(color.y, 'c')
+		|| !is_in_range(color.z, 'c'))
 		free_vec3_error(scene, arr_coord, splitted_obj, E_COL);
 	return (color);
 }

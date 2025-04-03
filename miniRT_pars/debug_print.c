@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:20:21 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 06:59:31 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 09:42:37 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	print_cylinder(t_obj *cylinder)
 		((t_obj *)(cylinder))->normal_vector.z);
 	printf("height	: %f \n", ((t_obj *)(cylinder))->height);
 	printf("diameter: %f \n", ((t_obj *)(cylinder))->diameter);
-	printf("Color	: %f %f %f\n", ((t_obj *)(cylinder))->color.r,
-		((t_obj *)(cylinder))->color.g,
-		((t_obj *)(cylinder))->color.b);
+	printf("Color	: %f %f %f\n", ((t_obj *)(cylinder))->color.x,
+		((t_obj *)(cylinder))->color.y,
+		((t_obj *)(cylinder))->color.z);
 	printf("\n");
 }

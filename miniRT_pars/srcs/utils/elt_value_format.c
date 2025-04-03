@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 10:26:42 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 04:53:52 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 08:40:51 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	check_arg_nbr(char **splitted_elt, int arg_number, t_scene *scene)
 void	check_dup_capital(char **scene)
 {
 	int					i;
-	static t_3dcoord	capitals;
+	static t_vec3	capitals;
 
 	i = 0;
 	while (scene[i] && scene)
