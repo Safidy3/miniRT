@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrakoton <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 11:42:55 by jrakoton          #+#    #+#             */
-/*   Updated: 2024/03/15 11:44:12 by jrakoton         ###   ########.fr       */
+/*   Updated: 2025/04/03 04:02:23 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,4 +19,9 @@ void	ft_putstr_fd(char *s, int fd)
 		write(fd, s, 1);
 		s++;
 	}
+}
+
+void	ft_putstr_err(char *s)
+{
+	ft_putstr_fd(s, 2);
 }

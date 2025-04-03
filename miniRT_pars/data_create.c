@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 21:37:16 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/03 01:15:09 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 03:34:44 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_3dcoord	create_3d(float x, float y, float z)
 	res.x = x;
 	res.y = y;
 	res.z = z;
-	return(res);
+	return (res);
 }
 
 t_3dcoord	create_3dnull(void)
@@ -29,7 +29,7 @@ t_3dcoord	create_3dnull(void)
 	res.x = 0.0;
 	res.y = 0.0;
 	res.z = 0.0;
-	return(res);
+	return (res);
 }
 
 t_rgb	create_rgb(float x, float y, float z)
@@ -39,7 +39,7 @@ t_rgb	create_rgb(float x, float y, float z)
 	res.red = x;
 	res.green = y;
 	res.blue = z;
-	return(res);
+	return (res);
 }
 
 t_rgb	create_rgbnull(void)
@@ -49,5 +49,5 @@ t_rgb	create_rgbnull(void)
 	res.red = 0.0;
 	res.green = 0.0;
 	res.blue = 0.0;
-	return(res);
+	return (res);
 }

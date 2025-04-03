@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 15:42:20 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 03:24:59 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 03:59:01 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,13 @@
 # include "./srcs/libs/libft/libft.h"
 # include <fcntl.h>
 # include <stdio.h>
+
+# define E_FLOAT "Ivalid float number found\n"
+# define E_NORM "Normal vector should be in range [-1, 1]\n"
+# define E_PARAM "Diameter/radius/brightness can not be negative\n"
+# define E_COL "R, G, B color should be in range [0, 255]\n"
+# define E_OBJ_CAP "Error : Element with capital letter id should be only declared once.\n"
+# define E_NUM_PARAM "Number of parameter of an object is incorect.\n"
 
 enum	e_shape
 {

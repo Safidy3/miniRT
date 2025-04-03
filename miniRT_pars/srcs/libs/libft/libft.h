@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 15:54:13 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 01:57:14 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 04:02:41 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void				ft_putnbr_fd(int n, int fd);
 void				ft_striteri(char *s, void (*f)(unsigned int, char *));
 void				ft_putchar_fd(char c, int fd);
 void				ft_putstr_fd(char *s, int fd);
+void				ft_putstr_err(char *s);
 void				ft_putendl_fd(char *s, int fd);
 char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char				**ft_split(char const *s, char c);

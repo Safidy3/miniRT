@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 10:26:42 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 03:19:44 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 04:05:39 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ int	is_str_type_id(char *str)
 {
 	if (str[2])
 		return (0);
-	return ((str[0] == 's' && str[1] == 'p') || (str[0] == 'c' && str[1] == 'y')
+	return ((str[0] == 's' && str[1] == 'p')
+		|| (str[0] == 'c' && str[1] == 'y')
 		|| (str[0] == 'p' && str[1] == 'l'));
 }
 
@@ -29,7 +30,7 @@ int	is_in_range(float nbr, char c)
 {
 	if (c == 'c')
 		return (nbr >= 0.0f && nbr <= 255.0f);
-	else if (c == 'v') // this is for normal vector
+	else if (c == 'v')
 		return (nbr >= -1.0f && nbr <= 1.0f);
 	else if (c == 'f')
 		return (nbr >= 0.0f && nbr <= 180.0f);
@@ -40,9 +41,9 @@ int	is_in_range(float nbr, char c)
 void	check_arg_nbr(char **splitted_elt, int arg_number, t_scene *scene)
 {
 	if ((splitted_elt[arg_number] && splitted_elt[arg_number][0] != '\n')
-		|| !splitted_elt[arg_number - 1] || splitted_elt[arg_number
-		- 1][0] == 10)
-		free_pars_error(scene, splitted_elt, "Element value format error \n");
+		|| !splitted_elt[arg_number - 1]
+		|| splitted_elt[arg_number - 1][0] == 10)
+		free_pars_error(scene, splitted_elt, E_NUM_PARAM);
 }
 
 void	check_dup_capital(char **scene)
@@ -61,7 +62,7 @@ void	check_dup_capital(char **scene)
 			capitals.z += 1.0f;
 		if (capitals.x > 1 || capitals.y > 1 || capitals.z > 1)
 		{
-			printf("Error : Element with capital letter id should be only declared once. \n");
+			ft_putstr_err(E_OBJ_CAP);
 			free_2d_arr(scene);
 			exit(1);
 		}

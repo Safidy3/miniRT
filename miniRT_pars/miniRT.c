@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 15:14:18 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 03:17:58 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 04:03:07 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,16 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		printf("Error\nInvalid number of argument.");
+		ft_putstr_err("Error\nInvalid number of argument.");
 		return (1);
 	}
 	if (validate_scene_name(argv[1]))
 	{
-		printf("Error\nInvalid filename \n");
+		ft_putstr_err("Error\nInvalid filename \n");
 		return (1);
 	}
-	p_scene(argv[1], &scene);
-
 	t_list	*tmp;
+	p_scene(argv[1], &scene);
 	tmp = scene.cylinder_lst;
 	while (tmp)
 	{

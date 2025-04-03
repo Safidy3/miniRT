@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 10:22:13 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 03:21:52 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 04:03:53 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	validate_scene(t_scene *scene)
 {
 	if (!(*(scene->scene_arr)) || !(scene->scene_arr))
 	{
-		printf("Error : Cannot support empty scene.\n");
+		ft_putstr_err("Error : Cannot support empty scene.\n");
 		free(scene->scene_arr);
 		exit(1);
 	}
@@ -70,7 +70,8 @@ void	free_pars_error(t_scene *scene, char **splitted_elt, char *str)
 	exit(1);
 }
 
-void	free_vec3_error(t_scene *scene, char **splitted_elt, char **splitted_obj, char *str)
+void	free_vec3_error(t_scene *scene, char **splitted_elt,
+			char **splitted_obj, char *str)
 {
 	if (str)
 		printf("Error : %s\n", str);
