@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   miniRT.h                                           :+:      :+:    :+:   */
+/*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/20 15:42:20 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 04:22:05 by safandri         ###   ########.fr       */
+/*   Created: 2025/04/03 06:35:47 by safandri          #+#    #+#             */
+/*   Updated: 2025/04/03 06:40:04 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINIRT_H
-# define MINIRT_H
+#ifndef PARSING_H
+# define PARSING_H
 
-# include "./srcs/includes/error_handling.h"
-# include "./srcs/includes/global.h"
 # include "./srcs/libs/get_next_line/get_next_line.h"
-# include "./srcs/libs/libft/libft.h"
+# include "../libft/libft.h"
 # include <fcntl.h>
+# include <stdio.h>
 
 # define E_FLOAT "Ivalid float number found\n"
 # define E_NORM "Normal vector should be in range [-1, 1]\n"
@@ -25,8 +24,7 @@
 # define E_COL "R, G, B color should be in range [0, 255]\n"
 # define E_OBJ_CAP "Error : Element with capital letter \
 	id should be only declared once.\n"
-# define E_NUM_PARAM "The number of parameter of \
-	an object is incorect.\n"
+# define E_NUM_PARAM "The number of parameter of an object is incorect.\n"
 # define E_ID "You can only enter [C, L, A, sp, pl, cy] as \
 	element of the scene.\n"
 
@@ -62,9 +60,9 @@ struct						s_3dcoord
 
 struct						s_rgb
 {
-	float					red;
-	float					green;
-	float					blue;
+	float					r;
+	float					g;
+	float					b;
 };
 
 struct						s_obj
@@ -104,6 +102,7 @@ t_obj						make_amient(t_scene *scene, char **splitted_obj);
 /* TODO: remove this for last push */
 void						print_2d_arr(char **arr);
 void						print_cylinder(t_obj *cylinder);
+void						print_obj_list(t_scene *scene);
 
 /* ./srcs/utils/scene.c */
 int							get_scene_len(int fd);
@@ -130,6 +129,12 @@ void						clear_sphere(void *g_sphere_lst);
 void						clear_cylinder(void *g_cylinder_lst);
 void						clear_p_scene(t_scene *scene);
 
+int							is_char_type_id(char c);
+int							is_str_type_id(char *str);
+int							is_in_range(float nbr, char c);
+int							validate_scene_name(char *scene);
+int							is_valid_id(char **scene);
+
 /* ./srcs/elt_value_format */
 void						check_arg_nbr(char **splitted_elt, int arg_number,
 								t_scene *scene);
@@ -139,5 +144,7 @@ void						free_pars_error(t_scene *scene, char **splitted_elt,
 								char *str);
 void						free_vec3_error(t_scene *scene, char **splitted_elt,
 								char **splitted_obj, char *str);
+
+void						get_pars(t_scene *scene, int argc, char **argv);
 
 #endif

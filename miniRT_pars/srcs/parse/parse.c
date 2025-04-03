@@ -6,11 +6,11 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:33:13 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 04:12:15 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 04:53:52 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../miniRT.h"
+#include "../../parsing.h"
 
 int	obj_arg_error(t_scene *scene, char **splitted_obj, char *str)
 {

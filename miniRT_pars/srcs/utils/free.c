@@ -6,11 +6,11 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 18:09:45 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 03:00:09 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 04:53:52 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../miniRT.h"
+#include "../../parsing.h"
 
 void	free_2d_arr(char **arr)
 {

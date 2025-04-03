@@ -6,11 +6,11 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 10:26:42 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 04:05:39 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 04:53:52 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../miniRT.h"
+#include "../../parsing.h"
 
 int	is_char_type_id(char c)
 {

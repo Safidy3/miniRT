@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/29 09:55:50 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 06:24:42 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "minilibx-linux/mlx.h"
 # include "libft/libft.h"
+# include "miniRT_pars/parsing.h"
 # include "stdio.h"
 # include "unistd.h"
 # include <stdlib.h>
@@ -35,15 +36,15 @@
 # define MAX_RECURS_DEPTH 10
 # define ANTIALIASING_SAMPLES 100
 
-enum	e_shape
-{
-	SPHERE,
-	PLANE,
-	CYLINDRE,
-	POINT_LIGHT,
-	AMBIENT_LIGHT,
-	CAMERA
-};
+// enum	e_shape
+// {
+// 	SPHERE,
+// 	PLANE,
+// 	CYLINDRE,
+// 	POINT_LIGHT,
+// 	AMBIENT_LIGHT,
+// 	CAMERA
+// };
 
 enum	e_material
 {
@@ -57,12 +58,12 @@ typedef struct s_vec3
 	float	z;
 }			t_vec3;
 
-typedef struct s_rgb
-{
-	float	r;
-	float	g;
-	float	b;
-}			t_rgb;
+// typedef struct s_rgb
+// {
+// 	float	r;
+// 	float	g;
+// 	float	b;
+// }			t_rgb;
 
 typedef struct s_ray
 {

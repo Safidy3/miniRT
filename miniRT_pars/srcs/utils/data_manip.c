@@ -6,11 +6,11 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:23:25 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 03:56:10 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 06:24:00 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../miniRT.h"
+#include "../../parsing.h"
 
 int	is_valid_float(char *str)
 {
@@ -125,12 +125,12 @@ t_rgb	make_rgb(int index, char **splitted_obj, t_scene *scene)
 	if (!is_valid_float(arr_coord[0]) || !is_valid_float(arr_coord[1])
 		|| !is_valid_float(arr_coord[2]))
 		free_vec3_error(scene, arr_coord, splitted_obj, E_FLOAT);
-	color.red = ft_atof(arr_coord[0]);
-	color.green = ft_atof(arr_coord[1]);
-	color.blue = ft_atof(arr_coord[2]);
+	color.r = ft_atof(arr_coord[0]);
+	color.g = ft_atof(arr_coord[1]);
+	color.b = ft_atof(arr_coord[2]);
 	free_2d_arr(arr_coord);
-	if (!is_in_range(color.red, 'c') || !is_in_range(color.green, 'c')
-		|| !is_in_range(color.blue, 'c'))
+	if (!is_in_range(color.r, 'c') || !is_in_range(color.g, 'c')
+		|| !is_in_range(color.b, 'c'))
 		free_vec3_error(scene, arr_coord, splitted_obj, E_COL);
 	return (color);
 }

@@ -6,11 +6,11 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 21:37:16 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/03 03:34:44 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 06:24:00 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
+#include "parsing.h"
 
 t_3dcoord	create_3d(float x, float y, float z)
 {
@@ -36,9 +36,9 @@ t_rgb	create_rgb(float x, float y, float z)
 {
 	t_rgb	res;
 
-	res.red = x;
-	res.green = y;
-	res.blue = z;
+	res.r = x;
+	res.g = y;
+	res.b = z;
 	return (res);
 }
 
@@ -46,8 +46,8 @@ t_rgb	create_rgbnull(void)
 {
 	t_rgb	res;
 
-	res.red = 0.0;
-	res.green = 0.0;
-	res.blue = 0.0;
+	res.r = 0.0;
+	res.g = 0.0;
+	res.b = 0.0;
 	return (res);
 }

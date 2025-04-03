@@ -6,11 +6,11 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 10:55:02 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 04:03:30 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 04:53:52 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../miniRT.h"
+#include "../../parsing.h"
 
 void	p_scene(char *filename, t_scene *scene)
 {

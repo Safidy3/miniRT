@@ -6,11 +6,11 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 08:54:18 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 04:03:35 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 04:53:52 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../miniRT.h"
+#include "../../parsing.h"
 
 void	get_fd(char *filename, int *fd, int is_first_fd, t_scene *scene)
 {

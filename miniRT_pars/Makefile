@@ -2,8 +2,8 @@ NAME = miniRT
 
 ERROR_PATH = ./srcs/error-handling
 GNL_PATH = ./srcs/libs/get_next_line
-UTILS_PATH = ./srcs/utils
 PARSE_PATH = ./srcs/parse
+UTILS_PATH = ./srcs/utils
 
 SRCS = ./miniRT.c ./data_create.c $(ERROR_PATH)/scene.c  debug_print.c \
 $(GNL_PATH)/get_next_line.c $(GNL_PATH)/get_next_line_utils.c \
@@ -15,16 +15,19 @@ OBJS = $(SRCS:%.c=%.o)
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror -g
-LIBFT_FLAG = -lft
-LIBFT_PATH = ./srcs/libs/libft/
+FLAGS = -Wall -Wextra -Werror -g
+LIBFT_PATH = ../libft
+LIBFT_ARCHIVE = $(LIBFT_PATH)/libft.a
 
 %.o : %.c
-	$(CC) $(CFLAGS) -c $< -o $(<:%.c=%.o)
+	$(CC) $(FLAGS) -c $< -o $(<:%.c=%.o)
 
-$(NAME) : $(OBJS)
-	@make -C $(LIBFT_PATH)
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L $(LIBFT_PATH) $(LIBFT_FLAG)
+$(LIBFT_ARCHIVE):
+	@make bonus -C $(LIBFT_PATH)
+
+$(NAME) : $(LIBFT_ARCHIVE) $(OBJS)
+	@make bonus -C $(LIBFT_PATH)
+	@$(CC) $(FLAGS) -o $(NAME) $(OBJS) $(LIBFT_ARCHIVE)
 
 all : $(NAME)
 
@@ -38,4 +41,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re                                                             
+.PHONY: all clean fclean re

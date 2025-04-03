@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/29 00:31:48 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 06:33:51 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,13 @@ void	init_data(t_data *data)
 		data->hit_objects[i] = (t_object **)malloc(sizeof(t_object *) * HEIGHT);
 }
 
-int	main()
+int	main(int argc, char **argv)
 {
 	t_data		data;
-
+	t_scene		pars;
+	
+	get_pars(&pars, argc, argv);
+	clear_p_scene(&pars);
 	init_data(&data);
 	add_sceen(&data);
 	printT(data.world);

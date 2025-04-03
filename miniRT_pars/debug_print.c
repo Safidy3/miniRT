@@ -6,11 +6,11 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:20:21 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 04:21:13 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 06:40:34 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
+#include "parsing.h"
 
 void	print_2d_arr(char **arr)
 {
@@ -21,6 +21,18 @@ void	print_2d_arr(char **arr)
 	{
 		printf("%s \n", arr[i]);
 		i++;
+	}
+}
+
+void	print_obj_list(t_scene *scene)
+{
+	t_list	*tmp;
+
+	tmp = scene->cylinder_lst;
+	while (tmp)
+	{
+		print_cylinder((t_obj *)(tmp->content));
+		tmp = tmp->next;
 	}
 }
 
@@ -36,8 +48,8 @@ void	print_cylinder(t_obj *cylinder)
 		((t_obj *)(cylinder))->normal_vector.z);
 	printf("height	: %f \n", ((t_obj *)(cylinder))->height);
 	printf("diameter: %f \n", ((t_obj *)(cylinder))->diameter);
-	printf("Color	: %f %f %f\n", ((t_obj *)(cylinder))->color.red,
-		((t_obj *)(cylinder))->color.green,
-		((t_obj *)(cylinder))->color.blue);
+	printf("Color	: %f %f %f\n", ((t_obj *)(cylinder))->color.r,
+		((t_obj *)(cylinder))->color.g,
+		((t_obj *)(cylinder))->color.b);
 	printf("\n");
 }

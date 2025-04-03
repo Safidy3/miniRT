@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   scene.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrakoton <jrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 08:55:06 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/02 00:39:22 by jrakoton         ###   ########.fr       */
+/*   Updated: 2025/04/03 05:56:59 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/error_handling.h"
-#include <stdio.h>
+#include "../../parsing.h"
 
 int	validate_scene_name(char *scene)
 {
