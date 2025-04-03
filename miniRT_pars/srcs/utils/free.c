@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 18:09:45 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 04:53:52 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 06:59:31 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,6 @@ void	clear_sphere(void *g_sphere_lst)
 
 void	clear_p_scene(t_scene *scene)
 {
-	ft_lstclear(&(scene->cylinder_lst), clear_cylinder);
+	ft_lstclear(&(scene->obj_lst), clear_cylinder);
 	free_2d_arr(scene->scene_arr);
 }

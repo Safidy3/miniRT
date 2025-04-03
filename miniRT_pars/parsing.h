@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 06:35:47 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/03 06:40:04 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 06:59:31 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ struct						s_scene
 {
 	int						scene_len;
 	char					**scene_arr;
-	t_list					*cylinder_lst;
+	t_list					*obj_lst;
 };
 
 t_3dcoord					create_3d(float x, float y, float z);

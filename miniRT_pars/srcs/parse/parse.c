@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:33:13 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 04:53:52 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 06:59:31 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	parse(t_scene *scene)
 		obj->color = tmp.color;
 		obj->diameter = tmp.diameter;
 		obj->height = tmp.height;
-		ft_lstadd_back(&(scene->cylinder_lst), ft_lstnew(obj));
+		ft_lstadd_back(&(scene->obj_lst), ft_lstnew(obj));
 		free_2d_arr(splitted_obj);
 		scene_arr++;
 	}

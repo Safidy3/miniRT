@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:20:21 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 06:40:34 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/03 06:59:31 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	print_obj_list(t_scene *scene)
 {
 	t_list	*tmp;
 
-	tmp = scene->cylinder_lst;
+	tmp = scene->obj_lst;
 	while (tmp)
 	{
 		print_cylinder((t_obj *)(tmp->content));
