@@ -26,8 +26,8 @@ RENDER_SRCS = ./render/render_image.c ./render/render_utils.c ./render/render_de
 SRCS = main.c data_free.c  exemple_sceen.c print_debug.c $(PARSING_SRCS) \
 		$(VECTORS_SRCS) $(OBJECTS_SRCS) $(RENDER_SRCS) $(TRANSFORM_SRCS)
 
-FLAGS = -Wall -Werror -Wextra -I/usr/include
-FLAGS_MINI = -Lmlx_linux -Imlx_linux -lXext -lX11 -lm -lz -g
+FLAGS = -Wall -Werror -Wextra -I/usr/include -g
+FLAGS_MINI = -Lmlx_linux -Imlx_linux -lXext -lX11 -lm -lz
 
 LIB_MLX_PATH = ./minilibx-linux
 LIB_MLX_ARCHIVE = $(LIB_MLX_PATH)/libmlx.a

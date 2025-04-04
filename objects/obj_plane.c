@@ -9,6 +9,7 @@ t_object	*create_plane(t_vec3 center, t_vec3 direction)
 	res->center = center;
 	res->direction = direction;
 	res->radius = 0;
+	res->height = 0;
 	return (res);
 }
 

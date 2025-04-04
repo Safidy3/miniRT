@@ -33,43 +33,38 @@ void	init_data(t_data *data)
 		data->hit_objects[i] = (t_object **)malloc(sizeof(t_object *) * HEIGHT);
 }
 
-// void	init_sceen(t_data *data, int argc, char **argv)
-// {
-// 	t_scene			pars;
-// 	t_list			*tmp;
-// 	t_obj			*obj;
-// 	t_object		*new_obj;
-// 	t_proprieties	prt;
 
-// 	get_pars(&pars, argc, argv);
-// 	tmp = pars.obj_lst;
-// 	while (tmp)
-// 	{
-// 		obj = (t_obj *)tmp->content;
-// 		print_vec3(vec3_div_float(obj->color, 255.0f), "~");
-// 		prt = create_proprieties(vec3_div_float(obj->color, 255.0f), LAMBERTIAN, obj->diameter, 0);
-// 		if (obj->shape == SPHERE)
-// 			new_obj = create_sphere(obj->center, obj->diameter);
-// 		else if (obj->shape == PLANE)
-// 			new_obj = create_plane(obj->center, obj->normal_vector);
-// 		else if (obj->shape == CYLINDRE)
-// 			new_obj = create_cylinder(obj->center, obj->normal_vector, obj->diameter, obj->height);
-// 		else if (obj->shape == POINT_LIGHT)
-// 			new_obj = create_pl(obj->center, obj->color, obj->diameter);
-// 		else if (obj->shape == AMBIENT_LIGHT)
-// 			new_obj = create_al(obj->color, obj->diameter);
-// 		else if (obj->shape == CAMERA)
-// 			new_obj = create_obj_cam(obj->center, obj->normal_vector, obj->diameter);
-// 		scene_add_obj(&data->world, new_obj, prt);
-// 		print_vec3(new_obj->center, "center");
-// 		print_vec3(new_obj->direction, "direction");
-// 		print_vec3(new_obj->proprieties.color, "color");
-// 		printf("radius : %f\n", new_obj->radius);
-// 		printf("height : %f\n\n", new_obj->height);
-// 		tmp = tmp->next;
-// 	}
-// 	clear_p_scene(&pars);
-// }
+void	init_sceen(t_scene *pars, t_data *data, int argc, char **argv)
+{
+	t_list			*tmp;
+	t_obj			*obj;
+	t_object		*new_obj;
+	t_proprieties	prt;
+
+	get_pars(pars, argc, argv);
+	tmp = pars->obj_lst;
+	while (tmp)
+	{
+		obj = (t_obj *)tmp->content;
+		prt = create_proprieties(obj->color, LAMBERTIAN, 0, 0);
+		if (obj->shape == SPHERE)
+			new_obj = create_sphere(obj->center, obj->diameter);
+		else if (obj->shape == PLANE)
+			new_obj = create_plane(obj->center, obj->normal_vector);
+		else if (obj->shape == CYLINDRE)
+			new_obj = create_cylinder(obj->center, obj->normal_vector, obj->diameter, obj->height);
+		else if (obj->shape == CAMERA)
+			new_obj = create_obj_cam(obj->center, obj->normal_vector, obj->diameter);
+		else if (obj->shape == POINT_LIGHT)
+			new_obj = create_pl(obj->center, obj->color, obj->brightness);
+		else if (obj->shape == AMBIENT_LIGHT)
+			new_obj = create_al(obj->color, obj->brightness);
+		scene_add_obj(&data->world, new_obj, prt);
+		print_obj(new_obj);
+		tmp = tmp->next;
+	}
+	clear_p_scene(pars);
+}
 
 int	main(int argc, char **argv)
 {
@@ -78,22 +73,18 @@ int	main(int argc, char **argv)
 	(void)argv;
 	
 	init_data(&data);
-	
-	t_scene			pars;
-	get_pars(&pars, argc, argv);
-	print_obj_list(&pars);
 
-	// init_sceen(&data, argc, argv);
-	// sceen1(&data);
+	// init_sceen(&pars, &data, argc, argv);
+	sceen1(&data);
 
 	// add_sceen(&data);
 
-	// printT(data.world);
-	// put_pixel_color(&data);
+	printT(data.world);
+	put_pixel_color(&data);
 	// put_pixel_color_debug(&data);
-	// mlx_mouse_hook(data.win, mouse_hook, &data);
-	// mlx_hook(data.win, 2, 1L << 0, handle_key, &data);
-	// mlx_hook(data.win, 17, 1L << 17, close_window, &data);
-	// // mlx_loop(data.mlx);
+	mlx_mouse_hook(data.win, mouse_hook, &data);
+	mlx_hook(data.win, 2, 1L << 0, handle_key, &data);
+	mlx_hook(data.win, 17, 1L << 17, close_window, &data);
+	mlx_loop(data.mlx);
 	return (0);
 }

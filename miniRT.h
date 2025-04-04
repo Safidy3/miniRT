@@ -221,7 +221,6 @@ void			delete_obj(void *obj);
 t_object		*make_obj(t_list *obj);
 t_object		*get_first_hit_obj(const t_ray r, t_list *world);
 t_object		*get_light(t_list *og_world, int light_type);
-int				is_void(float x, float y, t_data *data);
 
 int				hit_sphere(t_object *obj, const t_ray r, t_hit_record *hit_rec);
 int				hit_plane(t_object *obj, const t_ray r, t_hit_record *hit_rec);
@@ -252,5 +251,6 @@ void			add_cornell_box(t_list **world);
 void			add_sceen(t_data *data);
 void			sceen1(t_data *data);
 void			printT(t_list *t);
+void			print_obj(t_object *new_obj);
 
 #endif

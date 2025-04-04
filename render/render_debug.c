@@ -31,8 +31,6 @@ t_vec3	color_debug(t_data *data, int x, int y)
 {
 	t_edge_object	o;
 
-	if (is_void(x, y, data) || x > WIDTH - 2)
-		return (create_nullvec());
 	o.obj = data->hit_objects[x][y];
 	o.obj2 = data->hit_objects[x + 1][y];
 	o.obj3 = data->hit_objects[x - 1][y];
@@ -50,12 +48,12 @@ void	put_pixel_color_debug(t_data *data)
 	int		x;
 	int		y;
 
-	x = 1;
+	x = 2;
 	erase_main_screen(data);
-	while (++x < (WIDTH - 2))
+	while (++x < (WIDTH - 3))
 	{
-		y = 1;
-		while (++y < (HEIGHT - 2))
+		y = 2;
+		while (++y < (HEIGHT - 3))
 		{
 			pix_col = color_debug(data, x, y);
 			my_mlx_pixel_put(data, x, y, pix_col);

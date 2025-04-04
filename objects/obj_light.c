@@ -9,6 +9,7 @@ t_object	*create_pl(t_vec3 center, t_vec3 color, float brightness)
 	pl->shape = POINT_LIGHT;
 	pl->center = center;
 	pl->radius = 0;
+	pl->height = 0;
 	pl->direction = create_nullvec();
 	prts.color = vec3_mult_float(color, brightness);
 	prts.material = 0;
@@ -27,6 +28,7 @@ t_object	*create_al(t_vec3 color, float brightness)
 	pl->shape = AMBIENT_LIGHT;
 	pl->center = create_nullvec();
 	pl->radius = 0;
+	pl->height = 0;
 	pl->direction = create_nullvec();
 	prts.color = vec3_mult_float(color, brightness);
 	prts.material = 0;
