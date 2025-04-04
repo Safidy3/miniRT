@@ -250,6 +250,7 @@ t_vec3			color_debug(t_data *data, int x, int y);
 
 void			add_cornell_box(t_list **world);
 void			add_sceen(t_data *data);
+void			sceen1(t_data *data);
 void			printT(t_list *t);
 
 #endif

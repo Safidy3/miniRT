@@ -71,3 +71,27 @@ void	add_sceen(t_data *data)
 	create_camera(data, create_vec3(0, 0, 1), create_vec3(0, 0, -1), 90);
 	compute_camera_rays(data);
 }
+
+void	sceen1(t_data *data)
+{
+	t_proprieties green_lamb = create_proprieties(create_vec3(0, 1, 0), LAMBERTIAN, 0, 0);
+	// t_proprieties Blue_lamb = create_proprieties(create_vec3(0, 0, 1), LAMBERTIAN, 0, 0);
+	t_proprieties white_lamb = create_proprieties(create_vec3(1, 1, 1), LAMBERTIAN, 0, 0);
+
+	t_object *point_light = create_pl(create_vec3(-1, 0, -0.5), create_vec3(1, 1, 1), 1);
+	t_object *ambent_light = create_al(create_vec3(1, 1, 1), 0.2);
+	scene_add_obj(&data->world, point_light, white_lamb);
+	scene_add_obj(&data->world, ambent_light, green_lamb);
+
+	t_object *fw = create_plane(
+		create_vec3(0, 0, -2),
+		create_vec3(0, 0, 1)
+	);
+	scene_add_obj(&data->world, fw, white_lamb);
+
+	// t_object *shpere = create_sphere(create_vec3(1, 0, -1), 1.0);
+	// scene_add_obj(&data->world, shpere, Blue_lamb);
+
+	create_camera(data, create_vec3(0, 0, 1), create_vec3(0, 0, -1), 90);
+	compute_camera_rays(data);
+}

@@ -23,7 +23,7 @@
 # define E_PARAM "Diameter/radius/brightness can not be negative\n"
 # define E_COL "R, G, B color should be in range [0, 255]\n"
 # define E_OBJ_CAP "Error : Element with capital letter \
-	id should be only declared once.\n"
+	should be only declared once.\n"
 # define E_NUM_PARAM "The number of parameter of an object is incorect.\n"
 # define E_ID "You can only enter [C, L, A, sp, pl, cy] as \
 	element of the scene.\n"
@@ -55,7 +55,7 @@ typedef struct	s_rgb
 typedef struct	s_obj
 {
 	int			shape;
-	t_vec3		center_coord;
+	t_vec3		center;
 	t_vec3		normal_vector;
 	float		diameter;
 	float		height;

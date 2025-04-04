@@ -25,5 +25,4 @@ void	get_pars(t_scene *scene, int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 	p_scene(argv[1], scene);
-	print_obj_list(scene);
 }

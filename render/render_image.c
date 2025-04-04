@@ -67,15 +67,12 @@ void	put_pixel_color(t_data *data)
 
 	x = -1;
 	y = -1;
-	compute_camera_rays(data);
 	erase_main_screen(data);
 	while (++x < WIDTH)
 	{
 		y = -1;
 		while (++y < HEIGHT)
 		{
-			if (is_void(x, y, data))
-				continue ;
 			pix_col = ray_casted_color(data, x, y);
 			my_mlx_pixel_put(data, x, y, pix_col);
 		}

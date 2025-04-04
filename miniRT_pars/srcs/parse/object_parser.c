@@ -17,7 +17,7 @@ t_obj	make_cylindre(t_scene *scene, char **splitted_obj)
 	t_obj	tmp;
 
 	tmp.shape = CYLINDRE;
-	tmp.center_coord = make_coord(1, splitted_obj, 0, scene);
+	tmp.center = make_coord(1, splitted_obj, 0, scene);
 	tmp.normal_vector = make_coord(2, splitted_obj, 1, scene);
 	tmp.color = make_rgb(5, splitted_obj, scene);
 	tmp.diameter = ft_atofl(3, splitted_obj, scene);
@@ -30,7 +30,7 @@ t_obj	make_sphere(t_scene *scene, char **splitted_obj)
 	t_obj	tmp;
 
 	tmp.shape = SPHERE;
-	tmp.center_coord = make_coord(1, splitted_obj, 0, scene);
+	tmp.center = make_coord(1, splitted_obj, 0, scene);
 	tmp.diameter = ft_atofl(2, splitted_obj, scene);
 	tmp.color = make_rgb(3, splitted_obj, scene);
 	tmp.normal_vector = create_3dnull();
@@ -43,7 +43,7 @@ t_obj	make_plan(t_scene *scene, char **splitted_obj)
 	t_obj	tmp;
 
 	tmp.shape = PLANE;
-	tmp.center_coord = make_coord(1, splitted_obj, 0, scene);
+	tmp.center = make_coord(1, splitted_obj, 0, scene);
 	tmp.normal_vector = make_coord(2, splitted_obj, 1, scene);
 	tmp.color = make_rgb(3, splitted_obj, scene);
 	tmp.diameter = 0.0;
@@ -56,7 +56,7 @@ t_obj	make_camera(t_scene *scene, char **splitted_obj)
 	t_obj	tmp;
 
 	tmp.shape = CAMERA;
-	tmp.center_coord = make_coord(1, splitted_obj, 0, scene);
+	tmp.center = make_coord(1, splitted_obj, 0, scene);
 	tmp.normal_vector = make_coord(2, splitted_obj, 1, scene);
 	tmp.diameter = ft_atofl(3, splitted_obj, scene);
 	tmp.color = create_3dnull();

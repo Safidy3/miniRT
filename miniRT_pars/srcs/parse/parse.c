@@ -65,14 +65,13 @@ void	parse(t_scene *scene)
 	t_obj	tmp;
 
 	scene_arr = scene->scene_arr;
-	print_2d_arr(scene->scene_arr);
 	while (*scene_arr)
 	{
 		splitted_obj = ft_split_space(*scene_arr);
 		get_obj_parameter(scene, &tmp, splitted_obj);
 		obj = (t_obj *)malloc(sizeof(t_obj));
 		obj->shape = tmp.shape;
-		obj->center_coord = tmp.center_coord;
+		obj->center = tmp.center;
 		obj->normal_vector = tmp.normal_vector;
 		obj->color = tmp.color;
 		obj->diameter = tmp.diameter;

@@ -9,6 +9,9 @@ void	printT(t_list *t)
 		int iter_val = 	(int)((t_object *)(t->content))->shape;
 		switch (iter_val)
 		{
+			case CAMERA:
+				printf("CAMERA : %d\n", (int)((t_object *)(t->content))->id);
+				break;
 			case SPHERE:
 				printf("SPHERE : %d\n", (int)((t_object *)(t->content))->id);
 				break;
@@ -27,6 +30,11 @@ void	printT(t_list *t)
 			default:
 				break;
 		}
+		print_vec3(((t_object *)(t->content))->center, "center");
+		print_vec3(((t_object *)(t->content))->direction, "direction");
+		print_vec3(((t_object *)(t->content))->proprieties.color, "color");
+		printf("radius : %f\n", ((t_object *)(t->content))->radius);
+		printf("height : %f\n\n", ((t_object *)(t->content))->height);
 		// printf("id : %d\n", iter_val);
 		t = t->next;
 	}
@@ -36,6 +44,6 @@ void	printT(t_list *t)
 void	print_vec3(t_vec3 v, char *name)
 {
 	if (name)
-		printf("%s -> ", name);
-	printf("x: %f, y: %f, z: %f\n", v.x, v.y, v.z);
+		printf("%s : ", name);
+	printf("%f, %f, %f\n", v.x, v.y, v.z);
 }

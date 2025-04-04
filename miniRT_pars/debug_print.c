@@ -31,7 +31,7 @@ void	print_obj_list(t_scene *scene)
 	tmp = scene->obj_lst;
 	while (tmp)
 	{
-		print_cylinder((t_obj *)(tmp->content));
+		print_cylinder((tmp->content));
 		tmp = tmp->next;
 	}
 }
@@ -39,17 +39,28 @@ void	print_obj_list(t_scene *scene)
 void	print_cylinder(t_obj *cylinder)
 {
 	printf("\n");
-	printf("shape	: %i \n", ((t_obj *)(cylinder))->shape);
-	printf("Center	: %f %f %f\n", ((t_obj *)(cylinder))->center_coord.x,
-		((t_obj *)(cylinder))->center_coord.y,
-		((t_obj *)(cylinder))->center_coord.z);
-	printf("Normal	: %f %f %f\n", ((t_obj *)(cylinder))->normal_vector.x,
-		((t_obj *)(cylinder))->normal_vector.y,
-		((t_obj *)(cylinder))->normal_vector.z);
-	printf("height	: %f \n", ((t_obj *)(cylinder))->height);
-	printf("diameter: %f \n", ((t_obj *)(cylinder))->diameter);
-	printf("Color	: %f %f %f\n", ((t_obj *)(cylinder))->color.x,
-		((t_obj *)(cylinder))->color.y,
-		((t_obj *)(cylinder))->color.z);
+	if (cylinder->shape == SPHERE)
+		printf("Sphere	: SPHERE\n");
+	else if (cylinder->shape == PLANE)
+		printf("Plane	: PLANE\n");
+	else if (cylinder->shape == CYLINDRE)
+		printf("Cylinder: CYLINDRE\n");
+	else if (cylinder->shape == POINT_LIGHT)
+		printf("Light	: POINT_LIGHT\n");
+	else if (cylinder->shape == AMBIENT_LIGHT)
+		printf("Ambient : AMBIENT_LIGHT\n");
+	else if (cylinder->shape == CAMERA)
+		printf("Camera	: CAMERA\n");
+	printf("Center	: %f %f %f\n", cylinder->center.x,
+		cylinder->center.y,
+		cylinder->center.z);
+	printf("Normal	: %f %f %f\n", cylinder->normal_vector.x,
+		cylinder->normal_vector.y,
+		cylinder->normal_vector.z);
+	printf("height	: %f \n", cylinder->height);
+	printf("diameter: %f \n", cylinder->diameter);
+	printf("Color	: %f %f %f\n", cylinder->color.x,
+		cylinder->color.y,
+		cylinder->color.z);
 	printf("\n");
 }
