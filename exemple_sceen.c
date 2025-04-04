@@ -77,7 +77,7 @@ void	sceen1(t_data *data)
 	t_proprieties green_lamb = create_proprieties(create_vec3(0, 1, 0), LAMBERTIAN, 0, 0);
 	t_proprieties white_lamb = create_proprieties(create_vec3(1, 1, 1), LAMBERTIAN, 0, 0);
 
-	t_object *point_light = create_pl(create_vec3(-1, 0, -0.5), create_vec3(1, 1, 1), 1);
+	t_object *point_light = create_pl(create_vec3(-1, 0, 0), create_vec3(1, 1, 1), 1);
 	t_object *ambent_light = create_al(create_vec3(1, 1, 1), 0.2);
 	t_object *plan = create_plane(create_vec3(0, 0, -2), create_vec3(0, 0, 1));
 
@@ -86,5 +86,4 @@ void	sceen1(t_data *data)
 	scene_add_obj(&data->world, plan, white_lamb);
 
 	create_camera(data, create_vec3(0, 0, 1), create_vec3(0, 0, -1), 90);
-	compute_camera_rays(data);
 }

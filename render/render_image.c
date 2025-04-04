@@ -40,6 +40,7 @@ t_vec3	ray_casted_color(t_data *data, int x, int y)
 	float		n;
 
 	first_hit_obj = get_first_hit_obj(data->camera_rays[x][y], data->world);
+	data->hit_objects[x][y] = first_hit_obj;
 	if (!first_hit_obj)
 		return (create_nullvec());
 	p_light = get_light(data->world, POINT_LIGHT);
