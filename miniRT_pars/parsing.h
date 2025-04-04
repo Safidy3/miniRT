@@ -77,6 +77,7 @@ t_vec3			make_coord(int index, char **splitted_obj,
 					int is_normal_vect, t_scene *scene);
 float			ft_atofl(int index, char **arr_obj, t_scene *scene);
 t_vec3			make_rgb(int index, char **splitted_obj, t_scene *scene);
+t_vec3			make_color(t_vec3 a);
 
 t_obj			make_cylindre(t_scene *scene, char **splitted_obj);
 t_obj			make_sphere(t_scene *scene, char **splitted_obj);

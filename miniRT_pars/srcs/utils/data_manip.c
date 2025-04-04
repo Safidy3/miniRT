@@ -36,7 +36,6 @@ int	is_valid_float(char *str)
 	return (0);
 }
 
-// Array to float
 float	ft_atof(char *str)
 {
 	float	res_int;
@@ -132,5 +131,5 @@ t_vec3	make_rgb(int index, char **splitted_obj, t_scene *scene)
 	if (!is_in_range(color.x, 'c') || !is_in_range(color.y, 'c')
 		|| !is_in_range(color.z, 'c'))
 		free_vec3_error(scene, arr_coord, splitted_obj, E_COL);
-	return (color);
+	return (make_color(color));
 }

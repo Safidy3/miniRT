@@ -22,6 +22,7 @@ t_obj	make_cylindre(t_scene *scene, char **splitted_obj)
 	tmp.color = make_rgb(5, splitted_obj, scene);
 	tmp.diameter = ft_atofl(3, splitted_obj, scene);
 	tmp.height = ft_atofl(4, splitted_obj, scene);
+	tmp.brightness = 0.0;
 	return (tmp);
 }
 
@@ -35,6 +36,7 @@ t_obj	make_sphere(t_scene *scene, char **splitted_obj)
 	tmp.color = make_rgb(3, splitted_obj, scene);
 	tmp.normal_vector = create_3dnull();
 	tmp.height = 0;
+	tmp.brightness = 0.0;
 	return (tmp);
 }
 

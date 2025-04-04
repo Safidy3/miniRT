@@ -75,6 +75,7 @@ void	parse(t_scene *scene)
 		obj->normal_vector = tmp.normal_vector;
 		obj->color = tmp.color;
 		obj->diameter = tmp.diameter;
+		obj->brightness = tmp.brightness;
 		obj->height = tmp.height;
 		ft_lstadd_back(&(scene->obj_lst), ft_lstnew(obj));
 		free_2d_arr(splitted_obj);

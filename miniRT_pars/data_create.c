@@ -42,3 +42,12 @@ t_vec3	create_rgb(float x, float y, float z)
 	return (res);
 }
 
+t_vec3	make_color(t_vec3 a)
+{
+	t_vec3	res;
+
+	res.x = a.x / 255.0f;
+	res.y = a.y / 255.0f;
+	res.z = a.z / 255.0f;
+	return (res);
+}
