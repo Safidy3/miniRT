@@ -57,6 +57,7 @@ typedef struct	s_obj
 	int			shape;
 	t_vec3		center;
 	t_vec3		normal_vector;
+	float		brightness;
 	float		diameter;
 	float		height;
 	t_vec3		color;

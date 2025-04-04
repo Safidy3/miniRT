@@ -18,7 +18,8 @@ t_obj	make_light(t_scene *scene, char **splitted_obj)
 
 	tmp.shape = POINT_LIGHT;
 	tmp.center = make_coord(1, splitted_obj, 0, scene);
-	tmp.diameter = ft_atofl(2, splitted_obj, scene);
+	tmp.brightness = ft_atofl(2, splitted_obj, scene);
+	tmp.diameter = 0.0;
 	tmp.color = create_rgb(255.0, 255.0, 255.0);
 	tmp.normal_vector = create_3dnull();
 	tmp.height = 0;
@@ -31,6 +32,7 @@ t_obj	make_amient(t_scene *scene, char **splitted_obj)
 
 	tmp.shape = AMBIENT_LIGHT;
 	tmp.diameter = ft_atofl(1, splitted_obj, scene);
+	tmp.brightness = ft_atofl(2, splitted_obj, scene);
 	tmp.color = make_rgb(2, splitted_obj, scene);
 	tmp.center = create_3dnull();
 	tmp.normal_vector = create_3dnull();

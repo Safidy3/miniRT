@@ -57,6 +57,7 @@ void	print_cylinder(t_obj *cylinder)
 	printf("Normal	: %f %f %f\n", cylinder->normal_vector.x,
 		cylinder->normal_vector.y,
 		cylinder->normal_vector.z);
+	printf("brighnes: %f \n", cylinder->brightness);
 	printf("height	: %f \n", cylinder->height);
 	printf("diameter: %f \n", cylinder->diameter);
 	printf("Color	: %f %f %f\n", cylinder->color.x,

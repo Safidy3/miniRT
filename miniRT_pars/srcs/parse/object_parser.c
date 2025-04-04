@@ -48,6 +48,7 @@ t_obj	make_plan(t_scene *scene, char **splitted_obj)
 	tmp.color = make_rgb(3, splitted_obj, scene);
 	tmp.diameter = 0.0;
 	tmp.height = 0;
+	tmp.brightness = 0.0;
 	return (tmp);
 }
 
@@ -61,5 +62,6 @@ t_obj	make_camera(t_scene *scene, char **splitted_obj)
 	tmp.diameter = ft_atofl(3, splitted_obj, scene);
 	tmp.color = create_3dnull();
 	tmp.height = 0;
+	tmp.brightness = 0.0;
 	return (tmp);
 }
