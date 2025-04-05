@@ -15,6 +15,7 @@
 
 # include "minilibx-linux/mlx.h"
 # include "libft/libft.h"
+# include "miniRT_pars/parsing.h"
 # include "stdio.h"
 # include "unistd.h"
 # include <stdlib.h>
@@ -35,17 +36,16 @@
 # define MAX_RECURS_DEPTH 10
 # define ANTIALIASING_SAMPLES 100
 
-enum	e_shape
-{
-	SPHERE,
-	RECTANGLE,
-	PLANE,
-	CYLINDRE,
-	LIGHT_SOURCE,
-	POINT_LIGHT,
-	AMBIENT_LIGHT,
-	CAMERA
-};
+// enum	e_shape
+// {
+// 	SPHERE,
+// 	PLANE,
+// 	CYLINDRE,
+// 	LIGHT_SOURCE,
+// 	POINT_LIGHT,
+// 	AMBIENT_LIGHT,
+// 	CAMERA
+// };
 
 enum	e_material
 {
@@ -54,20 +54,6 @@ enum	e_material
 	DIELECTRIC,
 	LIGHT
 };
-
-typedef struct s_vec3
-{
-	float	x;
-	float	y;
-	float	z;
-}			t_vec3;
-
-typedef struct s_rgb
-{
-	float	r;
-	float	g;
-	float	b;
-}			t_rgb;
 
 typedef struct s_ray
 {
@@ -272,7 +258,6 @@ t_cam			dup_camera(t_cam cam);
 t_object		*create_obj_cam(t_vec3 origin, t_vec3 direction, float fov);
 t_object		*create_sphere(t_vec3 center, float diameter);
 t_object		*create_plane(t_vec3 center, t_vec3 direction);
-t_object		*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1);
 t_object		*create_cylinder(t_vec3 center, t_vec3 direction,
 					float diameter, float height);
 t_object		*create_pl(t_vec3 center, t_vec3 color, float brightness);

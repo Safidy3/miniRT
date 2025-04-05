@@ -16,8 +16,6 @@ char	*obj_type(int shape)
 {
 	if (shape == SPHERE)
 		return ("SPHERE");
-	else if (shape == RECTANGLE)
-		return ("RECTANGLE");
 	else if (shape == PLANE)
 		return ("PLANE");
 	else if (shape == CYLINDRE)

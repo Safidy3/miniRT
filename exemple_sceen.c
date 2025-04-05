@@ -47,7 +47,7 @@ void	add_cornell_box(t_list **world)
 void	add_sceen(t_data *data)
 {
 	t_proprieties green_lamb = create_proprieties(create_vec3(0, 1, 0), LAMBERTIAN, 0, 0);
-	t_proprieties white_dielectric = create_proprieties(create_vec3(1, 1, 1), DIELECTRIC, 0, 0);
+	t_proprieties white_dielectric = create_proprieties(create_vec3(1, 1, 1), LAMBERTIAN, 0, 0);
 	// t_proprieties Blue_metal = create_proprieties(create_vec3(0, 0, 1), METAL, 0, 0);
 	t_proprieties purple = create_proprieties(create_vec3(0.490196078, 0, 1), LAMBERTIAN, 0, 0);
 
@@ -59,12 +59,12 @@ void	add_sceen(t_data *data)
 
 	t_object *point_light = create_pl(create_vec3(-1, 0, -0.5), create_vec3(1, 1, 1), 1);
 	scene_add_obj(&data->world, point_light, green_lamb);
-	t_object *ambent_light = create_al(create_vec3(1, 1, 1), 0.2);
+	t_object *ambent_light = create_al(create_vec3(1, 1, 1), 0);
 	scene_add_obj(&data->world, ambent_light, green_lamb);
 
-	// t_proprieties p_white_light = create_proprieties(create_vec3(1, 1, 1), LIGHT, 0, 0);
-	// t_object *shpere_light = create_sphere(create_vec3(-1, 0, -0.5), 1);
-	// scene_add_obj(&data->world, shpere_light, p_white_light);
+	t_proprieties p_white_light = create_proprieties(create_vec3(1, 1, 1), LIGHT, 0, 0);
+	t_object *shpere_light = create_sphere(create_vec3(-1, 0, -0.5), 1);
+	scene_add_obj(&data->world, shpere_light, p_white_light);
 
 	add_cornell_box(&data->world);
 

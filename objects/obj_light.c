@@ -10,10 +10,6 @@ t_object	*create_pl(t_vec3 center, t_vec3 color, float brightness)
 	pl->center = center;
 	pl->radius = 0;
 	pl->direction = create_nullvec();
-	pl->plane[0] = create_nullvec();
-	pl->plane[1] = create_nullvec();
-	pl->plane[2] = create_nullvec();
-	pl->plane[3] = create_nullvec();
 	prts.color = vec3_mult_float(color, brightness);
 	prts.material = 0;
 	prts.parameter = brightness;
@@ -32,10 +28,6 @@ t_object	*create_al(t_vec3 color, float brightness)
 	pl->center = create_nullvec();
 	pl->radius = 0;
 	pl->direction = create_nullvec();
-	pl->plane[0] = create_nullvec();
-	pl->plane[1] = create_nullvec();
-	pl->plane[2] = create_nullvec();
-	pl->plane[3] = create_nullvec();
 	prts.color = vec3_mult_float(color, brightness);
 	prts.material = 0;
 	prts.parameter = brightness;

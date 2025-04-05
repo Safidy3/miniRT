@@ -9,27 +9,6 @@ t_object	*create_plane(t_vec3 center, t_vec3 direction)
 	res->center = center;
 	res->direction = direction;
 	res->radius = 0;
-	res->plane[0] = create_nullvec();
-	res->plane[1] = create_nullvec();
-	res->plane[2] = create_nullvec();
-	res->plane[3] = create_nullvec();
-	return (res);
-}
-
-t_object	*create_rectangle(t_vec3 x0, t_vec3 x1, t_vec3 y0, t_vec3 y1)
-{
-	t_object	*res;
-
-	res = (t_object *)malloc(sizeof(t_object));
-	res->shape = PLANE;
-	res->center = create_nullvec();
-	res->direction = create_nullvec();
-	res->radius = 0;
-	res->plane[0] = x0;
-	res->plane[1] = x1;
-	res->plane[2] = y0;
-	res->plane[3] = y1;
-	res->shape = RECTANGLE;
 	return (res);
 }
 

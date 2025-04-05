@@ -1,0 +1,41 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   light_parser.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/18 16:53:04 by jrakoton          #+#    #+#             */
+/*   Updated: 2025/04/03 04:53:52 by safandri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../parsing.h"
+
+t_obj	make_light(t_scene *scene, char **splitted_obj)
+{
+	t_obj	tmp;
+
+	tmp.shape = POINT_LIGHT;
+	tmp.center = make_coord(1, splitted_obj, 0, scene);
+	tmp.brightness = ft_atofl(2, splitted_obj, scene);
+	tmp.color = create_rgb(1.0, 1.0, 1.0);
+	tmp.normal_vector = create_3dnull();
+	tmp.height = 0;
+	tmp.diameter = 0.0;
+	return (tmp);
+}
+
+t_obj	make_amient(t_scene *scene, char **splitted_obj)
+{
+	t_obj	tmp;
+
+	tmp.shape = AMBIENT_LIGHT;
+	tmp.brightness = ft_atofl(1, splitted_obj, scene);
+	tmp.color = make_rgb(2, splitted_obj, scene);
+	tmp.center = create_3dnull();
+	tmp.normal_vector = create_3dnull();
+	tmp.diameter = 0.0;
+	tmp.height = 0.0;
+	return (tmp);
+}
