@@ -82,6 +82,7 @@ int	main(int argc, char **argv)
 
 	init_data(&data);
 	init_sceen(&data, argc, argv);
+	// sceen1(&data);
 	printT(data.world);
 	put_pixel_color(&data);
 	// put_pixel_color_debug(&data);

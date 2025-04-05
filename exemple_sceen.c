@@ -62,10 +62,6 @@ void	add_sceen(t_data *data)
 	t_object *ambent_light = create_al(create_vec3(1, 1, 1), 0.2);
 	scene_add_obj(&data->world, ambent_light, green_lamb);
 
-	// t_proprieties p_white_light = create_proprieties(create_vec3(1, 1, 1), LIGHT, 0, 0);
-	// t_object *shpere_light = create_sphere(create_vec3(-1, 0, -0.5), 1);
-	// scene_add_obj(&data->world, shpere_light, p_white_light);
-
 	add_cornell_box(&data->world);
 
 	create_camera(data, create_vec3(0, 0, 1), create_vec3(0, 0, -1), 90);
@@ -85,5 +81,5 @@ void	sceen1(t_data *data)
 	scene_add_obj(&data->world, ambent_light, green_lamb);
 	scene_add_obj(&data->world, plan, white_lamb);
 
-	create_camera(data, create_vec3(0, 0, 1), create_vec3(0, 0, -1), 90);
+	create_camera(data, create_vec3(0, 0, 1), create_vec3(0, -1, 0), 90);
 }
