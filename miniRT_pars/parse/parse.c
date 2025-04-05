@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../parsing.h"
+#include "../parsing.h"
 
 int	obj_arg_error(t_scene *scene, char **splitted_obj, char *str)
 {

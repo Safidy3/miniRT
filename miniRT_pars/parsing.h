@@ -13,10 +13,9 @@
 #ifndef PARSING_H
 # define PARSING_H
 
-# include "./srcs/libs/get_next_line/get_next_line.h"
+# include "./get_next_line/get_next_line.h"
 # include "../libft/libft.h"
 # include <fcntl.h>
-# include <stdio.h>
 
 # define E_FLOAT "Ivalid float number found\n"
 # define E_NORM "Normal vector should be in range [-1, 1]\n"
@@ -38,21 +37,21 @@ enum	e_shape
 	CAMERA
 };
 
-typedef struct	s_vec3
+typedef struct s_vec3
 {
 	float		x;
 	float		y;
 	float		z;
 }				t_vec3;
 
-typedef struct	s_rgb
+typedef struct s_rgb
 {
 	float		r;
 	float		g;
 	float		b;
 }				t_rgb;
 
-typedef struct	s_obj
+typedef struct s_obj
 {
 	int			shape;
 	t_vec3		center;
@@ -63,7 +62,7 @@ typedef struct	s_obj
 	t_vec3		color;
 }				t_obj;
 
-typedef struct	s_scene
+typedef struct s_scene
 {
 	int			scene_len;
 	char		**scene_arr;
@@ -86,10 +85,6 @@ t_obj			make_camera(t_scene *scene, char **splitted_obj);
 t_obj			make_light(t_scene *scene, char **splitted_obj);
 t_obj			make_amient(t_scene *scene, char **splitted_obj);
 
-/* TODO: remove this for last push */
-void			print_2d_arr(char **arr);
-void			print_cylinder(t_obj *cylinder);
-void			print_obj_list(t_scene *scene);
 
 /* ./srcs/utils/scene.c */
 int				get_scene_len(int fd);
@@ -123,7 +118,8 @@ int				validate_scene_name(char *scene);
 int				is_valid_id(char **scene);
 
 /* ./srcs/elt_value_format */
-void			check_arg_nbr(char **splitted_elt, int arg_number, t_scene *scene);
+void			check_arg_nbr(char **splitted_elt,
+					int arg_number, t_scene *scene);
 void			check_dup_capital(char **scene);
 
 void			free_pars_error(t_scene *scene, char **splitted_elt, char *str);

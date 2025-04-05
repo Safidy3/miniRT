@@ -1,10 +1,10 @@
 
 PARS_ROOT = ./miniRT_pars
 
-ERROR_PATH = $(PARS_ROOT)/srcs/error-handling
-GNL_PATH = $(PARS_ROOT)/srcs/libs/get_next_line
-UTILS_PATH = $(PARS_ROOT)/srcs/utils
-PARSE_PATH = $(PARS_ROOT)/srcs/parse
+ERROR_PATH = $(PARS_ROOT)/error-handling
+GNL_PATH = $(PARS_ROOT)/get_next_line
+UTILS_PATH = $(PARS_ROOT)/utils
+PARSE_PATH = $(PARS_ROOT)/parse
 
 PARSING_SRCS = $(PARS_ROOT)/miniRT.c $(PARS_ROOT)/data_create.c $(PARS_ROOT)/debug_print.c\
 				$(ERROR_PATH)/scene.c $(GNL_PATH)/get_next_line.c $(GNL_PATH)/get_next_line_utils.c \

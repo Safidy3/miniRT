@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../parsing.h"
+#include "../parsing.h"
 
 int	is_char_type_id(char c)
 {
@@ -48,7 +48,7 @@ void	check_arg_nbr(char **splitted_elt, int arg_number, t_scene *scene)
 
 void	check_dup_capital(char **scene)
 {
-	int					i;
+	int				i;
 	static t_vec3	capitals;
 
 	i = 0;

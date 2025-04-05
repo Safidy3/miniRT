@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../parsing.h"
+#include "../parsing.h"
 
 int	is_valid_float(char *str)
 {
@@ -96,7 +96,7 @@ t_vec3	make_coord(int index, char **splitted_obj,
 		int is_normal_vect, t_scene *scene)
 {
 	t_vec3	coord;
-	char		**arr_coord;
+	char	**arr_coord;
 
 	arr_coord = ft_split(splitted_obj[index], ',');
 	if (!is_valid_float(arr_coord[0]) || !is_valid_float(arr_coord[1])

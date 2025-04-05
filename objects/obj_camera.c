@@ -9,8 +9,11 @@ void	create_camera(t_data *data, t_vec3 origin, t_vec3 look_dir, float fov)
 
 void	update_camera(t_data *data, t_vec3 origin, t_vec3 direction, float fov)
 {
-	float	theta, half_height, half_width;
+	float	theta;
+	float	half_height;
+	float	half_width;
 	t_vec3	up;
+
 	if (fabs(direction.x) == 0 && fabs(direction.z) == 0)
 		up = create_vec3(0, 0, 1);
 	else
@@ -27,12 +30,11 @@ void	update_camera(t_data *data, t_vec3 origin, t_vec3 direction, float fov)
 	data->cam.horizintal = vec3_mult_float(data->cam.u, 2 * half_width);
 	data->cam.vertical = vec3_mult_float(data->cam.v, 2 * half_height);
 	data->cam.lower_l = vec3_sub3(origin,
-		vec3_div_float(data->cam.horizintal, 2),
-		vec3_div_float(data->cam.vertical, 2));
+			vec3_div_float(data->cam.horizintal, 2),
+			vec3_div_float(data->cam.vertical, 2));
 	data->cam.lower_l = vec3_sub(data->cam.lower_l, data->cam.w);
 	compute_camera_rays(data);
 }
-
 
 t_object	*create_obj_cam(t_vec3 origin, t_vec3 direction, float fov)
 {

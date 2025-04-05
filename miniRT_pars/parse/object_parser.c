@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../parsing.h"
+#include "../parsing.h"
 
 t_obj	make_cylindre(t_scene *scene, char **splitted_obj)
 {

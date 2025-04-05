@@ -35,11 +35,11 @@ int	mouse_hook(int keycode, int x, int y, void *param)
 		data->seleced_object = data->hit_objects[x][y];
 		if (data->seleced_object)
 		{
-			printf("Object selected: %d\n", data->seleced_object->id);
+			ft_putstr("Object selected : ");
 			print_obj(data->seleced_object);
 		}
 		else
-			printf("No object selected\n");
+			ft_putstr("No object selected\n");
 	}
 	return (0);
 }
@@ -93,7 +93,6 @@ int	handle_key(int keycode, void *param)
 	t_data	*data;
 
 	data = (t_data *)param;
-	printf("keycode : %d\n", keycode);
 	if (keycode == 65436)
 		data->seleced_object = get_light(data->world, POINT_LIGHT);
 	if (keycode == 65307)

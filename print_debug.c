@@ -1,22 +1,23 @@
 
 #include "miniRT.h"
+# include <stdio.h>
 
 void	print_obj(t_object *new_obj)
 {
 	if (new_obj->shape == SPHERE)
-		printf("SPHERE\n");
+		ft_putstr("SPHERE\n");
 	else if (new_obj->shape == PLANE)
-		printf("PLANE\n");
+		ft_putstr("PLANE\n");
 	else if (new_obj->shape == CYLINDRE)
-		printf("CYLINDRE\n");
+		ft_putstr("CYLINDRE\n");
 	else if (new_obj->shape == POINT_LIGHT)
-		printf("POINT_LIGHT\n");
+		ft_putstr("POINT_LIGHT\n");
 	else if (new_obj->shape == AMBIENT_LIGHT)
-		printf("AMBIENT_LIGHT\n");
+		ft_putstr("AMBIENT_LIGHT\n");
 	else if (new_obj->shape == CAMERA)
-		printf("Object type: CAMERA\n");
+		ft_putstr("CAMERA\n");
 	else
-		printf("Unknown object type\n");
+		ft_putstr("Unknown object type\n");
 	print_vec3(new_obj->center, "center   ");
 	print_vec3(new_obj->direction, "direction");
 	print_vec3(new_obj->proprieties.color, "color    ");
@@ -32,36 +33,7 @@ void	printT(t_list *t)
 	while (t)
 	{
 		obj = (t_object *)(t->content);
-		int iter_val = 	(int)obj->shape;
-		switch (iter_val)
-		{
-			case CAMERA:
-				printf("CAMERA : %d\n", (int)obj->id);
-				break;
-			case SPHERE:
-				printf("SPHERE : %d\n", (int)obj->id);
-				break;
-			case PLANE:
-				printf("PLANE : %d\n", (int)obj->id);
-				break;
-			case CYLINDRE:
-				printf("CYLINDRE : %d\n", (int)obj->id);
-				break;
-			case POINT_LIGHT:
-				printf("POINT_LIGHT : %d\n", (int)obj->id);
-				break;
-			case AMBIENT_LIGHT:
-				printf("AMBIENT_LIGHT : %d\n", (int)obj->id);
-				break;
-			default:
-				break;
-		}
-		print_vec3(obj->center, "center");
-		print_vec3(obj->direction, "direction");
-		print_vec3(obj->proprieties.color, "color");
-		printf("radius : %f\n", obj->radius);
-		printf("height : %f\n\n", obj->height);
-		// printf("id : %d\n", iter_val);
+		print_obj(obj);
 		t = t->next;
 	}
 	printf("\n");

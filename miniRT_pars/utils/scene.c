@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../parsing.h"
+#include "../parsing.h"
 
 int	get_scene_len(int fd)
 {
@@ -63,7 +63,11 @@ void	validate_scene(t_scene *scene)
 void	free_pars_error(t_scene *scene, char **splitted_elt, char *str)
 {
 	if (str)
-		printf("Error : %s\n", str);
+	{
+		ft_putstr_err("Error : ");
+		ft_putstr_err(str);
+		ft_putstr_err(".\n");
+	}
 	if (splitted_elt)
 		free_2d_arr(splitted_elt);
 	clear_p_scene(scene);
@@ -74,7 +78,11 @@ void	free_vec3_error(t_scene *scene, char **splitted_elt,
 			char **splitted_obj, char *str)
 {
 	if (str)
-		printf("Error : %s\n", str);
+	{
+		ft_putstr_err("Error : ");
+		ft_putstr_err(str);
+		ft_putstr_err(".\n");
+	}
 	if (splitted_elt)
 		free_2d_arr(splitted_elt);
 	if (splitted_obj)

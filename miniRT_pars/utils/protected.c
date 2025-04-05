@@ -1,27 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   protected.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/15 11:42:55 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 04:02:23 by safandri         ###   ########.fr       */
+/*   Created: 2025/02/18 08:54:18 by jrakoton          #+#    #+#             */
+/*   Updated: 2025/04/03 04:53:52 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../parsing.h"
 
-void	ft_putstr_fd(char *s, int fd)
+void	get_fd(char *filename, int *fd, int is_first_fd, t_scene *scene)
 {
-	while (*s)
+	*fd = open(filename, O_RDONLY);
+	if (*fd < 0)
 	{
-		write(fd, s, 1);
-		s++;
+		ft_putstr_err("Error : Could not open file. \n");
+		if (is_first_fd == 2)
+			free_2d_arr(scene->scene_arr);
+		exit(1);
 	}
-}
-
-void	ft_putstr_err(char *s)
-{
-	ft_putstr_fd(s, 2);
 }

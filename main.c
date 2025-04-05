@@ -50,7 +50,8 @@ void	create_obj(t_list *tmp, t_data *data)
 		else if (obj->shape == PLANE)
 			new_obj = create_plane(obj->center, obj->normal_vector);
 		else if (obj->shape == CYLINDRE)
-			new_obj = create_cylinder(obj->center, obj->normal_vector, obj->diameter, obj->height);
+			new_obj = create_cylinder(obj->center, obj->normal_vector,
+					obj->diameter, obj->height);
 		else if (obj->shape == POINT_LIGHT)
 			new_obj = create_pl(obj->center, obj->color, obj->brightness);
 		else if (obj->shape == AMBIENT_LIGHT)
@@ -77,15 +78,11 @@ void	init_sceen(t_data *data, int argc, char **argv)
 int	main(int argc, char **argv)
 {
 	t_data		data;
-	(void)argc;
-	(void)argv;
 
 	init_data(&data);
 	init_sceen(&data, argc, argv);
-	// sceen1(&data);
 	printT(data.world);
 	put_pixel_color(&data);
-	// put_pixel_color_debug(&data);
 	mlx_mouse_hook(data.win, mouse_hook, &data);
 	mlx_hook(data.win, 2, 1L << 0, handle_key, &data);
 	mlx_hook(data.win, 17, 1L << 17, close_window, &data);

@@ -22,3 +22,8 @@ void	ft_putstr_err(char *s)
 {
 	ft_putstr_fd(s, 2);
 }
+
+void	ft_putstr(char *s)
+{
+	ft_putstr_fd(s, 1);
+}

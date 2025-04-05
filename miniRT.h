@@ -252,5 +252,8 @@ void			add_sceen(t_data *data);
 void			sceen1(t_data *data);
 void			printT(t_list *t);
 void			print_obj(t_object *new_obj);
+void			print_2d_arr(char **arr);
+void			print_cylinder(t_obj *cylinder);
+void			print_obj_list(t_scene *scene);
 
 #endif
