@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 06:35:47 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/03 09:44:20 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/06 10:21:59 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ typedef struct s_obj
 	float		brightness;
 	float		diameter;
 	float		height;
-	int			metalness;
+	float		metalness;
 	int			use_texture;
 }				t_obj;
 

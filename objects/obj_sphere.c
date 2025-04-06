@@ -9,6 +9,7 @@ t_object	*create_sphere(t_vec3 center, float diameter)
 	shpere->center = center;
 	shpere->radius = diameter / 2;
 	shpere->direction = create_nullvec();
+	shpere->height = 0;
 	return (shpere);
 }
 

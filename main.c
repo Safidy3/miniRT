@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/29 00:31:48 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/06 10:24:25 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,16 @@ void	create_obj(t_list *tmp, t_data *data)
 	t_obj			*obj;
 	t_proprieties	prt;
 
+	new_obj = NULL;
 	obj = (t_obj *)tmp->content;
 	if (obj->shape == CAMERA)
 		create_camera(data, obj->center, obj->normal_vector, obj->diameter);
 	else
 	{
-		prt = create_proprieties(obj->color, LAMBERTIAN, 0, 0);
+		if (obj->metalness == 1)
+			prt = create_proprieties(obj->color, LAMBERTIAN, obj->metalness, obj->use_texture);
+		else
+			prt = create_proprieties(obj->color, METAL, obj->metalness, obj->use_texture);
 		if (obj->shape == SPHERE)
 			new_obj = create_sphere(obj->center, obj->diameter);
 		else if (obj->shape == PLANE)
@@ -68,7 +72,8 @@ void	create_obj(t_list *tmp, t_data *data)
 		}
 		else if (obj->shape == AMBIENT_LIGHT)
 			new_obj = create_al(obj->color, obj->brightness);
-		scene_add_obj(&data->world, new_obj, prt);
+		if (new_obj != NULL)
+			scene_add_obj(&data->world, new_obj, prt);
 	}
 }
 
@@ -97,9 +102,9 @@ int	main(int argc, char **argv)
 	data.aa_sample = 100;
 	init_data(&data, &thread);
 
-	// init_sceen(&data, argc, argv);
+	init_sceen(&data, argc, argv);
 
-	add_sceen(&data);
+	// add_sceen(&data);
 
 	printT(data.world);
 	put_pixel_color_thread(&thread);

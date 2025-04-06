@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:33:13 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 06:59:31 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/06 09:49:34 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	obj_arg_error(t_scene *scene, char **splitted_obj, char *str)
 	int		num;
 	char	*shape;
 
+	num = 0;
 	shape = splitted_obj[0];
 	if (ft_strcmp3(shape, str, "A") && ft_strcmp3(shape, str, "C")
 		&& ft_strcmp3(shape, str, "L") && ft_strcmp3(shape, str, "sp")

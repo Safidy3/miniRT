@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/29 09:55:50 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/06 09:41:33 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "minilibx-linux/mlx.h"
 # include "libft/libft.h"
 # include "miniRT_pars/parsing.h"
-# include "stdio.h"
+# include <stdio.h>
 # include "unistd.h"
 # include <stdlib.h>
 # include <math.h>
@@ -32,7 +32,7 @@
 # define FAR 100.0
 # define M_PI 3.14159265358979323846
 # define MIN_T 0.001
-# define MAX_T INT_MAX
+# define MAX_T (float) INT_MAX
 # define MAX_RECURS_DEPTH 10
 # define ANTIALIASING_SAMPLES 100
 
