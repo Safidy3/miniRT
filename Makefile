@@ -1,3 +1,16 @@
+PARS_ROOT = ./miniRT_pars
+
+ERROR_PATH = $(PARS_ROOT)/error-handling
+GNL_PATH = $(PARS_ROOT)/get_next_line
+UTILS_PATH = $(PARS_ROOT)/utils
+PARSE_PATH = $(PARS_ROOT)/parse
+
+PARSING_SRCS = $(PARS_ROOT)/miniRT.c $(PARS_ROOT)/data_create.c \
+				$(ERROR_PATH)/scene.c $(GNL_PATH)/get_next_line.c $(GNL_PATH)/get_next_line_utils.c \
+				$(UTILS_PATH)/scene.c $(UTILS_PATH)/init.c $(UTILS_PATH)/protected.c \
+				$(UTILS_PATH)/elt_value_format.c $(UTILS_PATH)/data_manip.c $(UTILS_PATH)/free.c \
+				$(PARSE_PATH)/parse.c $(PARSE_PATH)/light_parser.c $(PARSE_PATH)/object_parser.c
+
 TRANSFORM_SRCS = ./object_transform/transform.c ./object_transform/key_hooks.c ./object_transform/hooks_utils.c
 
 OPTION_WINDOW_SRCS = ./option_window/print_utils.c ./option_window/option_window.c
@@ -14,7 +27,7 @@ RENDER_SRCS = ./render/render_image.c ./render/render_utils.c ./render/render_de
 			  ./render/thread_render.c ./render/render_utils2.c ./render/thread_render_utils.c
 
 SRCS = main.c data_free.c  exemple_sceen.c print_debug.c\
-		$(VECTORS_SRCS) $(OBJECTS_SRCS) $(MATERIALS_SRCS) $(RENDER_SRCS) $(OPTION_WINDOW_SRCS) $(TRANSFORM_SRCS)
+		$(VECTORS_SRCS) $(OBJECTS_SRCS) $(MATERIALS_SRCS) $(RENDER_SRCS) $(OPTION_WINDOW_SRCS) $(TRANSFORM_SRCS) $(PARSING_SRCS)
 
 FLAGS = -Wall -Werror -Wextra -I/usr/include
 FLAGS_MINI = -Lmlx_linux -Imlx_linux -lXext -lX11 -lm -lz

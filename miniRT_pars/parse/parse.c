@@ -29,11 +29,11 @@ int	obj_arg_error(t_scene *scene, char **splitted_obj, char *str)
 	else if (!ft_strcmp(shape, "L"))
 		num = 3;
 	else if (!ft_strcmp(shape, "sp"))
-		num = 4;
-	else if (!ft_strcmp(shape, "pl"))
-		num = 4;
-	else if (!ft_strcmp(shape, "cy"))
 		num = 6;
+	else if (!ft_strcmp(shape, "pl"))
+		num = 6;
+	else if (!ft_strcmp(shape, "cy"))
+		num = 8;
 	if (ft_arr_len((void **)splitted_obj) != num)
 		free_pars_error(scene, splitted_obj, E_NUM_PARAM);
 	return (1);
@@ -77,6 +77,7 @@ void	parse(t_scene *scene)
 		obj->diameter = tmp.diameter;
 		obj->brightness = tmp.brightness;
 		obj->height = tmp.height;
+		obj->metalness = tmp.metalness;
 		ft_lstadd_back(&(scene->obj_lst), ft_lstnew(obj));
 		free_2d_arr(splitted_obj);
 		scene_arr++;

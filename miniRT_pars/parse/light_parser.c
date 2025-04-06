@@ -22,6 +22,8 @@ t_obj	make_light(t_scene *scene, char **splitted_obj)
 	tmp.color = create_rgb(1.0, 1.0, 1.0);
 	tmp.normal_vector = create_3dnull();
 	tmp.height = 0;
+	tmp.metalness = 0.0;
+	tmp.use_texture = 0;
 	tmp.diameter = 0.0;
 	return (tmp);
 }
@@ -36,6 +38,24 @@ t_obj	make_amient(t_scene *scene, char **splitted_obj)
 	tmp.center = create_3dnull();
 	tmp.normal_vector = create_3dnull();
 	tmp.diameter = 0.0;
+	tmp.metalness = 0.0;
+	tmp.use_texture = 0;
 	tmp.height = 0.0;
+	return (tmp);
+}
+
+t_obj	make_camera(t_scene *scene, char **splitted_obj)
+{
+	t_obj	tmp;
+
+	tmp.shape = CAMERA;
+	tmp.center = make_coord(1, splitted_obj, 0, scene);
+	tmp.normal_vector = make_coord(2, splitted_obj, 1, scene);
+	tmp.diameter = ft_atofl(3, splitted_obj, scene);
+	tmp.color = create_3dnull();
+	tmp.height = 0;
+	tmp.metalness = 0.0;
+	tmp.use_texture = 0;
+	tmp.brightness = 0.0;
 	return (tmp);
 }

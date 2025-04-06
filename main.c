@@ -12,7 +12,7 @@
 
 #include "miniRT.h"
 
-void	init_data(t_data *data)
+void	init_data(t_data *data, t_threads *thread)
 {
 	int	i;
 
@@ -35,30 +35,76 @@ void	init_data(t_data *data)
 	i = -1;
 	while (++i < WIDTH)
 		data->hit_objects[i] = (t_object **)malloc(sizeof(t_object *) * HEIGHT);
+	thread->data = data;
+	pthread_mutex_init(&thread->lock, NULL);
+	data->thread = thread;
+}
+
+void	create_obj(t_list *tmp, t_data *data)
+{
+	t_object		*new_obj;
+	t_obj			*obj;
+	t_proprieties	prt;
+
+	obj = (t_obj *)tmp->content;
+	if (obj->shape == CAMERA)
+		create_camera(data, obj->center, obj->normal_vector, obj->diameter);
+	else
+	{
+		prt = create_proprieties(obj->color, LAMBERTIAN, 0, 0);
+		if (obj->shape == SPHERE)
+			new_obj = create_sphere(obj->center, obj->diameter);
+		else if (obj->shape == PLANE)
+			new_obj = create_plane(obj->center, obj->normal_vector);
+		else if (obj->shape == CYLINDRE)
+			new_obj = create_cylinder(obj->center, obj->normal_vector,
+					obj->diameter, obj->height);
+		else if (obj->shape == POINT_LIGHT)
+		{
+			t_proprieties p_white_light = create_proprieties(obj->color, LIGHT, 0, 0);
+			new_obj = create_sphere(obj->center, 1);
+			scene_add_obj(&data->world, new_obj, p_white_light);
+			new_obj = create_pl(obj->center, obj->color, obj->brightness);
+		}
+		else if (obj->shape == AMBIENT_LIGHT)
+			new_obj = create_al(obj->color, obj->brightness);
+		scene_add_obj(&data->world, new_obj, prt);
+	}
+}
+
+void	init_sceen(t_data *data, int argc, char **argv)
+{
+	t_list	*tmp;
+	t_scene	pars;
+
+	get_pars(&pars, argc, argv);
+	tmp = pars.obj_lst;
+	while (tmp)
+	{
+		create_obj(tmp, data);
+		tmp = tmp->next;
+	}
+	clear_p_scene(&pars);
 }
 
 int	main(int argc, char **argv)
 {
 	t_data		data;
 	t_threads	thread;
+	(void)argc;
+	(void)argv;
 
-	if (argc > 1)
-	{
-		if (!ft_is_number(argv[1]))
-			return (ft_putstr_fd("Usage: ./miniRT OR ./miniRT [aa_sample]\n", 1), 1);
-		data.aa_sample = ft_atoi(argv[1]);
-	}
-	else
-		data.aa_sample = 2;
-	init_data(&data);
-	thread.data = &data;
-	pthread_mutex_init(&thread.lock, NULL);
-	data.thread = &thread;
+	data.aa_sample = 100;
+	init_data(&data, &thread);
+
+	// init_sceen(&data, argc, argv);
+
 	add_sceen(&data);
+
 	printT(data.world);
-	put_pixel_color(&data);
+	put_pixel_color_thread(&thread);
+	// put_pixel_color(&data);
 	// put_pixel_color_debug(&data);
-	// put_pixel_color_thread(&thread);
 	mlx_mouse_hook(data.win, mouse_hook, &data);
 	mlx_hook(data.win, 2, 1L << 0, handle_key, &data);
 	mlx_hook(data.win, 17, 1L << 17, close_window, &data);

@@ -36,25 +36,6 @@
 # define MAX_RECURS_DEPTH 10
 # define ANTIALIASING_SAMPLES 100
 
-// enum	e_shape
-// {
-// 	SPHERE,
-// 	PLANE,
-// 	CYLINDRE,
-// 	LIGHT_SOURCE,
-// 	POINT_LIGHT,
-// 	AMBIENT_LIGHT,
-// 	CAMERA
-// };
-
-enum	e_material
-{
-	LAMBERTIAN,
-	METAL,
-	DIELECTRIC,
-	LIGHT
-};
-
 typedef struct s_ray
 {
 	t_vec3	origin;

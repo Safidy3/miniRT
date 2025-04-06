@@ -19,6 +19,7 @@
 
 # define E_FLOAT "Ivalid float number found\n"
 # define E_NORM "Normal vector should be in range [-1, 1]\n"
+# define E_METAL "Metalness should be in range [0, 1]\n"
 # define E_PARAM "Diameter/radius/brightness can not be negative\n"
 # define E_COL "R, G, B color should be in range [0, 255]\n"
 # define E_OBJ_CAP "Error : Element with capital letter \
@@ -36,6 +37,14 @@ enum	e_shape
 	POINT_LIGHT,
 	AMBIENT_LIGHT,
 	CAMERA
+};
+
+enum	e_material
+{
+	LAMBERTIAN,
+	METAL,
+	DIELECTRIC,
+	LIGHT
 };
 
 typedef struct s_vec3
@@ -57,10 +66,12 @@ typedef struct s_obj
 	int			shape;
 	t_vec3		center;
 	t_vec3		normal_vector;
+	t_vec3		color;
 	float		brightness;
 	float		diameter;
 	float		height;
-	t_vec3		color;
+	int			metalness;
+	int			use_texture;
 }				t_obj;
 
 typedef struct s_scene
@@ -76,6 +87,7 @@ t_vec3			create_rgb(float x, float y, float z);
 t_vec3			make_coord(int index, char **splitted_obj,
 					int is_normal_vect, t_scene *scene);
 float			ft_atofl(int index, char **arr_obj, t_scene *scene);
+float			ft_atof(char *str);
 t_vec3			make_rgb(int index, char **splitted_obj, t_scene *scene);
 t_vec3			make_color(t_vec3 a);
 
