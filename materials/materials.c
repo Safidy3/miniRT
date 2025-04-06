@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 16:24:23 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/29 08:55:30 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/06 10:28:03 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	metal_scatter_ray(const t_ray r_in, t_vec3 *attenuation,
 	reflected = ray_reflected(vec3_unit(r_in.direction),
 			obj->hit_record.normal);
 	ray_dir = vec3_add(reflected, vec3_mult_float(
-				vec3_random_in_unit_object(), obj->proprieties.parameter));
+				vec3_random_in_unit_object(), 1 - obj->proprieties.parameter));
 	*scattered = create_ray(obj->hit_record.hit_point, ray_dir);
 	if (obj->proprieties.use_texture)
 		*attenuation = texture_checker(obj->hit_record.hit_point,

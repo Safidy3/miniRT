@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/06 10:24:25 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/06 10:47:01 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	create_obj(t_list *tmp, t_data *data)
 	t_object		*new_obj;
 	t_obj			*obj;
 	t_proprieties	prt;
+	int				material;
 
 	new_obj = NULL;
 	obj = (t_obj *)tmp->content;
@@ -52,10 +53,12 @@ void	create_obj(t_list *tmp, t_data *data)
 		create_camera(data, obj->center, obj->normal_vector, obj->diameter);
 	else
 	{
-		if (obj->metalness == 1)
-			prt = create_proprieties(obj->color, LAMBERTIAN, obj->metalness, obj->use_texture);
+		if (obj->metalness == 0)
+			material = LAMBERTIAN;
 		else
-			prt = create_proprieties(obj->color, METAL, obj->metalness, obj->use_texture);
+			material = METAL;
+		printf("%d\n", obj->use_texture);
+		prt = create_proprieties(obj->color, material, obj->metalness, obj->use_texture);
 		if (obj->shape == SPHERE)
 			new_obj = create_sphere(obj->center, obj->diameter);
 		else if (obj->shape == PLANE)

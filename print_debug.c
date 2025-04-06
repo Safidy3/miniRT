@@ -23,7 +23,8 @@ void	print_obj(t_object *new_obj)
 	print_vec3(new_obj->proprieties.color, "color    ");
 	printf("brightness: %f\n", new_obj->proprieties.parameter);
 	printf("radius    : %f\n", new_obj->radius);
-	printf("height    : %f\n\n", new_obj->height);
+	printf("height    : %f\n", new_obj->height);
+	printf("texture   : %d\n\n", new_obj->proprieties.use_texture);
 }
 
 void	printT(t_list *t)

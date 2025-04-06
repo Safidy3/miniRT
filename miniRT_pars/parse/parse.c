@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:33:13 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/06 09:49:34 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/06 10:49:56 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void	parse(t_scene *scene)
 		obj->brightness = tmp.brightness;
 		obj->height = tmp.height;
 		obj->metalness = tmp.metalness;
+		obj->use_texture = tmp.use_texture;
 		ft_lstadd_back(&(scene->obj_lst), ft_lstnew(obj));
 		free_2d_arr(splitted_obj);
 		scene_arr++;

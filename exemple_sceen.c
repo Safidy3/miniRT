@@ -3,7 +3,7 @@
 
 void	add_cornell_box(t_list **world)
 {
-	t_proprieties white_lamb = create_proprieties(create_vec3(1, 1, 1), LAMBERTIAN, 0, 0);
+	t_proprieties white_lamb = create_proprieties(create_vec3(1, 1, 1), LAMBERTIAN, 0, 1);
 	t_proprieties red_lamb = create_proprieties(create_vec3(1, 0, 0), LAMBERTIAN, 0, 0);
 	t_proprieties green_lamb = create_proprieties(create_vec3(0, 1, 0), LAMBERTIAN, 0, 0);
 
@@ -47,7 +47,7 @@ void	add_cornell_box(t_list **world)
 void	add_sceen(t_data *data)
 {
 	t_proprieties green_lamb = create_proprieties(create_vec3(0, 1, 0), LAMBERTIAN, 0, 0);
-	t_proprieties white_dielectric = create_proprieties(create_vec3(0, 0, 1), METAL, 0, 0);
+	t_proprieties white_dielectric = create_proprieties(create_vec3(0, 0, 1), METAL, 0, 1);
 	// t_proprieties Blue_metal = create_proprieties(create_vec3(0, 0, 1), METAL, 0, 0);
 	t_proprieties purple = create_proprieties(create_vec3(0.490196078, 0, 1), METAL, 1, 0);
 

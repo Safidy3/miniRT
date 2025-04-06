@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 06:35:47 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/06 10:21:59 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/06 10:30:58 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # define E_FLOAT "Ivalid float number found\n"
 # define E_NORM "Normal vector should be in range [-1, 1]\n"
 # define E_METAL "Metalness should be in range [0, 1]\n"
-# define E_PARAM "Diameter/radius/brightness can not be negative\n"
+# define E_PARAM "Diameter/radius/brightness/metalness can not be negative"
 # define E_COL "R, G, B color should be in range [0, 255]\n"
 # define E_OBJ_CAP "Error : Element with capital letter \
 	should be only declared once.\n"
