@@ -43,6 +43,22 @@ void	get_scattered_attenuation(t_vec3 *attenuation, t_ray *scattered,
 		dielectric_scatter_ray(r, attenuation, scattered, first_hit);
 }
 
+t_ray	get_antialiased_ray(int x, int y, t_data *data)
+{
+	t_vec3	pix_pos;
+	t_ray	r;
+	float	i;
+	float	j;
+
+	i = (float)(x + drand48()) / (float)WIDTH;
+	j = (float)(HEIGHT - y + drand48()) / (float)HEIGHT;
+	pix_pos = vec3_add3(data->cam.lower_l,
+			vec3_mult_float(data->cam.horizintal, i),
+			vec3_mult_float(data->cam.vertical, j));
+	r = create_ray(data->cam.origin, vec3_sub(pix_pos, data->cam.origin));
+	return (r);
+}
+
 t_vec3	compute_path_traced_color(t_data *data, int x, int y)
 {
 	t_vec3	pix_col;
@@ -55,7 +71,7 @@ t_vec3	compute_path_traced_color(t_data *data, int x, int y)
 		return (create_nullvec());
 	while (++s < data->aa_sample)
 	{
-		r = data->camera_rays[x][y];
+		r = get_antialiased_ray(x, y, data);
 		pix_col = vec3_add(pix_col, path_traced_color(r, data->world, 0, NULL));
 	}
 	pix_col = vec3_div_float(pix_col, data->aa_sample);

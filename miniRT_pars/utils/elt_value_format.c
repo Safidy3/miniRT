@@ -48,24 +48,29 @@ void	check_arg_nbr(char **splitted_elt, int arg_number, t_scene *scene)
 
 void	check_dup_capital(char **scene)
 {
-	int				i;
-	static t_vec3	capitals;
+	int	i;
+	int	c;
+	int	a;
+	int	l;
 
 	i = 0;
+	c = 0;
+	a = 0;
+	l = 0;
 	while (scene[i] && scene)
 	{
 		if (scene[i][0] == 'A')
-			capitals.x += 1.0f;
+			a += 1;
 		if (scene[i][0] == 'C')
-			capitals.y += 1.0f;
+			c += 1;
 		if (scene[i][0] == 'L')
-			capitals.z += 1.0f;
-		if (capitals.x > 1 || capitals.y > 1 || capitals.z > 1)
-		{
-			ft_putstr_err(E_OBJ_CAP);
-			free_2d_arr(scene);
-			exit(1);
-		}
+			l += 1;
 		i++;
+	}
+	if (c != 1 || a != 1 || l == 0)
+	{
+		ft_putstr_err(E_OBJ_CAP);
+		free_2d_arr(scene);
+		exit(1);
 	}
 }

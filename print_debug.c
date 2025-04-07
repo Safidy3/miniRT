@@ -21,7 +21,10 @@ void	print_obj(t_object *new_obj)
 	print_vec3(new_obj->center, "center   ");
 	print_vec3(new_obj->direction, "direction");
 	print_vec3(new_obj->proprieties.color, "color    ");
-	printf("brightness: %f\n", new_obj->proprieties.parameter);
+	if (new_obj->proprieties.material == LIGHT)
+		printf("brightness: %f\n", new_obj->proprieties.parameter);
+	else
+		printf("metalness : %f\n", new_obj->proprieties.parameter);
 	printf("radius    : %f\n", new_obj->radius);
 	printf("height    : %f\n", new_obj->height);
 	printf("texture   : %d\n\n", new_obj->proprieties.use_texture);

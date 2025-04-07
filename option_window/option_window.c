@@ -70,5 +70,10 @@ void	option_window(t_data *data, t_object *object)
 		put_float(data, object->radius, "Radius : ", &p);
 		put_vector3(data, object->proprieties.color, "Color : ", &p);
 	}
+	if (object->proprieties.material == LIGHT)
+		put_float(data, object->proprieties.parameter, "Brightness : ", &p);
+	else
+		put_float(data, object->proprieties.parameter, "Metalness : ", &p);
+	put_float(data, object->proprieties.use_texture, "Textured : ", &p);
 	p.py += 15;
 }

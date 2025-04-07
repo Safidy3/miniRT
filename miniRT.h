@@ -32,8 +32,8 @@
 # define FAR 100.0
 # define M_PI 3.14159265358979323846
 # define MIN_T 0.001
-# define MAX_T (float) INT_MAX
-# define MAX_RECURS_DEPTH 10
+# define MAX_T 2147483647.0
+# define MAX_RECURS_DEPTH 50
 # define ANTIALIASING_SAMPLES 100
 
 typedef struct s_ray

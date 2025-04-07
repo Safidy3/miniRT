@@ -22,11 +22,11 @@
 # define E_METAL "Metalness should be in range [0, 1]\n"
 # define E_PARAM "Diameter/radius/brightness/metalness can not be negative"
 # define E_COL "R, G, B color should be in range [0, 255]\n"
-# define E_OBJ_CAP "Error : Element with capital letter \
-	should be only declared once.\n"
+# define E_OBJ_CAP "Error : Camera/Ambient light \
+must be declared once and light must be declared at least once.\n"
 # define E_NUM_PARAM "The number of parameter of an object is incorect.\n"
 # define E_ID "You can only enter [C, L, A, sp, pl, cy] as \
-	element of the scene.\n"
+element of the scene.\n"
 
 enum	e_shape
 {
