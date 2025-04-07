@@ -19,6 +19,19 @@ t_object	*create_pl(t_vec3 center, t_vec3 color, float brightness)
 	return (pl);
 }
 
+// t_object	*create_pl(t_vec3 center, t_vec3 color, float brightness, float diameter)
+// {
+// 	t_object		*pl;
+
+// 	pl = create_sphere(center, diameter);
+// 	pl->proprieties.color = color;
+// 	pl->proprieties.material = LIGHT;
+// 	pl->proprieties.parameter = brightness;
+// 	pl->proprieties.use_texture = 0;
+// 	// pl->shape = POINT_LIGHT;
+// 	return (pl);
+// }
+
 t_object	*create_al(t_vec3 color, float brightness)
 {
 	t_object		*pl;

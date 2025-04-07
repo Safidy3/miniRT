@@ -40,12 +40,34 @@ void	init_data(t_data *data, t_threads *thread)
 	data->thread = thread;
 }
 
+t_proprieties	det_proprts(t_obj *obj)
+{
+	t_proprieties	res;
+	int				material;
+	int				param;
+
+	if (obj->shape != POINT_LIGHT)
+	{
+		if (obj->metalness == 0)
+			material = LAMBERTIAN;
+		else
+			material = METAL;
+		param = obj->metalness;
+	}
+	else
+	{
+		material = LIGHT;
+		param = obj->brightness;
+	}
+	res = create_proprieties(obj->color, material, param, obj->use_texture);
+	return (res);
+}
+
 void	create_obj(t_list *tmp, t_data *data)
 {
 	t_object		*new_obj;
 	t_obj			*obj;
 	t_proprieties	prt;
-	int				material;
 
 	new_obj = NULL;
 	obj = (t_obj *)tmp->content;
@@ -53,25 +75,14 @@ void	create_obj(t_list *tmp, t_data *data)
 		create_camera(data, obj->center, obj->normal_vector, obj->diameter);
 	else
 	{
-		if (obj->metalness == 0)
-			material = LAMBERTIAN;
-		else
-			material = METAL;
-		prt = create_proprieties(obj->color, material, obj->metalness, obj->use_texture);
-		if (obj->shape == SPHERE)
+		prt = det_proprts(obj);
+		if (obj->shape == SPHERE || obj->shape == POINT_LIGHT)
 			new_obj = create_sphere(obj->center, obj->diameter);
 		else if (obj->shape == PLANE)
 			new_obj = create_plane(obj->center, obj->normal_vector);
 		else if (obj->shape == CYLINDRE)
 			new_obj = create_cylinder(obj->center, obj->normal_vector,
 					obj->diameter, obj->height);
-		else if (obj->shape == POINT_LIGHT)
-		{
-			t_proprieties p_white_light = create_proprieties(obj->color, LIGHT, obj->brightness, 0);
-			new_obj = create_sphere(obj->center, obj->diameter);
-			scene_add_obj(&data->world, new_obj, p_white_light);
-			new_obj = create_pl(obj->center, obj->color, obj->brightness);
-		}
 		else if (obj->shape == AMBIENT_LIGHT)
 			new_obj = create_al(obj->color, obj->brightness);
 		if (new_obj != NULL)
