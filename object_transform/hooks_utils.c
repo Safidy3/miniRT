@@ -14,6 +14,7 @@ void	object_translation(int keycode, t_data *data)
 		translate_object(data, create_vec3(0, 0.1, 0));
 	else if (keycode == 113)
 		translate_object(data, create_vec3(0, -0.1, 0));
+	compute_objects_hits_debug(data);
 }
 
 void	object_rotation(int keycode, t_data *data)
@@ -39,8 +40,6 @@ void	object_rotation(int keycode, t_data *data)
 			vec3_inverse(obj->direction), data->cam.fov);
 		compute_camera_rays(data);
 	}
-	else
-		compute_objects_hits_debug(data);
-	// put_pixel_color_debug(data);
-	put_pixel_color(data);
+	compute_objects_hits_debug(data);
+	put_pixel_color_debug(data);
 }

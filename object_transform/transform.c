@@ -66,7 +66,5 @@ void	translate_object(t_data *data, t_vec3 translation)
 		update_camera(data, obj->center, data->cam.direction, data->cam.fov);
 	else
 		compute_objects_hits_debug(data);
-	// put_pixel_color_debug(data);
-	// put_pixel_color_thread(data->thread);
-	put_pixel_color(data);
+	put_pixel_color_debug(data);
 }

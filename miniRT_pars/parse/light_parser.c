@@ -19,12 +19,15 @@ t_obj	make_light(t_scene *scene, char **splitted_obj)
 	tmp.shape = POINT_LIGHT;
 	tmp.center = make_coord(1, splitted_obj, 0, scene);
 	tmp.brightness = ft_atofl(2, splitted_obj, scene);
-	tmp.color = create_rgb(1.0, 1.0, 1.0);
+	tmp.color = make_rgb(3, splitted_obj, scene);
+	if (ft_arr_len((void **)splitted_obj) == 5)
+		tmp.diameter = ft_atofl(4, splitted_obj, scene);
+	else
+		tmp.diameter = 1;
 	tmp.normal_vector = create_3dnull();
 	tmp.height = 0;
 	tmp.metalness = 0.0;
 	tmp.use_texture = 0;
-	tmp.diameter = 0.0;
 	return (tmp);
 }
 

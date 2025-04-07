@@ -59,11 +59,7 @@ void	thread_render(t_data *data, t_data *og_data, t_thread_data *thread_data)
 		y = -1;
 		while (++y < HEIGHT)
 		{
-			if (is_void(x, y, og_data))
-				continue ;
 			pix_col = compute_path_traced_color(data, x, y);
-			// pix_col = color_debug(data, x + 1, y);
-			// pix_col = ray_casted_color(data, x, y);
 			my_mlx_pixel_put(og_data, x, y, pix_col);
 		}
 		pthread_mutex_lock(&og_data->thread->lock);

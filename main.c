@@ -57,7 +57,6 @@ void	create_obj(t_list *tmp, t_data *data)
 			material = LAMBERTIAN;
 		else
 			material = METAL;
-		printf("%d\n", obj->use_texture);
 		prt = create_proprieties(obj->color, material, obj->metalness, obj->use_texture);
 		if (obj->shape == SPHERE)
 			new_obj = create_sphere(obj->center, obj->diameter);
@@ -68,8 +67,8 @@ void	create_obj(t_list *tmp, t_data *data)
 					obj->diameter, obj->height);
 		else if (obj->shape == POINT_LIGHT)
 		{
-			t_proprieties p_white_light = create_proprieties(obj->color, LIGHT, 0, 0);
-			new_obj = create_sphere(obj->center, 1);
+			t_proprieties p_white_light = create_proprieties(obj->color, LIGHT, obj->brightness, 0);
+			new_obj = create_sphere(obj->center, obj->diameter);
 			scene_add_obj(&data->world, new_obj, p_white_light);
 			new_obj = create_pl(obj->center, obj->color, obj->brightness);
 		}
@@ -99,20 +98,13 @@ int	main(int argc, char **argv)
 {
 	t_data		data;
 	t_threads	thread;
-	(void)argc;
-	(void)argv;
 
 	data.aa_sample = 100;
 	init_data(&data, &thread);
-
 	init_sceen(&data, argc, argv);
-
-	// add_sceen(&data);
-
 	printT(data.world);
-	put_pixel_color_thread(&thread);
-	// put_pixel_color(&data);
-	// put_pixel_color_debug(&data);
+	compute_objects_hits_debug(&data);
+	put_pixel_color_debug(&data);
 	mlx_mouse_hook(data.win, mouse_hook, &data);
 	mlx_hook(data.win, 2, 1L << 0, handle_key, &data);
 	mlx_hook(data.win, 17, 1L << 17, close_window, &data);
