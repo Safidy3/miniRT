@@ -53,7 +53,6 @@ void	thread_render(t_data *data, t_data *og_data, t_thread_data *thread_data)
 	end = (thread_data->thread_id + 1) * thread_data->thread->pix_unit;
 	if (thread_data->thread_id == thread_data->thread->thread_num - 1)
 		end = WIDTH;
-	printf("Thread %d started.\n", thread_data->thread_id);
 	while (++x < end)
 	{
 		y = -1;
@@ -68,7 +67,6 @@ void	thread_render(t_data *data, t_data *og_data, t_thread_data *thread_data)
 		pthread_mutex_unlock(&og_data->thread->lock);
 	}
 	clear_sceen(&(data->world));
-	printf("Thread %d Finished.\n", thread_data->thread_id);
 }
 
 void	*thread_routing(void *param)
@@ -101,7 +99,7 @@ void	start_thread(t_threads *thread, t_list *thread_data_list)
 	int				i;
 
 	i = -1;
-	printf("rendering ...\n");
+	ft_putstr("rendering ...\n");
 	tmp = thread_data_list;
 	while (tmp)
 	{
@@ -112,7 +110,7 @@ void	start_thread(t_threads *thread, t_list *thread_data_list)
 	}
 	while (++i < thread->thread_num)
 		pthread_join(thread->threads[i], NULL);
-	printf("Finished.\n");
+	ft_putstr("Finished.\n");
 }
 
 void	put_pixel_color_thread(t_threads *thread)

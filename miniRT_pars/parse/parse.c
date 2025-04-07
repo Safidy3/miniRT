@@ -21,7 +21,8 @@ int	obj_arg_error(t_scene *scene, char **splitted_obj, char *str)
 	shape = splitted_obj[0];
 	if (ft_strcmp3(shape, str, "A") && ft_strcmp3(shape, str, "C")
 		&& ft_strcmp3(shape, str, "L") && ft_strcmp3(shape, str, "sp")
-		&& ft_strcmp3(shape, str, "pl") && ft_strcmp3(shape, str, "cy"))
+		&& ft_strcmp3(shape, str, "pl") && ft_strcmp3(shape, str, "cy") 
+		&& ft_strcmp3(shape, str, "co"))
 		return (0);
 	if (!ft_strcmp(shape, "C"))
 		num = 4;
@@ -30,11 +31,9 @@ int	obj_arg_error(t_scene *scene, char **splitted_obj, char *str)
 	else if (!ft_strcmp(shape, "L") && (ft_arr_len((void **)splitted_obj) == 4
 			|| ft_arr_len((void **)splitted_obj) == 5))
 		num = ft_arr_len((void **)splitted_obj);
-	else if (!ft_strcmp(shape, "sp"))
+	else if (!ft_strcmp(shape, "sp") || !ft_strcmp(shape, "pl"))
 		num = 6;
-	else if (!ft_strcmp(shape, "pl"))
-		num = 6;
-	else if (!ft_strcmp(shape, "cy"))
+	else if (!ft_strcmp(shape, "cy") || !ft_strcmp(shape, "co"))
 		num = 8;
 	if (ft_arr_len((void **)splitted_obj) != num)
 		free_pars_error(scene, splitted_obj, E_NUM_PARAM);
@@ -51,6 +50,8 @@ void	get_obj_parameter(t_scene *scene, t_obj *tmp, char **splitted_obj)
 		*tmp = make_camera(scene, splitted_obj);
 	else if (obj_arg_error(scene, splitted_obj, "cy"))
 		*tmp = make_cylindre(scene, splitted_obj);
+	else if (obj_arg_error(scene, splitted_obj, "co"))
+		*tmp = make_cone(scene, splitted_obj);
 	else if (obj_arg_error(scene, splitted_obj, "sp"))
 		*tmp = make_sphere(scene, splitted_obj);
 	else if (obj_arg_error(scene, splitted_obj, "pl"))

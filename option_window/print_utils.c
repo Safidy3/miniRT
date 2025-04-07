@@ -20,6 +20,8 @@ char	*obj_type(int shape)
 		return ("PLANE");
 	else if (shape == CYLINDRE)
 		return ("CYLINDRE");
+	else if (shape == CONE)
+		return ("CONE");
 	else if (shape == POINT_LIGHT)
 		return ("POINT_LIGHT");
 	else if (shape == AMBIENT_LIGHT)

@@ -87,7 +87,6 @@ int	handle_key(int keycode, void *param)
 	t_data	*data;
 
 	data = (t_data *)param;
-	printf("keycode : %d\n", keycode);
 	if (keycode == 65307)
 		close_window(data);
 	else if (keycode == 119 || keycode == 115 || keycode == 97

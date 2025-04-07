@@ -33,7 +33,7 @@ enum	e_shape
 	SPHERE,
 	PLANE,
 	CYLINDRE,
-	LIGHT_SOURCE,
+	CONE,
 	POINT_LIGHT,
 	AMBIENT_LIGHT,
 	CAMERA
@@ -92,6 +92,7 @@ t_vec3			make_rgb(int index, char **splitted_obj, t_scene *scene);
 t_vec3			make_color(t_vec3 a);
 
 t_obj			make_cylindre(t_scene *scene, char **splitted_obj);
+t_obj			make_cone(t_scene *scene, char **splitted_obj);
 t_obj			make_sphere(t_scene *scene, char **splitted_obj);
 t_obj			make_plan(t_scene *scene, char **splitted_obj);
 t_obj			make_camera(t_scene *scene, char **splitted_obj);

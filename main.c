@@ -44,7 +44,6 @@ t_proprieties	det_proprts(t_obj *obj)
 {
 	t_proprieties	res;
 	int				material;
-	float			param;
 
 	if (obj->shape != POINT_LIGHT)
 	{
@@ -52,14 +51,12 @@ t_proprieties	det_proprts(t_obj *obj)
 			material = LAMBERTIAN;
 		else
 			material = METAL;
-		param = obj->metalness;
+		res = create_proprieties(obj->color, material, obj->metalness, obj->use_texture);
 	}
 	else
-	{
-		material = LIGHT;
-		param = obj->brightness;
-	}
-	res = create_proprieties(obj->color, material, param, obj->use_texture);
+		res = create_proprieties(
+			vec3_mult_float(obj->color, obj->brightness),
+			LIGHT, obj->brightness, obj->use_texture);
 	return (res);
 }
 
@@ -83,6 +80,9 @@ void	create_obj(t_list *tmp, t_data *data)
 		else if (obj->shape == CYLINDRE)
 			new_obj = create_cylinder(obj->center, obj->normal_vector,
 					obj->diameter, obj->height);
+		else if (obj->shape == CONE)
+			new_obj = create_cone(obj->center, obj->normal_vector,
+					obj->diameter, obj->height);
 		else if (obj->shape == AMBIENT_LIGHT)
 			new_obj = create_al(obj->color, obj->brightness);
 		if (new_obj != NULL)
@@ -105,78 +105,6 @@ void	init_sceen(t_data *data, int argc, char **argv)
 	clear_p_scene(&pars);
 }
 
-
-void	bonus_sceen7(t_data *data)
-{
-
-	float	side = 5;
-	float	ud = 4;
-	float	height = 6;
-	float	radius = 3;
-	float	dept1 = -3.5;
-	float	dept2 = -7;
-
-	// t_proprieties purple = create_proprieties(create_vec3(0.490196078, 0, 1), LAMBERTIAN, 0, 0);
-	t_proprieties green_lamb = create_proprieties(create_vec3(0, 1, 0), LAMBERTIAN, 0, 0);
-	t_proprieties white_lamb = create_proprieties(create_vec3(0.329411765, 0.329411765, 0.329411765), LAMBERTIAN, 0, 0);
-	t_proprieties white_metal = create_proprieties(create_vec3(1, 1, 1), METAL, 0.5, 0);
-	t_proprieties Blue_lamb = create_proprieties(create_vec3(0, 0, 1), METAL, 0, 0);
-
-	t_object *shpere = create_sphere(create_vec3(0, -2, -4), 2.0);
-	scene_add_obj(&data->world, shpere, Blue_lamb);
-
-	t_object *shpere1 = create_sphere(create_vec3(-side, ud, dept1), radius);
-	scene_add_obj(&data->world, shpere1, white_metal);
-	t_object *shpere2 = create_sphere(create_vec3(side, ud, dept1), radius);
-	scene_add_obj(&data->world, shpere2, white_metal);
-	t_object *shpere3 = create_sphere(create_vec3(-side, ud, dept2), radius);
-	scene_add_obj(&data->world, shpere3, white_metal);
-	t_object *shpere4 = create_sphere(create_vec3(side, ud, dept2), radius);
-	scene_add_obj(&data->world, shpere4, white_metal);
-
-	t_object *shpere5 = create_sphere(create_vec3(-side, -ud, dept1), radius);
-	scene_add_obj(&data->world, shpere5, white_metal);
-	t_object *shpere6 = create_sphere(create_vec3(side, -ud, dept1), radius);
-	scene_add_obj(&data->world, shpere6, white_metal);
-	t_object *shpere7 = create_sphere(create_vec3(-side, -ud, dept2), radius);
-	scene_add_obj(&data->world, shpere7, white_metal);
-	t_object *shpere8 = create_sphere(create_vec3(side, -ud, dept2), radius);
-	scene_add_obj(&data->world, shpere8, white_metal);
-
-	t_object *cylinder1 = create_cylinder(create_vec3(-side, 0, dept1), create_vec3(0, 1, 0), radius / 2, height);
-	scene_add_obj(&data->world, cylinder1, white_metal);
-	t_object *cylinder2 = create_cylinder(create_vec3(side, 0, dept1), create_vec3(0, 1, 0), radius / 2, height);
-	scene_add_obj(&data->world, cylinder2, white_metal);
-	t_object *cylinder3 = create_cylinder(create_vec3(-side, 0, dept2), create_vec3(0, 1, 0), radius / 2, height);
-	scene_add_obj(&data->world, cylinder3, white_metal);
-	t_object *cylinder4 = create_cylinder(create_vec3(side, 0, dept2), create_vec3(0, 1, 0), radius / 2, height);
-	scene_add_obj(&data->world, cylinder4, white_metal);
-
-	t_object *up = create_plane(create_vec3(0, 3.5, 0), create_vec3(0, -1, 0));
-	t_object *down = create_plane(create_vec3(0, -3.5, 0), create_vec3(0, 1, 0));
-	t_object *forward = create_plane(create_vec3(0, 0, -10), create_vec3(0, 0, -1));
-	t_object *back = create_plane(create_vec3(0, 0, 5), create_vec3(0, 0, -1));
-	scene_add_obj(&data->world, back, white_lamb);
-	scene_add_obj(&data->world, forward, green_lamb);
-	scene_add_obj(&data->world, up, white_lamb);
-	scene_add_obj(&data->world, down, white_lamb);
-
-	t_proprieties p_pint_light = create_proprieties(create_vec3(1, 0, 1), LIGHT, 0, 0);
-	t_proprieties p_blue_light = create_proprieties(create_vec3(0, 0.784313725, 1), LIGHT, 0, 0);
-	t_object *shpere_light = create_sphere(create_vec3(-side + 2, 0, -5), 3);
-	t_object *shpere_light2 = create_sphere(create_vec3(side - 2, 0, -5), 3);
-	scene_add_obj(&data->world, shpere_light, p_pint_light);
-	scene_add_obj(&data->world, shpere_light2, p_blue_light);
-
-	t_object *ambent_light = create_al(create_vec3(1, 1, 1), 0.0);
-	scene_add_obj(&data->world, ambent_light, white_lamb);
-
-	create_camera(data, create_vec3(0, 0, 1), create_vec3(0, 0, -1), 90);
-	compute_camera_rays(data);
-}
-
-
-// int	main()
 int	main(int argc, char **argv)
 {
 	t_data		data;
@@ -185,7 +113,6 @@ int	main(int argc, char **argv)
 	data.aa_sample = ANTIALIASING_SAMPLES;
 	init_data(&data, &thread);
 	init_sceen(&data, argc, argv);
-	// bonus_sceen7(&data);
 	printT(data.world);
 	compute_objects_hits_debug(&data);
 	put_pixel_color_debug(&data);

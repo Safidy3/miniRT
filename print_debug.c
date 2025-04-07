@@ -10,6 +10,8 @@ void	print_obj(t_object *new_obj)
 		ft_putstr("PLANE\n");
 	else if (new_obj->shape == CYLINDRE)
 		ft_putstr("CYLINDRE\n");
+	else if (new_obj->shape == CONE)
+		ft_putstr("CONE\n");
 	else if (new_obj->shape == POINT_LIGHT)
 		ft_putstr("POINT_LIGHT\n");
 	else if (new_obj->shape == AMBIENT_LIGHT)

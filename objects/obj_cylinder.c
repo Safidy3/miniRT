@@ -52,10 +52,9 @@ int	determine_hit_rec(t_object *cylinder, const t_ray r,
 	m = vec3_dot(cylinder->direction,
 			vec3_sub(rec->hit_point, cylinder->center))
 		/ vec3_dot(cylinder->direction, cylinder->direction);
-	rec->normal = vec3_sub(
+	rec->normal = vec3_normalize(vec3_sub(
 			vec3_sub(rec->hit_point, cylinder->center),
-			vec3_mult_float(cylinder->direction, m));
-	rec->normal = vec3_normalize(rec->normal);
+			vec3_mult_float(cylinder->direction, m)));
 	if (vec3_dot(cylinder->direction, vec3_sub(rec->hit_point, bottom)) > 0)
 		if (vec3_dot(cylinder->direction, vec3_sub(rec->hit_point, top)) < 0)
 			return (1);
