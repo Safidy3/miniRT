@@ -61,7 +61,7 @@ void	delete_world_object(t_data *data)
 		prev = tmp;
 		tmp = tmp->next;
 	}
-	compute_objects_hits(data);
+	compute_objects_hits_debug(data);
 	data->seleced_object = NULL;
 	put_pixel_color_debug(data);
 }

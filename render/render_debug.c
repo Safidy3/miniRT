@@ -31,9 +31,9 @@ t_vec3	color_debug(t_data *data, int x, int y)
 {
 	t_edge_object	o;
 
-	if (is_void(x, y, data) || x > WIDTH - 2)
-		return (create_nullvec());
 	o.obj = data->hit_objects[x][y];
+	if (o.obj == NULL || x > WIDTH - 2)
+		return (create_nullvec());
 	o.obj2 = data->hit_objects[x + 1][y];
 	o.obj3 = data->hit_objects[x - 1][y];
 	o.obj4 = data->hit_objects[x][y + 1];
