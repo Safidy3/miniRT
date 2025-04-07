@@ -12,20 +12,10 @@
 
 #include "../parsing.h"
 
-#include <stdio.h>
-
-void	print_arr(char **a)
-{
-	int i = -1;
-	while (*a)
-		printf("%d - %s\n", ++i, *a++);
-}
-
 t_obj	make_cylindre(t_scene *scene, char **splitted_obj)
 {
 	t_obj	tmp;
 
-	print_arr(splitted_obj);
 	tmp.shape = CYLINDRE;
 	tmp.center = make_coord(1, splitted_obj, 0, scene);
 	tmp.normal_vector = make_coord(2, splitted_obj, 1, scene);

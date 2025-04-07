@@ -100,5 +100,5 @@ int	ft_atoint(int index, char **arr_obj, int data_type, t_scene *scene)
 	if (data_type == METAL)
 		if (res_int < 0 || res_int > 1)
 			free_pars_error(scene, arr_obj, E_METAL);
-	return (res_int);		
+	return (res_int);
 }

@@ -98,7 +98,6 @@ t_obj			make_camera(t_scene *scene, char **splitted_obj);
 t_obj			make_light(t_scene *scene, char **splitted_obj);
 t_obj			make_amient(t_scene *scene, char **splitted_obj);
 
-
 /* ./srcs/utils/scene.c */
 int				get_scene_len(int fd);
 void			get_scene(int fd, t_scene *scene);

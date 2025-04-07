@@ -23,7 +23,7 @@ OBJECTS_SRCS = ./objects/create_objects.c ./objects/obj_light.c ./objects/thread
 
 MATERIALS_SRCS = ./materials/materials.c ./materials/material_utils.c
 
-RENDER_SRCS = ./render/render_image.c ./render/render_utils.c ./render/render_debug.c\
+RENDER_SRCS = ./render/render_utils.c ./render/render_debug.c\
 			  ./render/thread_render.c ./render/render_utils2.c ./render/thread_render_utils.c
 
 SRCS = main.c data_free.c  exemple_sceen.c print_debug.c\

@@ -57,8 +57,6 @@ void	add_sceen(t_data *data)
 	t_object *cylinder = create_cylinder(create_vec3(-0, 1, -1), create_vec3(0, 1, 0), 0.6, 1.5);
 	scene_add_obj(&data->world, cylinder, purple);
 
-	// t_object *point_light = create_pl(create_vec3(-1, 0, -0.5), create_vec3(1, 1, 1), 1);
-	// scene_add_obj(&data->world, point_light, green_lamb);
 	t_object *ambent_light = create_al(create_vec3(1, 1, 1), 0);
 	scene_add_obj(&data->world, ambent_light, green_lamb);
 
@@ -134,8 +132,6 @@ void	bonus_sceen7(t_data *data)
 	scene_add_obj(&data->world, shpere_light, p_pint_light);
 	scene_add_obj(&data->world, shpere_light2, p_blue_light);
 
-	t_object *point_light = create_pl(create_vec3(0, 0, 0), create_vec3(1, 1, 1), 1);
-	scene_add_obj(&data->world, point_light, white_lamb);
 	t_object *ambent_light = create_al(create_vec3(1, 1, 1), 0.2);
 	scene_add_obj(&data->world, ambent_light, white_lamb);
 

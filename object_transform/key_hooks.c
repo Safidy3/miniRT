@@ -101,8 +101,6 @@ int	handle_key(int keycode, void *param)
 	else if (keycode == 114)
 		put_pixel_color_thread(data->thread);
 	else if (keycode == 116)
-		put_pixel_color(data);
-	else if (keycode == 121)
 		put_pixel_color_debug(data);
 	else if (keycode == 99)
 		select_camera(data);

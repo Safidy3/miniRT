@@ -110,7 +110,7 @@ int	main(int argc, char **argv)
 	t_data		data;
 	t_threads	thread;
 
-	data.aa_sample = 100;
+	data.aa_sample = ANTIALIASING_SAMPLES;
 	init_data(&data, &thread);
 	init_sceen(&data, argc, argv);
 	printT(data.world);

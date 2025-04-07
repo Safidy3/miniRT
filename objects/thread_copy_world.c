@@ -12,9 +12,6 @@ t_object	*copy_obj(t_object *obj)
 	else if (obj->shape == CYLINDRE)
 		new_obj = create_cylinder(obj->center,
 				obj->direction, obj->radius * 2, obj->height);
-	else if (obj->shape == POINT_LIGHT)
-		new_obj = create_pl(obj->center,
-				obj->proprieties.color, obj->proprieties.parameter);
 	else if (obj->shape == AMBIENT_LIGHT)
 		new_obj = create_al(obj->proprieties.color, obj->proprieties.parameter);
 	else if (obj->shape == CAMERA)

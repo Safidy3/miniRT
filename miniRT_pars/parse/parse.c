@@ -28,7 +28,7 @@ int	obj_arg_error(t_scene *scene, char **splitted_obj, char *str)
 	else if (!ft_strcmp(shape, "A"))
 		num = 3;
 	else if (!ft_strcmp(shape, "L") && (ft_arr_len((void **)splitted_obj) == 4
-		|| ft_arr_len((void **)splitted_obj) == 5))
+			|| ft_arr_len((void **)splitted_obj) == 5))
 		num = ft_arr_len((void **)splitted_obj);
 	else if (!ft_strcmp(shape, "sp"))
 		num = 6;

@@ -208,7 +208,6 @@ t_vec3			ray_point_at(t_ray ray, float t);
 
 void			my_mlx_pixel_put(t_data *data, int x, int y, t_vec3 r_col);
 void			erase_main_screen(t_data *data);
-void			put_pixel_color(t_data *data);
 t_vec3			ray_casted_color(t_data *data, int x, int y);
 int				handle_key(int keycode, void *param);
 int				mouse_hook(int keycode, int x, int y, void *param);
@@ -241,7 +240,6 @@ t_object		*create_sphere(t_vec3 center, float diameter);
 t_object		*create_plane(t_vec3 center, t_vec3 direction);
 t_object		*create_cylinder(t_vec3 center, t_vec3 direction,
 					float diameter, float height);
-t_object		*create_pl(t_vec3 center, t_vec3 color, float brightness);
 t_object		*create_al(t_vec3 color, float brightness);
 
 void			scene_add_obj(t_list **world, t_object *obj,
