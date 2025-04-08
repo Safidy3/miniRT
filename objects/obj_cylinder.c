@@ -14,7 +14,7 @@ t_object	*create_cylinder(t_vec3 center, t_vec3 direction,
 	return (cylinder);
 }
 
-void	compute_cyl_hit_param(t_object *cylinder,
+static void	compute_cyl_hit_param(t_object *cylinder,
 			const t_ray r, t_hit_equation *eq)
 {
 	t_vec3	a1;
@@ -36,7 +36,7 @@ void	compute_cyl_hit_param(t_object *cylinder,
 		eq->t = eq->t2;
 }
 
-int	determine_hit_rec(t_object *cylinder, const t_ray r,
+static int	determine_hit_rec(t_object *cylinder, const t_ray r,
 		t_hit_record *rec, float t)
 {
 	t_vec3	top;
