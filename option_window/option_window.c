@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   option_window.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/08 17:32:30 by safandri          #+#    #+#             */
+/*   Updated: 2025/04/08 17:36:28 by safandri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../miniRT.h"
 
 void	put_vector3(t_data *data, t_vec3 center, char *str, t_put_vec3 *p)
@@ -48,6 +60,21 @@ void	put_float(t_data *data, float value, char *str, t_put_vec3 *p)
 	p->py += 15;
 }
 
+void	put_spetific_data(t_data *data, t_object *object, t_put_vec3 *p)
+{
+	if (object->shape == CAMERA)
+		put_float(data, object->radius, "FOV : ", p);
+	else
+	{
+		put_float(data, object->radius, "Radius : ", p);
+		put_vector3(data, object->proprieties.color, "Color : ", p);
+	}
+	if (object->proprieties.material == LIGHT)
+		put_float(data, object->proprieties.parameter, "Brightness : ", p);
+	else
+		put_float(data, object->proprieties.parameter, "Metalness : ", p);
+}
+
 void	option_window(t_data *data, t_object *object)
 {
 	t_put_vec3	p;
@@ -61,19 +88,9 @@ void	option_window(t_data *data, t_object *object)
 	put_obj_type(object, data, &p);
 	put_vector3(data, object->center, "Center : ", &p);
 	put_vector3(data, object->direction, "Direction : ", &p);
+	put_spetific_data(data, object, &p);
 	if (object->shape == CYLINDRE || object->shape == CONE)
 		put_float(data, object->height, "Height : ", &p);
-	if (object->shape == CAMERA)
-		put_float(data, object->radius, "FOV : ", &p);
-	else
-	{
-		put_float(data, object->radius, "Radius : ", &p);
-		put_vector3(data, object->proprieties.color, "Color : ", &p);
-	}
-	if (object->proprieties.material == LIGHT)
-		put_float(data, object->proprieties.parameter, "Brightness : ", &p);
-	else
-		put_float(data, object->proprieties.parameter, "Metalness : ", &p);
 	put_float(data, object->proprieties.use_texture, "Textured : ", &p);
 	p.py += 15;
 }

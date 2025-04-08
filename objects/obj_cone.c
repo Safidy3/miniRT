@@ -1,4 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   obj_cone.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/08 17:25:04 by safandri          #+#    #+#             */
+/*   Updated: 2025/04/08 17:26:25 by safandri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../miniRT.h"
+
 t_object	*create_cone(t_vec3 center, t_vec3 direction,
 	float diameter, float height)
 {
@@ -28,7 +41,8 @@ int	determine_hit_rec(t_object *cone, const t_ray r,
 	if (projection >= 0 && projection <= cone->height)
 	{
 		rec->hit_point = ray_point_at(r, t);
-		apex = vec3_add(cone->center, vec3_mult_float(cone->direction, cone->height));
+		apex = vec3_add(cone->center,
+				vec3_mult_float(cone->direction, cone->height));
 		k2 = (cone->radius / cone->height) * (cone->radius / cone->height);
 		apex_to_hit = vec3_sub(rec->hit_point, apex);
 		projection = vec3_dot(apex_to_hit, cone->direction);
@@ -49,7 +63,8 @@ void	compute_hit_param(t_object *cone,
 	float	dv;
 	float	co_v;
 
-	apex = vec3_add(cone->center, vec3_mult_float(cone->direction, cone->height));
+	apex = vec3_add(cone->center,
+			vec3_mult_float(cone->direction, cone->height));
 	co = vec3_sub(r.origin, apex);
 	k2 = (cone->radius / cone->height) * (cone->radius / cone->height);
 	dv = vec3_dot(r.direction, cone->direction);
@@ -68,11 +83,11 @@ void	compute_hit_param(t_object *cone,
 		eq->t = eq->t2;
 }
 
-int hit_cone(t_object *cone, const t_ray r, t_hit_record *rec)
+int	hit_cone(t_object *cone, const t_ray r, t_hit_record *rec)
 {
 	t_hit_equation	eq;
 	float			t;
-	
+
 	compute_hit_param(cone, r, &eq);
 	if (eq.delta < 0 || (eq.t < MIN_T && eq.t > MAX_T))
 		return (0);

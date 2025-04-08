@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/06 10:47:01 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/08 17:31:53 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,13 @@ t_proprieties	det_proprts(t_obj *obj)
 			material = LAMBERTIAN;
 		else
 			material = METAL;
-		res = create_proprieties(obj->color, material, obj->metalness, obj->use_texture);
+		res = create_proprieties(obj->color, material,
+				obj->metalness, obj->use_texture);
 	}
 	else
 		res = create_proprieties(
-			vec3_mult_float(obj->color, obj->brightness),
-			LIGHT, obj->brightness, obj->use_texture);
+				vec3_mult_float(obj->color, obj->brightness),
+				LIGHT, obj->brightness, obj->use_texture);
 	return (res);
 }
 
@@ -85,8 +86,7 @@ void	create_obj(t_list *tmp, t_data *data)
 					obj->diameter, obj->height);
 		else if (obj->shape == AMBIENT_LIGHT)
 			new_obj = create_al(obj->color, obj->brightness);
-		if (new_obj != NULL)
-			scene_add_obj(&data->world, new_obj, prt);
+		scene_add_obj(&data->world, new_obj, prt);
 	}
 }
 
@@ -113,7 +113,6 @@ int	main(int argc, char **argv)
 	data.aa_sample = ANTIALIASING_SAMPLES;
 	init_data(&data, &thread);
 	init_sceen(&data, argc, argv);
-	printT(data.world);
 	compute_objects_hits_debug(&data);
 	put_pixel_color_debug(&data);
 	mlx_mouse_hook(data.win, mouse_hook, &data);
