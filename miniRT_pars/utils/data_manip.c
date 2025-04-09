@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:23:25 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/09 16:54:35 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/09 22:48:45 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,7 @@ t_vec3	make_coord(int index, char **splitted_obj,
 	coord.x = ft_atof(arr_coord[0]);
 	coord.y = ft_atof(arr_coord[1]);
 	coord.z = ft_atof(arr_coord[2]);
-	if (is_normal_vect 
-			&& (!check_normilized(coord)
+	if (is_normal_vect && (!check_normilized(coord)
 			|| !is_in_range(coord.x, 'v')
 			|| !is_in_range(coord.y, 'v')
 			|| !is_in_range(coord.z, 'v')))

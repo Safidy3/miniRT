@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/09 16:52:30 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/09 22:48:12 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include "minilibx-linux/mlx.h"
 # include "libft/libft.h"
 # include "miniRT_pars/parsing.h"
-# include "stdio.h"
 # include "unistd.h"
 # include <stdlib.h>
 # include <limits.h>

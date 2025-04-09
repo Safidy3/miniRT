@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 21:44:03 by safandri          #+#    #+#             */
-/*   Updated: 2025/03/29 11:03:10 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/09 22:50:22 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,5 @@ void	translate_object(t_data *data, t_vec3 translation)
 		update_camera(data, obj->center, data->cam.direction, data->cam.fov);
 	else
 		compute_objects_hits_debug(data);
-	// put_pixel_color_debug(data);
 	put_pixel_color(data);
 }

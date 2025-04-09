@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 15:14:18 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/09 15:15:34 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/09 22:47:11 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	print_split(char **s)
 		ft_putstr("\n");
 	}
 	if (*s == NULL)
-		ft_putstr("NULL\n");	
+		ft_putstr("NULL\n");
 	ft_putstr("\n");
 }
 

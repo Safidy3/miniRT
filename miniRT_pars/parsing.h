@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 06:35:47 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/09 17:04:56 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/09 22:47:38 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include "./get_next_line/get_next_line.h"
 # include "../libft/libft.h"
 # include <fcntl.h>
-# include <stdio.h>
 # include <math.h>
 
 # define E_ARG "Ivalid argument found\n"
@@ -59,7 +58,7 @@ typedef struct s_obj
 {
 	int			shape;
 	t_vec3		center;
-	t_vec3		normal_vector;
+	t_vec3		normal;
 	float		brightness;
 	float		diameter;
 	float		height;
@@ -89,7 +88,6 @@ t_obj			make_plan(t_scene *scene, char **splitted_obj);
 t_obj			make_camera(t_scene *scene, char **splitted_obj);
 t_obj			make_light(t_scene *scene, char **splitted_obj);
 t_obj			make_amient(t_scene *scene, char **splitted_obj);
-
 
 /* ./srcs/utils/scene.c */
 int				get_scene_len(int fd);
@@ -132,7 +130,6 @@ void			free_vec3_error(t_scene *scene, char **splitted_elt,
 					char **splitted_obj, char *str);
 
 void			get_pars(t_scene *scene, int argc, char **argv);
-
 
 void			print_split(char **s);
 

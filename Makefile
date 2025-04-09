@@ -23,7 +23,7 @@ OBJECTS_SRCS = ./objects/create_objects.c ./objects/obj_light.c\
 RENDER_SRCS = ./render/render_image.c ./render/render_utils.c ./render/render_debug.c\
 			  ./render/render_utils2.c
 
-SRCS = main.c data_free.c  exemple_sceen.c print_debug.c $(PARSING_SRCS) \
+SRCS = main.c data_free.c  print_debug.c $(PARSING_SRCS) \
 		$(VECTORS_SRCS) $(OBJECTS_SRCS) $(RENDER_SRCS) $(TRANSFORM_SRCS)
 
 FLAGS = -Wall -Werror -Wextra -I/usr/include -g

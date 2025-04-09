@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:33:13 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/09 15:22:54 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/09 22:53:36 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	obj_arg_error(t_scene *scene, char **splitted_obj, char *str)
 	else if (!ft_strcmp(shape, "A"))
 		num = 3;
 	else if (!ft_strcmp(shape, "L"))
-		num = 3;
+		num = 4;
 	else if (!ft_strcmp(shape, "sp"))
 		num = 4;
 	else if (!ft_strcmp(shape, "pl"))
@@ -68,12 +68,11 @@ void	parse(t_scene *scene)
 	while (*scene_arr)
 	{
 		splitted_obj = ft_split_space(*scene_arr);
-		print_split(splitted_obj);
 		get_obj_parameter(scene, &tmp, splitted_obj);
 		obj = (t_obj *)malloc(sizeof(t_obj));
 		obj->shape = tmp.shape;
 		obj->center = tmp.center;
-		obj->normal_vector = tmp.normal_vector;
+		obj->normal = tmp.normal;
 		obj->color = tmp.color;
 		obj->diameter = tmp.diameter;
 		obj->brightness = tmp.brightness;

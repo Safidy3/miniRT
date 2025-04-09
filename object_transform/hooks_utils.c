@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hooks_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/09 22:49:18 by safandri          #+#    #+#             */
+/*   Updated: 2025/04/09 22:49:27 by safandri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../miniRT.h"
 
 void	object_translation(int keycode, t_data *data)
@@ -42,5 +54,4 @@ void	object_rotation(int keycode, t_data *data)
 	else
 		compute_objects_hits_debug(data);
 	put_pixel_color(data);
-	// put_pixel_color_debug(data);
 }
