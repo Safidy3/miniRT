@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/06 09:41:33 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/09 22:21:52 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,18 +75,13 @@ typedef struct s_obj_proprieties
 typedef struct s_object
 {
 	int				id;
-
 	int				shape;
-
 	t_vec3			center;
 	t_vec3			direction;
 	float			radius;
 	float			height;
-
 	t_vec3			plane[4];
-
 	t_proprieties	proprieties;
-
 	t_hit_record	hit_record;
 }					t_object;
 
@@ -179,7 +174,6 @@ typedef struct s_dielectric
 
 /******************************************************/
 
-void			print_vec3(t_vec3 v, char *name);
 t_vec3			create_vec3(float x, float y, float z);
 t_vec3			create_nullvec(void);
 float			vec3_len(t_vec3 v);

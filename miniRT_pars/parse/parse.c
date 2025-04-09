@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:33:13 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/09 22:11:33 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/09 22:22:42 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	parse(t_scene *scene)
 		obj = (t_obj *)malloc(sizeof(t_obj));
 		obj->shape = tmp.shape;
 		obj->center = tmp.center;
-		obj->normal_vector = tmp.normal_vector;
+		obj->normal = tmp.normal;
 		obj->color = tmp.color;
 		obj->diameter = tmp.diameter;
 		obj->brightness = tmp.brightness;

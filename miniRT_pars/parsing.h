@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 06:35:47 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/09 22:03:58 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/09 22:22:34 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef struct s_obj
 {
 	int			shape;
 	t_vec3		center;
-	t_vec3		normal_vector;
+	t_vec3		normal;
 	t_vec3		color;
 	float		brightness;
 	float		diameter;
