@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 06:35:47 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/09 16:55:34 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/09 17:04:56 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # define E_PARAM "Diameter/radius/brightness can not be negative\n"
 # define E_COL "R, G, B color should be in range [0, 255]\n"
 # define E_OBJ_CAP "Error : Element with capital letter \
-	should be only declared once.\n"
+	should be declared once.\n"
 # define E_NUM_PARAM "The number of parameter of an object is incorect.\n"
 # define E_ID "You can only enter [C, L, A, sp, pl, cy] as \
 	element of the scene.\n"

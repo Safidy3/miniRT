@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/09 15:43:23 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/09 19:05:56 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,16 @@ void	create_obj(t_list *tmp, t_data *data)
 
 	obj = (t_obj *)tmp->content;
 	if (obj->shape == CAMERA)
-		create_camera(data, obj->center, obj->normal_vector, obj->diameter);
+		create_camera(data, obj->center, vec3_normalize(obj->normal_vector), obj->diameter);
 	else
 	{
 		prt = create_proprieties(obj->color, LAMBERTIAN, 0, 0);
 		if (obj->shape == SPHERE)
 			new_obj = create_sphere(obj->center, obj->diameter);
 		else if (obj->shape == PLANE)
-			new_obj = create_plane(obj->center, obj->normal_vector);
+			new_obj = create_plane(obj->center, vec3_normalize(obj->normal_vector));
 		else if (obj->shape == CYLINDRE)
-			new_obj = create_cylinder(obj->center, obj->normal_vector,
+			new_obj = create_cylinder(obj->center, vec3_normalize(obj->normal_vector),
 					obj->diameter, obj->height);
 		else if (obj->shape == POINT_LIGHT)
 			new_obj = create_pl(obj->center, obj->color, obj->brightness);

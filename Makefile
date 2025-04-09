@@ -6,7 +6,7 @@ GNL_PATH = $(PARS_ROOT)/get_next_line
 UTILS_PATH = $(PARS_ROOT)/utils
 PARSE_PATH = $(PARS_ROOT)/parse
 
-PARSING_SRCS = $(PARS_ROOT)/miniRT.c $(PARS_ROOT)/data_create.c $(PARS_ROOT)/debug_print.c\
+PARSING_SRCS = $(PARS_ROOT)/miniRT.c $(PARS_ROOT)/data_create.c \
 				$(ERROR_PATH)/scene.c $(GNL_PATH)/get_next_line.c $(GNL_PATH)/get_next_line_utils.c \
 				$(UTILS_PATH)/scene.c $(UTILS_PATH)/init.c $(UTILS_PATH)/protected.c \
 				$(UTILS_PATH)/elt_value_format.c $(UTILS_PATH)/data_manip.c $(UTILS_PATH)/free.c \
