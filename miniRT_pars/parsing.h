@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 06:35:47 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/03 09:44:20 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/09 16:55:34 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,13 @@
 # include "./get_next_line/get_next_line.h"
 # include "../libft/libft.h"
 # include <fcntl.h>
+# include <stdio.h>
+# include <math.h>
 
+# define E_ARG "Ivalid argument found\n"
 # define E_FLOAT "Ivalid float number found\n"
-# define E_NORM "Normal vector should be in range [-1, 1]\n"
+# define E_NORM "Direction should be normalized vector\n"
+# define E_BRIGHTNESS "Brightness should be in range [0, 1]\n"
 # define E_PARAM "Diameter/radius/brightness can not be negative\n"
 # define E_COL "R, G, B color should be in range [0, 255]\n"
 # define E_OBJ_CAP "Error : Element with capital letter \
@@ -77,6 +81,7 @@ t_vec3			make_coord(int index, char **splitted_obj,
 float			ft_atofl(int index, char **arr_obj, t_scene *scene);
 t_vec3			make_rgb(int index, char **splitted_obj, t_scene *scene);
 t_vec3			make_color(t_vec3 a);
+int				check_normilized(t_vec3 v);
 
 t_obj			make_cylindre(t_scene *scene, char **splitted_obj);
 t_obj			make_sphere(t_scene *scene, char **splitted_obj);
@@ -127,5 +132,8 @@ void			free_vec3_error(t_scene *scene, char **splitted_elt,
 					char **splitted_obj, char *str);
 
 void			get_pars(t_scene *scene, int argc, char **argv);
+
+
+void			print_split(char **s);
 
 #endif

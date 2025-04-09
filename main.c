@@ -6,22 +6,26 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/03 09:41:51 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/09 15:43:23 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
+
+void	init_mlx(t_data *data)
+{
+	data->mlx = mlx_init();
+	data->win = mlx_new_window(data->mlx, WIDTH, HEIGHT, "miniRT");
+	data->img = mlx_new_image(data->mlx, WIDTH, HEIGHT);
+	data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel,
+			&data->line_length, &data->endian);
+}
 
 void	init_data(t_data *data)
 {
 	int	i;
 
 	i = -1;
-	data->mlx = mlx_init();
-	data->win = mlx_new_window(data->mlx, WIDTH, HEIGHT, "miniRT");
-	data->img = mlx_new_image(data->mlx, WIDTH, HEIGHT);
-	data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel,
-			&data->line_length, &data->endian);
 	data->world = NULL;
 	data->seleced_object = NULL;
 	data->camera_rays = (t_ray **)malloc(sizeof(t_ray *) * WIDTH);
@@ -81,6 +85,7 @@ int	main(int argc, char **argv)
 
 	init_data(&data);
 	init_sceen(&data, argc, argv);
+	init_mlx(&data);
 	printT(data.world);
 	put_pixel_color(&data);
 	mlx_mouse_hook(data.win, mouse_hook, &data);

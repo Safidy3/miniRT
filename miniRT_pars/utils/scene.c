@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 10:22:13 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 04:53:52 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/09 15:25:26 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,8 @@ void	free_vec3_error(t_scene *scene, char **splitted_elt,
 		ft_putstr_err(str);
 		ft_putstr_err(".\n");
 	}
-	if (splitted_elt)
-		free_2d_arr(splitted_elt);
-	if (splitted_obj)
-		free_2d_arr(splitted_obj);
+	free_2d_arr(splitted_elt);
+	free_2d_arr(splitted_obj);
 	clear_p_scene(scene);
 	exit(1);
 }

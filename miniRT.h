@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/03 09:27:48 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/09 16:52:30 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 # include "stdio.h"
 # include "unistd.h"
 # include <stdlib.h>
-# include <math.h>
 # include <limits.h>
 # include <pthread.h>
 
@@ -36,34 +35,10 @@
 # define MAX_RECURS_DEPTH 10
 # define ANTIALIASING_SAMPLES 100
 
-// enum	e_shape
-// {
-// 	SPHERE,
-// 	PLANE,
-// 	CYLINDRE,
-// 	POINT_LIGHT,
-// 	AMBIENT_LIGHT,
-// 	CAMERA
-// };
-
 enum	e_material
 {
 	LAMBERTIAN,
 };
-
-// typedef struct s_vec3
-// {
-// 	float	x;
-// 	float	y;
-// 	float	z;
-// }			t_vec3;
-
-// typedef struct s_rgb
-// {
-// 	float	r;
-// 	float	g;
-// 	float	b;
-// }			t_rgb;
 
 typedef struct s_ray
 {

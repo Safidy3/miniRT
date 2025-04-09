@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 18:09:45 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 06:59:31 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/09 15:26:29 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,13 @@
 void	free_2d_arr(char **arr)
 {
 	char	**tmp;
-	int		i;
 
 	if (!arr || !(*arr))
 		return ;
 	tmp = arr;
-	i = 0;
-	while (*arr && arr)
-	{
-		free(*arr);
-		i++;
-		arr++;
-	}
-	if (tmp)
-		free(tmp);
+	while (*arr)
+		free(*arr++);
+	free(tmp);
 }
 
 void	clear_plane(void *g_plane_lst)

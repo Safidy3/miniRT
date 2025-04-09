@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:33:13 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 06:59:31 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/09 15:22:54 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	parse(t_scene *scene)
 	while (*scene_arr)
 	{
 		splitted_obj = ft_split_space(*scene_arr);
+		print_split(splitted_obj);
 		get_obj_parameter(scene, &tmp, splitted_obj);
 		obj = (t_obj *)malloc(sizeof(t_obj));
 		obj->shape = tmp.shape;
