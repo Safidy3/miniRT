@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:53:04 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 04:53:52 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/09 22:08:49 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ t_obj	make_light(t_scene *scene, char **splitted_obj)
 		tmp.diameter = ft_atofl(4, splitted_obj, scene);
 	else
 		tmp.diameter = 1;
+	if (tmp.brightness > 1 || tmp.brightness < 0)
+		free_pars_error(scene, splitted_obj, E_METAL);
 	tmp.normal_vector = create_3dnull();
 	tmp.height = 0;
 	tmp.metalness = 0.0;
@@ -37,6 +39,8 @@ t_obj	make_amient(t_scene *scene, char **splitted_obj)
 
 	tmp.shape = AMBIENT_LIGHT;
 	tmp.brightness = ft_atofl(1, splitted_obj, scene);
+	if (tmp.brightness > 1 || tmp.brightness < 0)
+		free_pars_error(scene, splitted_obj, E_METAL);
 	tmp.color = make_rgb(2, splitted_obj, scene);
 	tmp.center = create_3dnull();
 	tmp.normal_vector = create_3dnull();

@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/08 17:31:53 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/09 22:00:24 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,19 +70,19 @@ void	create_obj(t_list *tmp, t_data *data)
 	new_obj = NULL;
 	obj = (t_obj *)tmp->content;
 	if (obj->shape == CAMERA)
-		create_camera(data, obj->center, obj->normal_vector, obj->diameter);
+		create_camera(data, obj->center, vec3_normalize(obj->normal_vector), obj->diameter);
 	else
 	{
 		prt = det_proprts(obj);
 		if (obj->shape == SPHERE || obj->shape == POINT_LIGHT)
 			new_obj = create_sphere(obj->center, obj->diameter);
 		else if (obj->shape == PLANE)
-			new_obj = create_plane(obj->center, obj->normal_vector);
+			new_obj = create_plane(obj->center, vec3_normalize(obj->normal_vector));
 		else if (obj->shape == CYLINDRE)
-			new_obj = create_cylinder(obj->center, obj->normal_vector,
+			new_obj = create_cylinder(obj->center, vec3_normalize(obj->normal_vector),
 					obj->diameter, obj->height);
 		else if (obj->shape == CONE)
-			new_obj = create_cone(obj->center, obj->normal_vector,
+			new_obj = create_cone(obj->center, vec3_normalize(obj->normal_vector),
 					obj->diameter, obj->height);
 		else if (obj->shape == AMBIENT_LIGHT)
 			new_obj = create_al(obj->color, obj->brightness);

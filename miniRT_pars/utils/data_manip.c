@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:23:25 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 09:41:32 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/09 22:04:44 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,13 +92,49 @@ float	ft_atofl(int index, char **arr_obj, t_scene *scene)
 	return (res_int);
 }
 
-int	ft_atoint(int index, char **arr_obj, int data_type, t_scene *scene)
+t_vec3	make_coord(int index, char **splitted_obj,
+		int is_normal_vect, t_scene *scene)
 {
-	float	res_int;
+	t_vec3	coord;
+	char	**arr_coord;
 
-	res_int = ft_atoi(arr_obj[index]);
-	if (data_type == METAL)
-		if (res_int < 0 || res_int > 1)
-			free_pars_error(scene, arr_obj, E_METAL);
-	return (res_int);
+	arr_coord = ft_split(splitted_obj[index], ',');
+	if (!arr_coord || ft_arr_len((void **)arr_coord) != 3
+		|| !is_valid_float(arr_coord[0])
+		|| !is_valid_float(arr_coord[1])
+		|| !is_valid_float(arr_coord[2]))
+		free_vec3_error(scene, arr_coord, splitted_obj, E_ARG);
+	coord.x = ft_atof(arr_coord[0]);
+	coord.y = ft_atof(arr_coord[1]);
+	coord.z = ft_atof(arr_coord[2]);
+	if (is_normal_vect && (!check_normilized(coord)
+			|| !is_in_range(coord.x, 'v')
+			|| !is_in_range(coord.y, 'v')
+			|| !is_in_range(coord.z, 'v')))
+		free_vec3_error(scene, arr_coord, splitted_obj, E_NORM);
+	free_2d_arr(arr_coord);
+	return (coord);
+}
+
+t_vec3	make_rgb(int index, char **splitted_obj, t_scene *scene)
+{
+	t_vec3	color;
+	char	**arr_coord;
+	char	*str_coord;
+
+	str_coord = splitted_obj[index];
+	arr_coord = ft_split(str_coord, ',');
+	if (!arr_coord || ft_arr_len((void **)arr_coord) != 3
+		|| !is_valid_float(arr_coord[0])
+		|| !is_valid_float(arr_coord[1])
+		|| !is_valid_float(arr_coord[2]))
+		free_vec3_error(scene, arr_coord, splitted_obj, E_ARG);
+	color.x = ft_atof(arr_coord[0]);
+	color.y = ft_atof(arr_coord[1]);
+	color.z = ft_atof(arr_coord[2]);
+	if (!is_in_range(color.x, 'c') || !is_in_range(color.y, 'c')
+		|| !is_in_range(color.z, 'c'))
+		free_vec3_error(scene, arr_coord, splitted_obj, E_COL);
+	free_2d_arr(arr_coord);
+	return (make_color(color));
 }

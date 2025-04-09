@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:33:13 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/08 17:27:48 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/09 22:11:33 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,15 +62,15 @@ void	get_obj_parameter(t_scene *scene, t_obj *tmp, char **splitted_obj)
 
 void	parse(t_scene *scene)
 {
-	char	**scene_arr;
+	int		i;
 	char	**splitted_obj;
 	t_obj	*obj;
 	t_obj	tmp;
 
-	scene_arr = scene->scene_arr;
-	while (*scene_arr)
+	i = -1;
+	while (scene->scene_arr[++i])
 	{
-		splitted_obj = ft_split_space(*scene_arr);
+		splitted_obj = ft_split_space(scene->scene_arr[i]);
 		get_obj_parameter(scene, &tmp, splitted_obj);
 		obj = (t_obj *)malloc(sizeof(t_obj));
 		obj->shape = tmp.shape;
@@ -81,9 +81,10 @@ void	parse(t_scene *scene)
 		obj->brightness = tmp.brightness;
 		obj->height = tmp.height;
 		obj->metalness = tmp.metalness;
+		if (tmp.metalness > 1 || tmp.brightness < 0)
+			free_pars_error(scene, splitted_obj, E_METAL);
 		obj->use_texture = tmp.use_texture;
 		ft_lstadd_back(&(scene->obj_lst), ft_lstnew(obj));
 		free_2d_arr(splitted_obj);
-		scene_arr++;
 	}
 }
