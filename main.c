@@ -6,26 +6,22 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/09 22:46:30 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/10 20:37:42 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
-
-void	init_mlx(t_data *data)
-{
-	data->mlx = mlx_init();
-	data->win = mlx_new_window(data->mlx, WIDTH, HEIGHT, "miniRT");
-	data->img = mlx_new_image(data->mlx, WIDTH, HEIGHT);
-	data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel,
-			&data->line_length, &data->endian);
-}
 
 void	init_data(t_data *data)
 {
 	int	i;
 
 	i = -1;
+	data->mlx = mlx_init();
+	data->win = mlx_new_window(data->mlx, WIDTH, HEIGHT, "miniRT");
+	data->img = mlx_new_image(data->mlx, WIDTH, HEIGHT);
+	data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel,
+			&data->line_length, &data->endian);
 	data->world = NULL;
 	data->seleced_object = NULL;
 	data->camera_rays = (t_ray **)malloc(sizeof(t_ray *) * WIDTH);
@@ -70,6 +66,7 @@ void	init_sceen(t_data *data, int argc, char **argv)
 	t_list			*tmp;
 	t_scene			pars;
 
+	pars.data = data;
 	get_pars(&pars, argc, argv);
 	tmp = pars.obj_lst;
 	while (tmp)
@@ -86,7 +83,6 @@ int	main(int argc, char **argv)
 
 	init_data(&data);
 	init_sceen(&data, argc, argv);
-	init_mlx(&data);
 	printT(data.world);
 	put_pixel_color(&data);
 	mlx_mouse_hook(data.win, mouse_hook, &data);
