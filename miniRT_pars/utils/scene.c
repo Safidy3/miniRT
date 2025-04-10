@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 10:22:13 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/09 15:25:26 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/10 21:33:04 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	validate_scene(t_scene *scene)
 	{
 		ft_putstr_err("Error : Cannot support empty scene.\n");
 		free(scene->scene_arr);
+		free_data(scene->data);
 		exit(1);
 	}
 	check_dup_capital(scene->scene_arr);
@@ -71,6 +72,7 @@ void	free_pars_error(t_scene *scene, char **splitted_elt, char *str)
 	if (splitted_elt)
 		free_2d_arr(splitted_elt);
 	clear_p_scene(scene);
+	free_data(scene->data);
 	exit(1);
 }
 
@@ -86,5 +88,6 @@ void	free_vec3_error(t_scene *scene, char **splitted_elt,
 	free_2d_arr(splitted_elt);
 	free_2d_arr(splitted_obj);
 	clear_p_scene(scene);
+	free_data(scene->data);
 	exit(1);
 }

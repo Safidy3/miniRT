@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:42:07 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/09 22:22:06 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/10 21:53:37 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ void	init_sceen(t_data *data, int argc, char **argv)
 	t_list	*tmp;
 	t_scene	pars;
 
+	pars.data = data;
 	get_pars(&pars, argc, argv);
 	tmp = pars.obj_lst;
 	while (tmp)

@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:33:13 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/09 22:22:42 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/10 21:44:30 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	parse(t_scene *scene)
 		obj->brightness = tmp.brightness;
 		obj->height = tmp.height;
 		obj->metalness = tmp.metalness;
-		if (tmp.metalness > 1 || tmp.brightness < 0)
+		if (tmp.metalness > 1 || tmp.metalness < 0)
 			free_pars_error(scene, splitted_obj, E_METAL);
 		obj->use_texture = tmp.use_texture;
 		ft_lstadd_back(&(scene->obj_lst), ft_lstnew(obj));
