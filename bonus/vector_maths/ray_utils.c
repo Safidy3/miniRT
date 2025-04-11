@@ -1,19 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   miniRT.h                                           :+:      :+:    :+:   */
+/*   ray_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/10 23:17:08 by safandri         ###   ########.fr       */
+/*   Created: 2025/03/11 16:24:31 by safandri          #+#    #+#             */
+/*   Updated: 2025/03/11 16:24:31 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINIRT_H
-# define MINIRT_H
+#include "../miniRT.h"
 
-# include "miniRT_pars/parsing.h"
-/************  utils  *************/
+t_ray	create_ray(t_vec3 origin, t_vec3 dir)
+{
+	t_ray	res;
 
-#endif
+	res.origin = origin;
+	res.direction = dir;
+	return (res);
+}
+
+t_vec3	ray_point_at(t_ray ray, float t)
+{
+	return (vec3_add(ray.origin, vec3_mult_float(ray.direction, t)));
+}

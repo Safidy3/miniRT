@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrakoton <jrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/09 22:49:18 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/11 00:33:22 by jrakoton         ###   ########.fr       */
+/*   Created: 2025/04/08 17:27:02 by safandri          #+#    #+#             */
+/*   Updated: 2025/04/11 00:33:54 by jrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	object_translation(int keycode, t_data *data)
 		translate_object(data, create_vec3(0, 0.1, 0));
 	else if (keycode == 113)
 		translate_object(data, create_vec3(0, -0.1, 0));
+	compute_objects_hits_debug(data);
 }
 
 void	object_rotation(int keycode, t_data *data)
@@ -51,7 +52,6 @@ void	object_rotation(int keycode, t_data *data)
 			vec3_inverse(obj->direction), data->cam.fov);
 		compute_camera_rays(data);
 	}
-	else
-		compute_objects_hits_debug(data);
-	put_pixel_color(data);
+	compute_objects_hits_debug(data);
+	put_pixel_color_debug(data);
 }

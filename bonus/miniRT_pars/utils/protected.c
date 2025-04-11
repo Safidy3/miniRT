@@ -1,19 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   miniRT.h                                           :+:      :+:    :+:   */
+/*   protected.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/28 15:50:44 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/10 23:17:08 by safandri         ###   ########.fr       */
+/*   Created: 2025/02/18 08:54:18 by jrakoton          #+#    #+#             */
+/*   Updated: 2025/04/11 07:10:00 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINIRT_H
-# define MINIRT_H
+#include "../parsing.h"
 
-# include "miniRT_pars/parsing.h"
-/************  utils  *************/
-
-#endif
+void	get_fd(char *filename, int *fd, int is_first_fd, t_scene *scene)
+{
+	*fd = open(filename, O_RDONLY);
+	if (*fd < 0)
+	{
+		ft_putstr_err("Error\nCould not open file. \n");
+		if (is_first_fd == 2)
+			free_2d_arr(scene->scene_arr);
+		exit(1);
+	}
+}

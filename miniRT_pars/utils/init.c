@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 10:55:02 by jrakoton          #+#    #+#             */
-/*   Updated: 2025/04/03 06:59:31 by safandri         ###   ########.fr       */
+/*   Updated: 2025/04/11 07:10:00 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	p_scene(char *filename, t_scene *scene)
 	scene->scene_arr = (char **)malloc(sizeof(char *) * (scene->scene_len + 1));
 	if (!(scene->scene_arr))
 	{
-		ft_putstr_err("Error : Malloc error\n");
+		ft_putstr_err("Error\nMalloc error.\n");
 		exit(1);
 	}
 	get_fd(filename, &fd, 2, scene);

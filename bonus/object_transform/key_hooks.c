@@ -6,7 +6,7 @@
 /*   By: safandri <safandri@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 21:49:26 by safandri          #+#    #+#             */
-/*   Updated: 2025/04/10 23:30:16 by safandri         ###   ########.fr       */
+/*   Updated: 2025/03/28 22:25:23 by safandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ int	mouse_hook(int keycode, int x, int y, void *param)
 
 	data = (t_data *)param;
 	if (keycode == 1)
+	{
 		data->seleced_object = data->hit_objects[x][y];
+		option_window(data, data->seleced_object);
+	}
 	return (0);
 }
 
@@ -58,7 +61,7 @@ void	delete_world_object(t_data *data)
 		prev = tmp;
 		tmp = tmp->next;
 	}
-	compute_objects_hits(data);
+	compute_objects_hits_debug(data);
 	data->seleced_object = NULL;
 	put_pixel_color_debug(data);
 }
@@ -84,8 +87,6 @@ int	handle_key(int keycode, void *param)
 	t_data	*data;
 
 	data = (t_data *)param;
-	if (keycode == 65436)
-		data->seleced_object = get_light(data->world, POINT_LIGHT);
 	if (keycode == 65307)
 		close_window(data);
 	else if (keycode == 119 || keycode == 115 || keycode == 97
@@ -96,11 +97,12 @@ int	handle_key(int keycode, void *param)
 		object_rotation(keycode, data);
 	else if (keycode == 65535)
 		delete_world_object(data);
+	else if (keycode == 114)
+		put_pixel_color_thread(data->thread);
 	else if (keycode == 116)
-		put_pixel_color(data);
-	else if (keycode == 121)
 		put_pixel_color_debug(data);
 	else if (keycode == 99)
 		select_camera(data);
+	option_window(data, data->seleced_object);
 	return (0);
 }
